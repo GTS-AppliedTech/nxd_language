@@ -1,6 +1,4 @@
-Continuing **in perfect order**, Gabriel — and now we enter one of the most *strategic, cloud‑native, production‑grade* XXL systems in the entire suite:
-
-# ⭐ **XXL System 12 — Distributed Service Mesh**  (sidecars • mTLS • routing • retries • circuit breakers)
+# **XXL System 12 — Distributed Service Mesh**  (sidecars • mTLS • routing • retries • circuit breakers)
 
 
 # **Step 1 — Architecture Map (XXL Service Mesh)**

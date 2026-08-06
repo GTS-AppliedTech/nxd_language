@@ -1,5 +1,3 @@
-Continuing **in perfect order**, Gabriel — and now we enter one of the *heaviest, deepest, and most infrastructure‑critical* XXL systems:
-
 # ⭐ **XXL System 10 — Distributed Filesystem (Object Store + Block Store)**  (objects • blocks • replication • metadata • directory tree)
 
 

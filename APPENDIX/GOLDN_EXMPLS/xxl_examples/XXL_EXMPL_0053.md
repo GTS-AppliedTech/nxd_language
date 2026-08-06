@@ -1,4 +1,4 @@
-# ⭐ **XXL System 13 — Distributed Identity & Access Federation**  (OAuth2 • JWT • SSO • trust domains • identity graph)
+# **XXL System 13 — Distributed Identity & Access Federation**  (OAuth2 • JWT • SSO • trust domains • identity graph)
 
 
 # **Step 1 — Architecture Map (XXL Identity & Access Federation)**
