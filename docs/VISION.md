@@ -1,8 +1,21 @@
 VISION.md
 
-NXD Vision
+### NXD Vision
 
-Capitalization Philosophy
+# ORIGIN STORY
+
+NXD (pronounced "next") derives its name from the language's original target ecosystems:
+
+N → Nim
+X → Elixir (.ex)
+D → D
+
+What began as a practical naming convention evolved into a broader vision. NXD represents the next generation of software development through a unified language, consistent developer experience, and backend portability across multiple ecosystems.
+
+The NᵋXD logo incorporates an elevated epsilon (ε), acknowledging both the mathematical foundations of programming languages and the project's pronunciation: "next."
+
+
+# Capitalization Philosophy
 
 NXD uses one core lexical rule:
 
@@ -21,7 +34,7 @@ Identifiers include:
 • struct/class names
 • constants
 
-Keywords are the reserved language primitives:
+# Keywords are the reserved language primitives:
 
 • LET
 • FUNC
@@ -33,7 +46,7 @@ Keywords are the reserved language primitives:
 • LOOP
 • RETURN
 
-Operators include both symbols and words:
+# Operators include both symbols and words:
 
 • arithmetic: + - * / %
 • logical: AND OR NOT
@@ -43,7 +56,7 @@ Operators include both symbols and words:
 • concatenation: ++
 • pattern matching: =>
 
-Example:
+# Example:
 
 MODULE math
 
@@ -59,7 +72,7 @@ FUNC FACTORIAL(N):
 This capitalization philosophy makes structure and intent visually obvious while leaving literal values neutral.
 
 
-What NXD Solves
+# What NXD Solves
 
 1. Unified concurrency and systems programming
 
@@ -95,7 +108,7 @@ NXD’s lexical discipline makes the language easier to read, write, and automat
 NXD solves the common developer pain of maintaining multiple implementations by enabling one language to target many ecosystems.
 
 
-Standalone Rationale
+# Standalone Rationale
 
 NXD is designed to stand alone as its own language, not just as a syntax layer or transpilation gimmick.
 
@@ -109,7 +122,7 @@ Its value comes from combining:
 NXD is viable because it blends systems programming, concurrency, and hybrid memory semantics in one coherent design.
 
 
-Semantic Portability Goals
+# Semantic Portability Goals
 
 NXD is built to move across ecosystems while preserving intent.
 
@@ -134,7 +147,7 @@ Future IR ambitions include backends for:
 A clean IR preserves NXD’s semantics and makes new backends possible without sacrificing the language’s distinct rules.
 
 
-AI Readability Rationale
+# AI Readability Rationale
 
 NXD’s strict capitalization rule is chosen for agents as much as for humans.
 
@@ -150,7 +163,7 @@ That makes NXD easier to generate, audit, transpile, and document.
 NXD is explicitly designed for AI collaboration, with a syntax that favors both human readability and automated tooling.
 
 
-Design Principles
+# Design Principles
 
 1. Explicit over implicit
 2. Semantic portability over implementation portability
@@ -159,7 +172,7 @@ Design Principles
 5. Human-AI collaborative development
 
 
-Vision Summary
+# Vision Summary
 
 NXD is a standalone language with a distinctive capitalization philosophy, a multi-paradigm core, and strong portability goals.
 
@@ -171,7 +184,7 @@ It is shaped to be:
 • safe by design through explicit semantics
 
 NXD is intended to be both a practical language and a foundation for AI-enabled language tooling.
-s viable because it offers:
+It's viable because it offers:
 
 • a unique visual identity
 • strict lexical rules
@@ -183,6 +196,6 @@ s viable because it offers:
 • future‑proof IR design
 
 
-NXD solves problems that no single language currently solves.
+NXD seeks to combine capabilities that are rarely found together in a single language.
 
 
