@@ -7,22 +7,19 @@
 
 #### JSON-LD
 ```jsonld
+---
 {
   "@context": "https://nxdlang.org/schema",
-
   "doc_id": "",
   "title": "",
   "description": "",
-
-  "category": "",
   "layer": "",
-
+  "category": "",
   "keywords": [],
-
-  "version": "1.4.5",
-
+  "doc_version": "",
   "status": "active"
 }
+---
 ```
 
 
@@ -69,26 +66,22 @@ RO001
 
 #### JSON-LD
 ```jsonld
+---
 {
   "@context": "https://nxdlang.org/schema",
-
   "doc_id": "ME010",
   "title": "Authentication User Application",
-
   "description": "Demonstrates multi-module authentication architecture.",
-
+  "layer": "Medium",
   "category": "MultiModule",
-  "layer": "medium",
-
   "keywords": [
-    "authentication",
+    "authentication", 
     "security",
-    "modules",
-    "services"
-  ],
-
-  "version": "1.4.5",
-
+    "modules", 
+    "services",
+   ],
+  "doc_version": "1.0",
   "status": "active"
 }
+---
 ```
