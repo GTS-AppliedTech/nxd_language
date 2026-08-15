@@ -1,4 +1,19 @@
-SECURITY_SPEC.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE009",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+
+# SE009 SECURITY SPECIFICATIONS
 
 1. Security design goals
 

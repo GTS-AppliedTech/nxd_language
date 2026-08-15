@@ -1,4 +1,18 @@
-NXD-ELIXIR_MAPPING.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "BE003",
+  "title": "",
+  "description": "",
+  "layer": "backend",
+  "category": "backend",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+# BE003 MAPPING ELIXIR
 
 1. Modules
 

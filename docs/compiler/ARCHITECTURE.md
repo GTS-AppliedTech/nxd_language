@@ -1,4 +1,18 @@
-ARCHITECTURE.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "CP001",
+  "title": "",
+  "description": "",
+  "layer": "compiler",
+  "category": "compiler",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+# CP001 ARCHITECTURE
 
 Layer	Role	
 Frontend	Parse NXD → AST	

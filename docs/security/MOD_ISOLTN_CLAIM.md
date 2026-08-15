@@ -1,6 +1,19 @@
-MOD_ISOLTN_CLAIM.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE007",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-### MODULE ISOLATION CLAIM
+
+# SE007 MODULE ISOLATION CLAIM
 
 NXD enforces module isolation through explicit namespaces and explicit imports.
 

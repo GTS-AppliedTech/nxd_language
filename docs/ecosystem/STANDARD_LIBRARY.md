@@ -1,7 +1,22 @@
-# STANDARD_LIBRARY.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "ES003",
+  "title": "",
+  "description": "",
+  "layer": "ecosystem",
+  "category": "ecosystem",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
 
-# High‑level layout
+# ES003 STANDARD LIBRARY
+
+
+### High‑level layout
 
 Module	Purpose	
 CORE	primitives, math, collections	

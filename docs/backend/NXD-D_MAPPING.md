@@ -1,4 +1,18 @@
-NXD-D_MAPPING.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "BE002",
+  "title": "",
+  "description": "",
+  "layer": "backend",
+  "category": "backend",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+# BE002 MAPPING D
 
 
 D is a systems language, so this backend focuses on:

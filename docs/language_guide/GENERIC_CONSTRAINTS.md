@@ -1,7 +1,19 @@
-GENERIC_CONSTRAINTS.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "LG002",
+  "title": "",
+  "description": "",
+  "layer": "language guide",
+  "category": "language guide",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
 
-NXD Generic Constraints Specification
+# LG002 Generic Constraints Specification
 
 (Traits, constraint resolution, multiple constraints, backend mapping, semantics)
 

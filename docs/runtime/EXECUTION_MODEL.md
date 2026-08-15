@@ -1,6 +1,19 @@
-EXECUTION_MODEL.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RT003",
+  "title": "",
+  "description": "",
+  "layer": "runtime",
+  "category": "runtime",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-NXD execution model
+
+# RT003 execution model
 
 Here’s the spec‑level Execution Model—how an NXD program actually runs, from startup to shutdown.
 

@@ -1,6 +1,19 @@
-AGENT_MOD_SFTY_CLAIM.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE001",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-### AGENT MODIFICATION SAFTEY CLAIM
+
+# SE001 AGENT MODIFICATION SAFTEY CLAIM
 
 NXD does not claim that all agent‑generated behavior is automatically correct.
 Instead, NXD claims that declared structural invariants are preserved or made statically detectable under agent modification.

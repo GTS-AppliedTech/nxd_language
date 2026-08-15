@@ -1,6 +1,19 @@
-CHANNEL_SEMANTICS.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RT001",
+  "title": "",
+  "description": "",
+  "layer": "runtime",
+  "category": "runtime",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-NXD Channel Semantics Specification
+
+# RT001 Channel Semantics Specification
 
 (Creation, closing, boundedness, send/receive rules, error behavior, lifecycle)
 

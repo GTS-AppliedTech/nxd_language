@@ -1,6 +1,18 @@
-MAP_PHILOSOPHY.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "",
+  "title": "",
+  "description": "",
+  "layer": "",
+  "category": "",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-NXD Backend Mapping Philosophy
+# BE001 Backend Mapping Philosophy
 
 The backend mapping philosophy defines how NXD’s single semantic model is preserved across three radically different target languages: Nim, Elixir, and D.
 It ensures that NXD behaves consistently regardless of backend, while still leveraging each backend’s strengths.

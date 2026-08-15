@@ -1,6 +1,19 @@
-TYPE_CONVERSION-CASTING.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "LG004",
+  "title": "",
+  "description": "",
+  "layer": "language guide",
+  "category": "language guide",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-NXD Type Conversion & Casting Semantics
+
+# LG004 Type Conversion & Casting Semantics
 
 (Implicit conversions, explicit casts, numeric rules, failure behavior, AS/IS semantics)
 

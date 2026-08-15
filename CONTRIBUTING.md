@@ -1,4 +1,19 @@
-# **CONTRIBUTING.md**
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RO901",
+  "title": "",
+  "description": "",
+  "layer": "Root",
+  "category": "Contributing",
+  "keywords": [],
+  "doc_version": "1.0",
+  "status": "active"
+}
+---
+
+
+# RO901 CONTRIBUTING.md
 
 ## **Welcome**
 Thank you for your interest in contributing to **NXD** — a multi‑backend systems language targeting Nim, Elixir, and D.  

@@ -1,6 +1,19 @@
-ERROR_HNDL_CLAIM.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE004",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-### ERROR HANDLING CLAIM
+
+# SE004 ERROR HANDLING CLAIM
 
 NXD enforces explicit error handling through closed union types (RESULT, OPTION) and exhaustive pattern matching.
 

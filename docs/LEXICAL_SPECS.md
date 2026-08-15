@@ -1,4 +1,19 @@
-LEXICAL_SPECS.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RO002",
+  "title": "",
+  "description": "",
+  "layer": "Root",
+  "category": "Lexical",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+
+# RO002 LEXICAL SPECIFICATIONS
 
 Below is the complete, structured NXD identifier specification 
 

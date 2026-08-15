@@ -1,4 +1,19 @@
-CONCURRANCY_MODEL.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RT002",
+  "title": "",
+  "description": "",
+  "layer": "runtime",
+  "category": "runtime",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+
+# RT002 CONCURRANCY MODEL
 
 1. Core concepts
 

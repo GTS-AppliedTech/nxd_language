@@ -1,8 +1,21 @@
-VISION.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RO004",
+  "title": "",
+  "description": "",
+  "layer": "root",
+  "category": "vision",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-### NXD Vision
 
-# ORIGIN STORY
+# RO004 NXD Vision
+
+### ORIGIN STORY
 
 NXD (pronounced "next") derives its name from the language's original target ecosystems:
 

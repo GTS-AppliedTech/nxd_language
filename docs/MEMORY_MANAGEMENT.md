@@ -1,4 +1,19 @@
-MEMORY_MANAGEMENT.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RO003",
+  "title": "",
+  "description": "",
+  "layer": "Root",
+  "category": "Memory",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+
+# RO003 MEMORY MANAGEMENT
 
 1. Design stance
 

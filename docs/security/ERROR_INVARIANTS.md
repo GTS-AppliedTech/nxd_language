@@ -1,6 +1,19 @@
-ERROR_INVARIANTS.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE005",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-### NXD ERROR INVARIATS
+
+# SE005 ERROR INVARIATS
 
 NXD’s error invariants are:
 

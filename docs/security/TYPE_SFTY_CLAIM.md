@@ -1,4 +1,19 @@
-### NXD Type Safety Claim 
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE010",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+
+# SE010 Type Safety Claim 
 
 NXD enforces type safety through explicit type declarations, closed union types, and the absence of implicit conversions.
 All values must conform to declared types, and all functions specify explicit input and output types.

@@ -1,7 +1,19 @@
-RUNTIME_ARCHITECTURE.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RT005",
+  "title": "",
+  "description": "",
+  "layer": "runtime",
+  "category": "runtime",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
 
-NXD runtime architecture
+# RT005 runtime architecture
 
 
 1. Separation of concerns

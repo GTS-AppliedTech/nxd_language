@@ -1,7 +1,19 @@
-# MOD-PKG_SYS_SPECS.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "ES002",
+  "title": "",
+  "description": "",
+  "layer": "ecosystem",
+  "category": "ecosystem",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
 
-# NXD Module & Package System Specification
+# ES002 Module & Package System Specification
 
 NXD’s module system defines how code is organized, named, imported, exported, versioned, and distributed across projects and backends.
 It must unify three incompatible ecosystems:

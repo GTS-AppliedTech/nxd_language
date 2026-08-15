@@ -1,7 +1,19 @@
-BUILD_SYSTEM_SPECS.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "ES001",
+  "title": "",
+  "description": "",
+  "layer": "ecosystem",
+  "category": "ecosystem",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
 
-## NXD build system specification
+# ES001 build system specification
 
 This defines how NXD projects are built, tested, and released across Nim, Elixir, and D, while presenting a single, coherent interface to the user.
 

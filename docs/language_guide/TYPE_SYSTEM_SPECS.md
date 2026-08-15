@@ -1,6 +1,19 @@
-TYPE_SYSTEM_SPECS.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "LG005",
+  "title": "",
+  "description": "",
+  "layer": "language guide",
+  "category": "language guide",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-NXD type system specification
+
+# LG005 type system specification
 
 1. Primitive types
 

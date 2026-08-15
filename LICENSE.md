@@ -1,4 +1,19 @@
-# MIT License
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RO902",
+  "title": "",
+  "description": "",
+  "layer": "root",
+  "category": "legal",
+  "keywords": [],
+  "doc_version": "1.0",
+  "status": "active"
+}
+---
+
+
+# RO902 MIT License
 
 ##### Copyright (c) 2026 G.T.S. Applied Technologies LLC
 

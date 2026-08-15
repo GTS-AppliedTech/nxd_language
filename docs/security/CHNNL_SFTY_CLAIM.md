@@ -1,7 +1,19 @@
-CHNNL_SFTY_CLAIM.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE002",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
 
-### NXD Channel Safety Claim 
+# SE002 NXD Channel Safety Claim 
 
 NXD enforces channel safety through typed message‑passing primitives.
 Every channel is parameterized by a concrete type (CHANNEL<T>).

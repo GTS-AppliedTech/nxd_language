@@ -1,4 +1,19 @@
-NODE_LIST-IR_SPEC.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "CP003",
+  "title": "",
+  "description": "",
+  "layer": "compiler",
+  "category": "compiler",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+
+# CP003 NODE LIST & IR SPECIFICATIONS
 
 
 

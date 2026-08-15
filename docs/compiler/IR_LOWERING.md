@@ -1,4 +1,19 @@
-IR_LOWERING.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "CP002",
+  "title": "",
+  "description": "",
+  "layer": "compiler",
+  "category": "compiler",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+
+# CP002 IR LOWERING
 
 NXD IR Lowering Rules
 

@@ -1,7 +1,19 @@
-OPERATE_SEMANTICS.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RT004",
+  "title": "",
+  "description": "",
+  "layer": "runtime",
+  "category": "runtime",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
 
-NXD Operational Semantics
+# RT004 Operational Semantics
 
 (Evaluation, Matching, Borrowing, Imports, Initialization, Runtime Ordering)
 

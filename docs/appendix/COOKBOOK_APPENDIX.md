@@ -1,4 +1,18 @@
-# COOKBOOK_APPENDIX.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "",
+  "title": "",
+  "description": "",
+  "layer": "",
+  "category": "",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
+
+# CB001 COOKBOOK_APPENDIX
 
 
 ## APPENDIX A

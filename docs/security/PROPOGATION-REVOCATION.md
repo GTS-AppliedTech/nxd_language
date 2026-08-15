@@ -1,6 +1,19 @@
-PROPOGATION-REVOCATION.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE008",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-NXD capability propagation and revocation semantics
+
+# SE008 capability propagation and revocation semantics
 
 Here’s the clean spec for how capabilities exist, move, and die in NXD—so they stop being vibes and become law.
 

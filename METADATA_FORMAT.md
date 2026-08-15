@@ -1,4 +1,19 @@
-# METADATA FORMAT (JSON-LD)
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RO903",
+  "title": "",
+  "description": "",
+  "layer": "root",
+  "category": "metadata",
+  "keywords": [],
+  "doc_version": "1.0",
+  "status": "active"
+}
+---
+
+
+# RO903 METADATA FORMAT 
 ***(Template, ID Prefix Key, Example)***
 
 

@@ -1,8 +1,21 @@
-INVARIANT_MODEL.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "SE006",
+  "title": "",
+  "description": "",
+  "layer": "security",
+  "category": "security",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-### NXD INVARIANT MODEL
 
-# INVARIANT DOMAINS
+# SE006 INVARIANT MODEL
+
+### INVARIANT DOMAINS
 
 NXD defines six structural invariant domains:
 

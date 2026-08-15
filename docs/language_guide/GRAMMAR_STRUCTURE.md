@@ -1,14 +1,18 @@
-GRAMMAR_STRUCTURE.md
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "LG003",
+  "title": "",
+  "description": "",
+  "layer": "language guide",
+  "category": "language guide",
+  "keywords": [],
+  "doc_version": "",
+  "status": "active"
+}
+---
 
-
-This is the NXD Grammar Blueprint — the foundation for the AST, IR, compiler, transpiler, and documentation.
-
-
-NXD Grammar Structure
-
-This is the high‑level grammar architecture.
-Later, you’ll formalize it into BNF or EBNF.
-
+# LG003 GRAMMER STRUCTURE
 
 1. Program Structure
 
