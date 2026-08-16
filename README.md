@@ -1,7 +1,7 @@
 ---
 {
   "@context": "https://nxdlang.org/schema",
-  "doc_id": "RO904",
+  "doc_id": "RO940",
   "title": "",
   "description": "",
   "layer": "Root",
@@ -13,7 +13,9 @@
 ---
 
 
-#  RO904 README : NXD
+#  RO940 README : NXD
+
+##### Copyright (c) 2026 G.T.S. Applied Technologies LLC
 
 ***NXD is a statically typed programming language designed to target Nim, D, and Elixir from a common semantic and intermediate representation.***
 

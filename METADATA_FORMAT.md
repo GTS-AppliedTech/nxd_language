@@ -1,19 +1,19 @@
 ---
 {
   "@context": "https://nxdlang.org/schema",
-  "doc_id": "RO903",
-  "title": "",
-  "description": "",
+  "doc_id": "RO930",
+  "title": "Metadata Format",
+  "description": "Format",
   "layer": "root",
   "category": "metadata",
-  "keywords": [],
+  "keywords": [example, metadata, format],
   "doc_version": "1.0",
   "status": "active"
 }
 ---
 
 
-# RO903 METADATA FORMAT 
+# RO940 METADATA FORMAT 
 ***(Template, ID Prefix Key, Example)***
 
 
@@ -72,9 +72,12 @@ RT001
 #### Security:
 SE001
 
-#### Root (/Docs):
-RO001
+#### SEMANTIC CONFORMITY
+SC001
 
+#### Root (/Docs):
+RO001 (Project Language Docs)
+RO900 (Project Repo Docs)
 
 ### ***FORMATTING EXAMPLE***
 
