@@ -52,7 +52,7 @@ Types and declarations
 
 Functions and parameters
 
-• FUNC_DECL_NODE:• fields: name: IDENTIFIER, params: PARAM_NODE*, body: BLOCK_NODE
+• FUNC_DECL_NODE:• fields: name: IDENTIFIER, params: PARAM_NODE*, return_type: TYPE_REF_NODE?, body: BLOCK_NODE
 
 • PARAM_NODE:• fields: name: IDENTIFIER, type: TYPE_REF_NODE?
 

@@ -131,7 +131,7 @@ Lowering rule:
 
 MATCH
 
-MATCH is syntactic sugar. It lowers into IRMatch.
+MATCH syntax lowers into the normalized IRMatch representation.
 
 MATCH_STMT_NODE → IRMatch(target, cases)
 CASE_BLOCK_NODE → IRMatchCase(pattern, body)
