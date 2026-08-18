@@ -1,0 +1,31 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "kind": "return",
+          "value": {
+            "kind": "binary",
+            "op": "ADD",
+            "left": {
+              "kind": "literal",
+              "value": 1
+            },
+            "right": {
+              "kind": "literal",
+              "value": 2
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 use crate::ir::nodes::*;
+use crate::ir::parse_ir::IRRoot;
 use crate::backend::nim::{
     module,
     types,

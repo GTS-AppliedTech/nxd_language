@@ -11,7 +11,7 @@ pub fn emit_functions(funcs: &Vec<IRFunction>) -> String {
     out
 }
 
-fn emit_function(f: &IRFunction) -> String {
+pub fn emit_function(f: &IRFunction) -> String {
     let mut out = String::new();
 
     // proc header
@@ -42,25 +42,39 @@ fn emit_function(f: &IRFunction) -> String {
     out
 }
 
-fn emit_statement(stmt: &IRStatement) -> String {
+pub fn emit_statement(stmt: &IRStatement) -> String {
     match stmt {
         IRStatement::Let { name, value } => {
             format!("  var {} = {}\n", name.to_lowercase(), value)
         }
+
         IRStatement::Const { name, value } => {
             format!("  let {} = {}\n", name.to_lowercase(), value)
         }
+
         IRStatement::Return(expr) => {
             format!("  return {}\n", expr)
         }
+
         IRStatement::Loop(body) => {
             let mut out = String::new();
             out.push_str("  while true:\n");
+
             for stmt in body {
                 out.push_str(&format!("    {}\n", emit_statement(stmt).trim()));
             }
+
             out
         }
+
+        IRStatement::If(_) => {
+            "  # TODO: emit if statement\n".to_string()
+        }
+
+        IRStatement::Match(_) => {
+            "  # TODO: emit match statement\n".to_string()
+        }
+
         IRStatement::Expr(expr) => {
             format!("  {}\n", expr)
         }

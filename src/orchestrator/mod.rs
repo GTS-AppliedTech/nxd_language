@@ -1,4 +1,4 @@
 pub mod pipeline;
-pub mod dispatcher; 
-pub mod bridge;
-pub mod config;
+
+pub use pipeline::compile_from_ir_json;
+

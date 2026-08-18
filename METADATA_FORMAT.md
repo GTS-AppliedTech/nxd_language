@@ -75,9 +75,14 @@ SE001
 #### SEMANTIC CONFORMITY
 SC001
 
+#### SAMPLE TESTS
+ST001 - ST299 (Nim)
+ST301 - ST599 (D)
+ST601 - ST999 (Elixir)
+
 #### Root (/Docs):
-RO001 (Project Language Docs)
-RO900 (Project Repo Docs)
+RO001 - RO899 (Project Language Docs)
+RO900 - RO999(Project Repo Docs)
 
 ### ***FORMATTING EXAMPLE***
 

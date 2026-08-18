@@ -1,4 +1,5 @@
-from ir.nodes import *
+from src.frontend.ir.nodes import *
+from src.frontend.ast.nodes import *
 
 def lower_module(ast):
     return IRModule(

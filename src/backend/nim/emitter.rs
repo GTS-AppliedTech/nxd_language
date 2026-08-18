@@ -1,10 +1,7 @@
-pub fn emit(ir_json: &str) -> String {
-    // TODO: parse IR JSON and generate Nim source
-    "// Nim backend not implemented yet\n".to_string()
-}
-pub fn emit(ir_json: &str) -> String {
-    let ir = parse_ir(ir_json);
+use crate::ir::parse_ir::IRRoot;
+use super::{module, types, traits, impls, functions};
 
+pub fn emit(ir: &IRRoot) -> String {
     let mut out = String::new();
 
     out.push_str(&module::emit_module(&ir.module));

@@ -1,13 +1,15 @@
-use super::bridge::run_frontend;
-use super::dispatcher::dispatch_backend;
-use super::config::OrchestratorConfig;
+use crate::backend::nim::emitter;
+use crate::ir::parse_ir::IRRoot;
+use std::fs;
 
-pub fn run_pipeline(source_code: &str, config: OrchestratorConfig) -> String {
-    // 1. Run frontend (Python)
-    let frontend = run_frontend(source_code);
+pub fn compile_from_ir_json(path: &str) -> Result<String, String> {
+    let data = fs::read_to_string(path)
+        .map_err(|e| e.to_string())?;
 
-    // 2. IR → Backend
-    let backend_output = dispatch_backend(&config, &frontend.ir_json);
+    let ir_root: IRRoot = serde_json::from_str(&data)
+        .map_err(|e| e.to_string())?;
 
-    backend_output
+    let nim_code = emitter::emit(&ir_root);
+
+    Ok(nim_code)
 }
