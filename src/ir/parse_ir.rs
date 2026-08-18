@@ -4,10 +4,20 @@ use crate::ir::nodes::*;
 #[derive(Deserialize)]
 pub struct IRRoot {
     pub module: IRModule,
+
+    #[serde(default)]
     pub types: Vec<IRTypeDecl>,
+
+    #[serde(default)]
     pub traits: Vec<IRTrait>,
+
+    #[serde(default)]
     pub impls: Vec<IRImpl>,
+
+    #[serde(default)]
     pub functions: Vec<IRFunction>,
+
+    #[serde(default)]
     pub statements: Vec<IRStatement>,
 }
 

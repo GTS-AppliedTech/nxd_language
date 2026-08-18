@@ -1,58 +1,12 @@
-   0.120517800s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint: fingerprint error for nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language)/Check { test: false }/TargetInner { name: "nxd-compiler", doc: true, ..: with_path("C:\\Users\\gsmob\\nxd_language\\src\\main.rs", Edition2021) }
-   0.120564200s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\gsmob\nxd_language\target\debug\.fingerprint\nxd-compiler-244a461b8f2321ee\bin-nxd-compiler`
-
-Caused by:
-    The system cannot find the file specified. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_repo
-   6: git_filter_source_repo
-   7: git_filter_source_repo
-   8: git_filter_source_repo
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_libgit2_prerelease
-  12: <unknown>
-  13: <unknown>
-  14: <unknown>
-  15: <unknown>
-  16: git_midx_writer_dump
-  17: git_filter_source_repo
-  18: git_midx_writer_dump
-  19: BaseThreadInitThunk
-  20: RtlUserThreadStart
-   0.143193400s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint: fingerprint error for nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language)/Check { test: true }/TargetInner { name: "nxd-compiler", doc: true, ..: with_path("C:\\Users\\gsmob\\nxd_language\\src\\main.rs", Edition2021) }
-   0.143224900s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\gsmob\nxd_language\target\debug\.fingerprint\nxd-compiler-7e5be6f91bcecb7e\test-bin-nxd-compiler`
-
-Caused by:
-    The system cannot find the file specified. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_repo
-   6: git_filter_source_repo
-   7: git_filter_source_repo
-   8: git_filter_source_repo
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_libgit2_prerelease
-  12: <unknown>
-  13: <unknown>
-  14: <unknown>
-  15: <unknown>
-  16: git_midx_writer_dump
-  17: git_filter_source_repo
-  18: git_midx_writer_dump
-  19: BaseThreadInitThunk
-  20: RtlUserThreadStart
+   0.086415900s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\gsmob\\nxd_language\\src\\ir\\nodes.rs"
+   0.086489700s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\gsmob\\nxd_language\\target\\debug\\.fingerprint\\nxd-compiler-244a461b8f2321ee\\dep-bin-nxd-compiler"
+   0.086501300s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13431546998, nanos: 530146200 } < FileTime { seconds: 13431547631, nanos: 370220400 }
+   0.087111600s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint: fingerprint dirty for nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language)/Check { test: false }/TargetInner { name: "nxd-compiler", doc: true, ..: with_path("C:\\Users\\gsmob\\nxd_language\\src\\main.rs", Edition2021) }
+   0.087199300s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\gsmob\\nxd_language\\target\\debug\\.fingerprint\\nxd-compiler-244a461b8f2321ee\\dep-bin-nxd-compiler", reference_mtime: FileTime { seconds: 13431546998, nanos: 530146200 }, stale: "C:\\Users\\gsmob\\nxd_language\\src\\ir\\nodes.rs", stale_mtime: FileTime { seconds: 13431547631, nanos: 370220400 } }))
+   0.107295300s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\gsmob\\nxd_language\\src\\ir\\nodes.rs"
+   0.107324000s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\gsmob\\nxd_language\\target\\debug\\.fingerprint\\nxd-compiler-7e5be6f91bcecb7e\\dep-test-bin-nxd-compiler"
+   0.107332000s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13431546998, nanos: 530146200 } < FileTime { seconds: 13431547631, nanos: 370220400 }
+   0.107686600s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint: fingerprint dirty for nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language)/Check { test: true }/TargetInner { name: "nxd-compiler", doc: true, ..: with_path("C:\\Users\\gsmob\\nxd_language\\src\\main.rs", Edition2021) }
+   0.107719400s  INFO prepare_target{force=false package_id=nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language) target="nxd-compiler"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\gsmob\\nxd_language\\target\\debug\\.fingerprint\\nxd-compiler-7e5be6f91bcecb7e\\dep-test-bin-nxd-compiler", reference_mtime: FileTime { seconds: 13431546998, nanos: 530146200 }, stale: "C:\\Users\\gsmob\\nxd_language\\src\\ir\\nodes.rs", stale_mtime: FileTime { seconds: 13431547631, nanos: 370220400 } }))
     Checking nxd-compiler v0.1.0 (C:\Users\gsmob\nxd_language)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.94s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.67s

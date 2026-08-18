@@ -1,1 +1,6 @@
 MODULE TEST
+
+FUNC MAIN()
+    LET X SET 1
+    
+    PRINTLN(X)

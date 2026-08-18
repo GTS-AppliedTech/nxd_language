@@ -4,6 +4,8 @@
     "imports": []
   },
   "types": [],
+  "traits": [],
+  "impls": [],
   "functions": [
     {
       "name": "MAIN",
@@ -11,21 +13,24 @@
       "return_type": null,
       "body": [
         {
-          "kind": "return",
-          "value": {
-            "kind": "binary",
-            "op": "ADD",
-            "left": {
-              "kind": "literal",
-              "value": 1
-            },
-            "right": {
-              "kind": "literal",
-              "value": 2
+          "Return": {
+            "Binary": {
+              "kind": "ADD",
+              "left": {
+                "Literal": {
+                  "Int": 1
+                }
+              },
+              "right": {
+                "Literal": {
+                  "Int": 2
+                }
+              }
             }
           }
         }
       ]
     }
-  ]
+  ],
+  "statements": []
 }

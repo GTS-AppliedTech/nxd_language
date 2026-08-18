@@ -11,6 +11,11 @@ class Parser:
         if self.pos >= len(self.tokens):
             return ("EOF", "")
         return self.tokens[self.pos]
+    
+    def _next_is(self, kind):
+        if self.pos + 1 >= len(self.tokens):
+            return False
+        return self.tokens[self.pos + 1][0] == kind
 
     def eat(self, kind=None, val=None):
         tok = self.peek()
@@ -50,7 +55,7 @@ class Parser:
                 continue
 
             body.append(self.parse_top_level())
-            
+
         return ASTModule(name=name, imports=imports, body=body)
 
     def parse_import(self):
@@ -412,15 +417,29 @@ class Parser:
         self.eat("LBRACE")
         entries = {}
         while not self.at("RBRACE"):
-            key = self.parse_expr()
+            while self.at("NEWLINE"):
+                self.eat("NEWLINE")
+                if self.at("RBRACE"):
+                 break
+        # Map/object keys should be simple identifiers for now
+            if self.at("IDENT"):
+                key = self.eat("IDENT")[1]
+            elif self.at("LOWNAME"):
+                key = self.eat("LOWNAME")[1]
+            elif self.at("STRING"):
+                key = self.eat("STRING")[1][1:-1]
+            else:
+                raise Exception(f"Expected map key, got {self.peek()}")
             self.eat("COLON")
             val = self.parse_expr()
+            entries[key] = val
             if self.at("COMMA"):
                 self.eat("COMMA")
-            entries[key] = val
+            while self.at("NEWLINE"):
+                self.eat("NEWLINE")
         self.eat("RBRACE")
-        return ASTLiteral(value=entries)
-
+        return ASTLiteral(value=entries) 
+   
     def parse_lambda(self):
         self.eat("FN")
         self.eat("LPAREN")

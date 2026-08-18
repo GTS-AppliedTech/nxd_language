@@ -11,21 +11,20 @@ def compile_to_ir_json(src: str, out_path: str):
     ir_types = lower_types(ast_types)
     ir_functions = [lower_function(f) for f in ast_functions]
 
-ir_root = {
-    "module": serialize_module(ir_module),
-    "types": [serialize_type(t) for t in ir_types],
-    "traits": [],
-    "impls": [],
-    "functions": [serialize_function(f) for f in ir_functions],
-    "statements": [],
-}
+    ir_root = {
+        "module": serialize_module(ir_module),
+        "types": [serialize_type(t) for t in ir_types],
+        "traits": [],
+        "impls": [],
+        "functions": [serialize_function(f) for f in ir_functions],
+        "statements": [],
+    }
+
     # optional: validate IR structure before writing
-    # validate_ir(ir_root_like_object)  # or validate on Rust side only
+    # validate_ir(ir_root_like_object)
 
-with open(out_path, "w") as f:
+    with open(out_path, "w") as f:
         json.dump(ir_root, f, indent=2)
-
-
 # --- serialization helpers (Python → JSON) ---
 
 def serialize_module(m: IRModule):
@@ -75,67 +74,135 @@ def serialize_function(f):
 
 def serialize_statements(stmts):
     out = []
+
     for s in stmts:
         if isinstance(s, IRStatement.Let):
-            out.append({"kind": "let", "name": s.name, "value": serialize_expr(s.value)})
+            out.append({
+                "Let": {
+                    "name": s.name,
+                    "value": serialize_expr(s.value)
+                }
+            })
+
         elif isinstance(s, IRStatement.Const):
-            out.append({"kind": "const", "name": s.name, "value": serialize_expr(s.value)})
+            out.append({
+                "Const": {
+                    "name": s.name,
+                    "value": serialize_expr(s.value)
+                }
+            })
+
         elif isinstance(s, IRStatement.Return):
-            out.append({"kind": "return", "value": serialize_expr(s.value)})
+            out.append({
+                "Return": serialize_expr(s.value)
+            })
+
         elif isinstance(s, IRStatement.Loop):
-            out.append({"kind": "loop", "body": serialize_statements(s.body)})
+            out.append({
+                "Loop": serialize_statements(s.body)
+            })
+
         elif isinstance(s, IRStatement.If):
             out.append({
-                "kind": "if",
-                "condition": serialize_expr(s.ifnode.condition),
-                "then": serialize_statements(s.ifnode.then_branch),
-                "else": serialize_statements(s.ifnode.else_branch) if s.ifnode.else_branch else None,
+                "If": {
+                    "condition": serialize_expr(s.ifnode.condition),
+                    "then_branch": serialize_statements(s.ifnode.then_branch),
+                    "else_branch": serialize_statements(s.ifnode.else_branch)
+                        if s.ifnode.else_branch else []
+                }
             })
+
         elif isinstance(s, IRStatement.Match):
             out.append({
-                "kind": "match",
-                "scrutinee": serialize_expr(s.matchnode.scrutinee),
-                "arms": [
-                    {
-                        "pattern": arm.pattern,
-                        "body": serialize_statements(arm.body),
-                    }
-                    for arm in s.matchnode.arms
-                ],
-                "otherwise": serialize_statements(s.matchnode.otherwise)
-                if s.matchnode.otherwise else None,
+                "Match": {
+                    "scrutinee": serialize_expr(s.matchnode.scrutinee),
+                    "arms": [
+                        {
+                            "pattern": arm.pattern,
+                            "body": serialize_statements(arm.body)
+                        }
+                        for arm in s.matchnode.arms
+                    ],
+                    "otherwise": serialize_statements(s.matchnode.otherwise)
+                        if s.matchnode.otherwise else None
+                }
             })
+
         elif isinstance(s, IRStatement.Expr):
-            out.append({"kind": "expr", "expr": serialize_expr(s.expr)})
+            out.append({
+                "Expr": serialize_expr(s.expr)
+            })
+
     return out
 
 def serialize_expr(e):
     if isinstance(e, IRExpr.Literal):
-        return {"kind": "literal", "value": e.literal.value}
+        return {
+            "Literal": serialize_literal(e.literal.value)
+        }
+
     if isinstance(e, IRExpr.Binary):
         return {
-            "kind": "binary",
-            "op": e.op.kind,
-            "left": serialize_expr(e.op.left),
-            "right": serialize_expr(e.op.right),
+            "Binary": {
+                "kind": e.op.kind,
+                "left": serialize_expr(e.op.left),
+                "right": serialize_expr(e.op.right),
+            }
         }
+
     if isinstance(e, IRExpr.Unary):
         return {
-            "kind": "unary",
-            "op": e.op.kind,
-            "expr": serialize_expr(e.op.expr),
+            "Unary": {
+                "kind": e.op.kind,
+                "expr": serialize_expr(e.op.expr),
+            }
         }
+
     if isinstance(e, IRExpr.Call):
         return {
-            "kind": "call",
-            "func": e.func,
-            "args": [serialize_expr(a) for a in e.args],
+            "Call": {
+                "func": e.func,
+                "args": [serialize_expr(a) for a in e.args],
+            }
         }
+
     if isinstance(e, IRExpr.Var):
-        return {"kind": "var", "name": e.name}
+        return {
+            "Var": e.name
+        }
+
     if isinstance(e, IRExpr.Pipeline):
         return {
-            "kind": "pipeline",
-            "value": serialize_expr(e.value),
-            "func": e.func,
+            "Pipeline": {
+                "value": serialize_expr(e.value),
+                "func": e.func,
+            }
         }
+
+    raise Exception(f"Unknown IR expression: {e}")
+
+def serialize_literal(value):
+    if isinstance(value, bool):
+        return {"Bool": value}
+
+    if isinstance(value, int):
+        return {"Int": value}
+
+    if isinstance(value, float):
+        return {"Float": value}
+
+    if isinstance(value, str):
+        return {"String": value}
+
+    if value is None:
+        return "None"
+
+    if isinstance(value, list):
+        return {
+            "List": [
+                serialize_literal(v)
+                for v in value
+            ]
+        }
+
+    raise Exception(f"Unknown literal value: {value}")

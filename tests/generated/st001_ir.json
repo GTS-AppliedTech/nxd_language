@@ -4,5 +4,8 @@
     "imports": []
   },
   "types": [],
-  "functions": []
+  "traits": [],
+  "impls": [],
+  "functions": [],
+  "statements": []
 }

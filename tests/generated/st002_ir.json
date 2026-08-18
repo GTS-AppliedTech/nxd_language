@@ -4,6 +4,8 @@
     "imports": []
   },
   "types": [],
+  "traits": [],
+  "impls": [],
   "functions": [
     {
       "name": "MAIN",
@@ -11,13 +13,14 @@
       "return_type": null,
       "body": [
         {
-          "kind": "return",
-          "value": {
-            "kind": "literal",
-            "value": 1
+          "Return": {
+            "Literal": {
+              "Int": 1
+            }
           }
         }
       ]
     }
-  ]
+  ],
+  "statements": []
 }

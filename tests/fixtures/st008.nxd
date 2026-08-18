@@ -1,4 +1,7 @@
 MODULE TEST
 
 FUNC MAIN():
-    RETURN 1
+    LET X SET 1
+    LET Y SET 2
+
+    PRINTLN(X ADD Y)

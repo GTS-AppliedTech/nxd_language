@@ -1,0 +1,59 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 1
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Literal": {
+                "Int": 2
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Binary": {
+                    "kind": "ADD",
+                    "left": {
+                      "Var": "X"
+                    },
+                    "right": {
+                      "Var": "Y"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
