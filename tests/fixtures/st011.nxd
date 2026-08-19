@@ -1,0 +1,10 @@
+MODULE TEST
+
+FUNC MAIN()
+    LET VALID SET false
+
+    IF VALID:
+        PRINTLN("PASS")
+    ELSE:
+        PRINTLN("FAIL")
+``

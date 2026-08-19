@@ -1,0 +1,7 @@
+MODULE TEST
+
+FUNC MAIN()
+    LET X SET 5
+    LET Y SET CLONE X
+
+    PRINTLN(Y)

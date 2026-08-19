@@ -67,14 +67,13 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
             out
         }
 
-        IRStatement::If(_) => {
-            "  # TODO: emit if statement\n".to_string()
-        }
+        IRStatement::If(if_node) => {
+    crate::backend::nim::control_flow::emit_if(if_node)
+}
 
-        IRStatement::Match(_) => {
-            "  # TODO: emit match statement\n".to_string()
-        }
-
+        IRStatement::Match(m) => {
+    crate::backend::nim::control_flow::emit_match(m)
+}
         IRStatement::Expr(expr) => {
             format!("  {}\n", expr)
         }

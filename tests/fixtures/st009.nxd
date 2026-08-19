@@ -1,4 +1,7 @@
 MODULE TEST
 
-FUNC MAIN():
-    RETURN 1 ADD 2
+FUNC MAIN()
+    LET VALID SET true
+
+    IF VALID:
+        PRINTLN("PASS")

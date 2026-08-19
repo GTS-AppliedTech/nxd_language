@@ -1,0 +1,92 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 2
+              }
+            }
+          }
+        },
+        {
+          "Match": {
+            "scrutinee": {
+              "Var": "X"
+            },
+            "arms": [
+              {
+                "pattern": 1,
+                "body": [
+                  {
+                    "Expr": {
+                      "Call": {
+                        "func": "PRINTLN",
+                        "args": [
+                          {
+                            "Literal": {
+                              "String": "ONE"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "pattern": 2,
+                "body": [
+                  {
+                    "Expr": {
+                      "Call": {
+                        "func": "PRINTLN",
+                        "args": [
+                          {
+                            "Literal": {
+                              "String": "TWO"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "otherwise": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "OTHER"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

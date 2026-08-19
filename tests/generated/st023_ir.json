@@ -1,0 +1,107 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "NAME",
+            "value": {
+              "Literal": {
+                "String": "gabriel"
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "AGE",
+            "value": {
+              "Literal": {
+                "Int": 42
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "SCORE",
+            "value": {
+              "Literal": {
+                "Float": 99.5
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "ACTIVE",
+            "value": {
+              "Literal": {
+                "Bool": true
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "NAME"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "AGE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "SCORE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "ACTIVE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

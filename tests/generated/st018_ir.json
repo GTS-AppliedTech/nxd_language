@@ -1,0 +1,54 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 5
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Var": "CLONE"
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Var": "X"
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "Y"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

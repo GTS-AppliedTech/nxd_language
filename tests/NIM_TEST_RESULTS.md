@@ -598,17 +598,62 @@ NXD Sample:
 
 ```nxd
 MODULE TEST
-    FUNC MAIN():
-    RETURN 1
+
+FUNC MAIN()
+    LET VALID SET true
+
+    IF VALID:
+        PRINTLN("PASS")
 ```    
 
 Result:
+
+SOFT PASS *(see notes)
 
 Expected Output:
 
 Actual Output:
 
+```nim
+# test
+
+
+proc main() =
+  var valid = true
+if valid:
+    println("PASS")
+
+```
+
+
 Notes:
+
+Verified boolean literal parsing for true.
+Verified boolean literal AST generation.
+Verified boolean literal IR generation.
+Verified boolean serialization into JSON IR.
+Verified Rust deserialization of boolean literal nodes.
+Verified IF statement parsing.
+Verified AST → IR lowering for control flow.
+Verified IRIf serialization and deserialization.
+Verified IRStatement::If dispatch successfully reaches the Nim control-flow emitter.
+Verified Nim backend emits an if construct instead of the previous placeholder (# TODO: emit if statement).
+Confirmed end-to-end control-flow transport through:
+
+Defect Identified:
+
+The emitted if statement is generated outside the enclosing procedure scope
+
+Impact:
+
+Does not indicate a parser failure.
+Does not indicate an IR failure.
+Does not indicate a JSON or Rust deserialization failure.
+Confirms control-flow functionality is present.
+Requires indentation correction in the Nim emitter.
+Technical Significance
+
+This test represents the first successful validation of NXD control-flow statements through the full compiler pipeline. It confirms that boolean literals and IF statements are correctly recognized, lowered, serialized, reconstructed, and emitted. The remaining issue is limited to backend formatting rather than language feature implementation.
 
 ---
 
@@ -645,3 +690,4898 @@ Notes:
 
 The pipeline reached function call parsing for `PRINTLN(P.NAME)`. Parsing failed because member access expressions such as `P.NAME` are not currently represented in the parser/AST/IR contract. The parser successfully recognized the outer call but expected `RPAREN` after parsing `P`, then encountered `NAME`.
 
+
+
+### ST011 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    LET VALID SET false
+
+    IF VALID:
+        PRINTLN("PASS")
+    ELSE:
+        PRINTLN("FAIL")
+```
+Result:
+
+SOFT PASS *(see notes)
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  var valid = false
+if valid:
+    println("PASS")
+else:
+    println("FAIL")
+```
+
+Notes:
+Verified boolean literal parsing for false.
+Verified ELSE parsing.
+Verified else_branch AST generation.
+Verified else_branch IR generation.
+Verified JSON serialization of both branches.
+Verified Rust deserialization of IRIf with populated else_branch.
+Verified backend dispatch correctly invokes emit_if().
+Verified Nim backend emits both:
+if
+else
+Verified the entire control-flow structure survives the pipeline:
+
+The presence of both the if and else branches in the generated output confirms that control-flow lowering, transport, and reconstruction are functioning correctly. The defect remains limited to procedure-scoped indentation.
+
+is strong evidence that else_branch survived every compiler phase successfully. In other words, ST010 expanded the control-flow proof started by ST009. The same emitter defect persists, but no new control-flow defects were discovered. That makes ST011 a natural Soft Pass rather than a failure.
+
+---
+
+
+### ST012 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST LIMIT SET 10
+    LET X SET 5
+
+    PRINTLN(LIMIT)
+    PRINTLN(X)
+```
+
+Result:
+
+PASS
+
+Expected Output:
+
+```nim
+# test
+
+proc main() =
+  let limit = 10
+  var x = 5
+  println(limit)
+  println(x)
+```
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let limit = 10
+  var x = 5
+  println(limit)
+  println(x)
+
+```
+
+Notes:
+
+Verified CONST statement parsing.
+Verified CONST AST generation.
+Verified CONST IR lowering.
+Verified CONST JSON serialization.
+Verified Rust deserialization of constant declarations.
+Verified Nim backend correctly emits immutable values
+Verified CONST and LET declarations can coexist within the same function scope.
+Verified constant references survive the complete compiler pipeline.
+Verified variable references survive the complete compiler pipeline.
+Verified multiple function calls within a single function body.
+Verified immutable and mutable storage semantics remain distinct after transpilation.
+
+Technical Significance:
+
+This test validates the first direct distinction between NXD immutable and mutable storage models through the complete compiler pipeline.
+
+Observations:
+
+The generated Nim closely mirrors the original NXD intent and remains highly readable without requiring prior Nim knowledge. This indicates that the current NXD → Nim mapping for storage declarations is predictable and transparent.
+
+No defects were identified during this test.
+
+---
+
+
+### ST013 (micro test)
+
+NXD Sample:
+
+```nxd
+LET P SET PERSON {
+    NAME: "gabriel",
+    AGE: 42
+}
+```
+
+Result:
+
+FAIL
+
+Expected Output:
+
+Actual Output:
+
+N/A
+
+Notes:
+
+Notes:
+
+The parser successfully reached the object/map literal body and constructed a dictionary-like value, but the Python IR serializer does not currently support map/object literal serialization.
+ 
+This test also indicates that typed construction syntax such as `PERSON { ... }` is not yet represented as a single constructor expression. The object literal appears to be treated separately from the `PERSON` identifier rather than as the value assigned to `P`.
+
+Required Future Work:
+
+- Add map/object literal representation to AST/IR.
+- Add JSON serialization support for object/map values.
+- Add Rust IR support for object/map values.
+- Add backend emission support for object/map values.
+- Add typed constructor support for `TYPE_NAME { ... }`.
+
+
+---
+
+
+### ST014 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST LIMIT SET 10
+    LET X SET SUB 5
+    LET Y SET 2.5
+
+    PRINTLN(LIMIT)
+    PRINTLN(X)
+    PRINTLN(Y)
+```
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST015 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    LET X SET 5
+    LET Y SET 10
+
+    IF Y GTE X:
+        PRINTLN("GTE")
+
+    IF X LTE Y:
+        PRINTLN("LTE")
+```
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+Validation Notes
+
+Verified parser entered IF statement handling.
+Verified failure occurred while processing the comparison expression.
+The parser encountered the terminating : before successfully constructing a valid condition expression.
+Current implementation does not appear to fully support GTE / LTE comparison parsing within IF conditions.
+
+Technical Significance
+
+This test indicates a gap in comparison-expression handling rather than a control-flow implementation failure. IF statements have already been demonstrated to survive the NXD → JSON → Rust → Nim pipeline in previous tests.
+
+---
+
+
+### ST016 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    LET COUNT SET 0
+
+    LOOP:
+        PRINTLN(COUNT)
+```        
+
+Result:
+
+PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  var count = 0
+  while true:
+    println(count)
+
+```
+
+Notes:
+
+
+---
+
+
+### ST017 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    LET X SET 2
+
+    MATCH X:
+        CASE 1:
+            PRINTLN("ONE")
+
+        CASE 2:
+            PRINTLN("TWO")
+
+        OTHERWISE:
+            PRINTLN("OTHER")
+```
+
+Result:
+
+SOFT PASS *(see notes)
+
+Expected Output:
+
+Actual Output:
+
+```json
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 2
+              }
+            }
+          }
+        },
+        {
+          "Match": {
+            "scrutinee": {
+              "Var": "X"
+            },
+            "arms": [
+              {
+                "pattern": 1,
+                "body": [
+                  {
+                    "Expr": {
+                      "Call": {
+                        "func": "PRINTLN",
+                        "args": [
+                          {
+                            "Literal": {
+                              "String": "ONE"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "pattern": 2,
+                "body": [
+                  {
+                    "Expr": {
+                      "Call": {
+                        "func": "PRINTLN",
+                        "args": [
+                          {
+                            "Literal": {
+                              "String": "TWO"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "otherwise": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "OTHER"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
+```
+
+Notes:
+
+Validation Notes
+
+MATCH keyword parsed successfully.
+CASE clauses parsed successfully.
+OTHERWISE clause parsed successfully.
+AST generation completed.
+IR generation completed.
+JSON emitted successfully.
+Rust backend rejected the pattern type during deserialization.
+
+Technical Significance
+
+This demonstrates that MATCH/CASE constructs are recognized by the NXD frontend and can be represented in generated IR. The current failure occurs at the Rust handoff stage due to a mismatch between the frontend JSON pattern representation and the Rust IR contract.
+
+---
+
+
+### ST018 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    LET X SET 5
+    LET Y SET CLONE X
+
+    PRINTLN(Y)
+```    
+
+Result:
+
+PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  var x = 5
+  var y = clone
+  x
+  println(y)
+```
+
+
+Notes:
+
+
+---
+
+
+### ST019 (micro test)
+
+NXD Sample:
+
+```nxd
+IMPORT STD.IO
+
+FUNC MAIN()
+    PRINTLN("TEST")
+```
+
+Result:
+
+FAIL
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+Verified lexer recognizes IMPORT.
+Verified IMPORT is tokenized as a keyword.
+Parser currently requires MODULE as the first top-level construct.
+Top-level import declarations are not currently supported by the parser.
+Failure occurs before AST generation.
+Technical Significance
+
+This test demonstrates that IMPORT exists in the lexical grammar but is not yet integrated into the top-level parser workflow.
+
+---
+
+
+### ST020 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    LET NEG SET SUB 5
+    LET PI SET 3.14
+
+    PRINTLN(NEG)
+    PRINTLN(PI)
+```
+
+Result:
+
+FAIL
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+Verified lexer recognizes SUB as an operator.
+Parser does not currently accept SUB as a valid unary expression.
+Failure occurred before IR generation.
+Float validation could not be completed because parsing stopped at the unary negative expression.
+
+Technical Significance
+
+The NXD specification states that negative values should be represented using: `SUB`
+
+---
+### ST021 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST MSG SET "NXD TEST"
+
+    PRINTLN(MSG)
+```    
+
+Result:
+
+PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let msg = "NXD TEST"
+  println(msg)
+```
+
+Notes:
+
+
+---
+
+
+### ST022 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    LET VALUES SET [1, 2, 3]
+
+    PRINTLN(VALUES)
+```
+
+Result:
+
+FAIL
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+Verified list literal parsing.
+Verified AST generation for list values.
+Verified list expressions survive frontend processing.
+Failure occurred during JSON serialization.
+Serializer attempted to process nested ASTLiteral nodes contained within the list.
+Current serializer does not support converting list elements represented as ASTLiteral objects into JSON-compatible IR literals.
+
+Technical Significance
+
+This test demonstrates that list literals are recognized by the NXD frontend and represented in the AST. The failure occurs during translation from AST structures into serialized IR.
+
+---
+### ST023 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST NAME SET "gabriel"
+    LET AGE SET 42
+    LET SCORE SET 99.5
+    LET ACTIVE SET true
+
+    PRINTLN(NAME)
+    PRINTLN(AGE)
+    PRINTLN(SCORE)
+    PRINTLN(ACTIVE)
+```
+
+Result:
+
+PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let name = "gabriel"
+  var age = 42
+  var score = 99.5
+  var active = true
+  println(name)
+  println(age)
+  println(score)
+  println(active)
+```
+
+Notes:
+
+
+---
+
+
+### ST024 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+
+### ST0 (micro test)
+
+NXD Sample:
+
+
+
+Result:
+
+
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---

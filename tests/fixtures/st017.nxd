@@ -1,0 +1,14 @@
+MODULE TEST
+
+FUNC MAIN()
+    LET X SET 2
+
+    MATCH X:
+        CASE 1:
+            PRINTLN("ONE")
+
+        CASE 2:
+            PRINTLN("TWO")
+
+        OTHERWISE:
+            PRINTLN("OTHER")

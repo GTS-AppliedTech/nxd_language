@@ -380,6 +380,8 @@ class Parser:
         tok = self.peek()
         if tok[0] == "NUMBER" or tok[0] == "STRING":
             return self.parse_literal()
+        if tok[0] == "LOWNAME" and tok[1] in ("true", "false"):
+            return self.parse_literal()
         if tok[0] == "LBRACK":
             return self.parse_list_literal()
         if tok[0] == "LBRACE":
@@ -401,6 +403,12 @@ class Parser:
         if tok[0] == "STRING":
             s = self.eat("STRING")[1][1:-1]
             return ASTLiteral(value=s)
+        if tok[0] == "LOWNAME":
+            value = self.eat("LOWNAME")[1]
+            if value == "true":
+                return ASTLiteral(value=True)
+            if value == "false":
+                return ASTLiteral(value=False)
         raise Exception("Literal expected")
 
     def parse_list_literal(self):

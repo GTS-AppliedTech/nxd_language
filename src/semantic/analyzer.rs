@@ -1,5 +1,5 @@
 use crate::semantic::{
-    symbols::SymbolTable,
+    symbols::{SymbolTable, Symbol},
     types::check_type,
     traits::TraitRegistry,
     casts::{check_as_cast, check_is},
@@ -8,6 +8,8 @@ use crate::semantic::{
     errors::SemanticError,
 };
 use crate::ir::nodes::*;
+use crate::ir::parse_ir::IRRoot;
+
 
 pub struct Analyzer {
     pub symbols: SymbolTable,
