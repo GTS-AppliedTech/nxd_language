@@ -2,11 +2,11 @@ from pathlib import Path
 from src.frontend.ir.main import compile_to_ir_json
 import subprocess
 
-TEST_ID = "st001"
+TEST_ID = "st004"
 
 src_path = f"tests/fixtures/{TEST_ID}.nxd"
-json_path = f"tests/generated/{TEST_ID}_ir.json"
-nim_path = f"tests/generated/{TEST_ID}.nim"
+json_path = f"tests/generated/partial_pipeline_tests/{TEST_ID}_ir.json"
+nim_path = f"tests/generated/full_pipeline_tests/{TEST_ID}.nim"
 
 src = Path(src_path).read_text()
 

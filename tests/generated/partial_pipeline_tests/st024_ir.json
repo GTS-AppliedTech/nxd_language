@@ -1,0 +1,79 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "PI",
+            "value": {
+              "Literal": {
+                "Float": 3.14
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "RATE",
+            "value": {
+              "Literal": {
+                "Float": 2.0
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Binary": {
+                    "kind": "MUL",
+                    "left": {
+                      "Var": "PI"
+                    },
+                    "right": {
+                      "Var": "RATE"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Binary": {
+                    "kind": "DIV",
+                    "left": {
+                      "Var": "PI"
+                    },
+                    "right": {
+                      "Var": "RATE"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

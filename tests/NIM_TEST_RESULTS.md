@@ -29,7 +29,9 @@ MODULE TEST
 
 Result: 
 
-PASS
+COMPILER: PASS
+SEMANTICS: PASS
+
 
 Failure Stage:
 
@@ -81,7 +83,8 @@ FUNC MAIN():
 
 Result:
 
-PASS
+COMPILER: PASS
+SEMANTICS: PASS
 
 Failure Stage:
 
@@ -162,7 +165,8 @@ FUNC MAIN():
 
 Result:
 
-PASS
+COMPILER: PASS
+SEMANTICS: PASS
 
 Failure Stage:
 
@@ -492,6 +496,9 @@ FUNC MAIN()
 
 Result:
 
+COMPILER: PASS
+SEMANTICS: PASS
+
 Expected Output:
 
 Actual Output:
@@ -559,7 +566,8 @@ FUNC MAIN():
 
 Result:
 
-PASS
+COMPILER: PASS
+SEMANTICS: PASS
 
 Expected Output:
 
@@ -608,7 +616,8 @@ FUNC MAIN()
 
 Result:
 
-SOFT PASS *(see notes)
+COMPILER: SOFT PASS *(see notes)
+SEMANTICS:
 
 Expected Output:
 
@@ -676,7 +685,8 @@ FUNC MAIN()
 
 Result:
 
-FAIL
+COMPILER:FAIL
+SEMANTICS: FAIL
 
 Failure Stage:
 
@@ -709,7 +719,8 @@ FUNC MAIN()
 ```
 Result:
 
-SOFT PASS *(see notes)
+COMPILER: SOFT PASS *(see notes)
+SEMANTICS: PASS
 
 Expected Output:
 
@@ -764,7 +775,8 @@ FUNC MAIN()
 
 Result:
 
-PASS
+COMPILER: PASS
+SEMANTICS: PASS
 
 Expected Output:
 
@@ -832,7 +844,8 @@ LET P SET PERSON {
 
 Result:
 
-FAIL
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -879,7 +892,8 @@ FUNC MAIN()
 
 Result:
 
-
+COMPILER: FAIL;
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -913,7 +927,8 @@ FUNC MAIN()
 
 Result:
 
-
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -953,7 +968,8 @@ FUNC MAIN()
 
 Result:
 
-PASS
+COMPILER: PASS
+SEMANTICS: PASS
 
 Expected Output:
 
@@ -999,7 +1015,8 @@ FUNC MAIN()
 
 Result:
 
-SOFT PASS *(see notes)
+COMPILER: PASS *(see notes)
+SEMANTICS: PASS
 
 Expected Output:
 
@@ -1135,7 +1152,8 @@ FUNC MAIN()
 
 Result:
 
-PASS
+COMPILER: PASS
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1172,7 +1190,8 @@ FUNC MAIN()
 
 Result:
 
-FAIL
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1211,7 +1230,8 @@ FUNC MAIN()
 
 Result:
 
-FAIL
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1246,7 +1266,8 @@ FUNC MAIN()
 
 Result:
 
-PASS
+COMPILER: PASS
+SEMANTICS: PASS
 
 Expected Output:
 
@@ -1282,7 +1303,8 @@ FUNC MAIN()
 
 Result:
 
-FAIL
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1325,7 +1347,8 @@ FUNC MAIN()
 
 Result:
 
-PASS
+COMPILER: PASS
+SEMANTICS: PASS
 
 Expected Output:
 
@@ -1356,11 +1379,185 @@ Notes:
 
 NXD Sample:
 
+```nxd
+MODULE TEST
 
+FUNC MAIN()
+    CONST PI SET 3.14
+    CONST RATE SET 2.0
+
+    PRINTLN(PI MUL RATE)
+    PRINTLN(PI DIV RATE)
+```
 
 Result:
 
+COMPILER: PASS
+SEMANTICS: PASS
 
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let pi = 3.14
+  let rate = 2
+  println(pi * rate)
+  println(pi / rate)
+```
+
+
+Notes:
+
+
+---
+
+
+### ST025 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST A SET 10
+    CONST B SET 3
+    CONST C SET 0
+
+    IF A MOD B NEQ C OR C EQ 0:
+        PRINTLN("MOD_OR_PASS")
+```
+
+Result:
+
+COMPILER: PASS
+SEMANTICS: PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let a = 10
+  let b = 3
+  let c = 0
+if a mod b != c or c == 0:
+    println("MOD_OR_PASS")
+```
+
+Notes:
+
+
+---
+
+
+### ST026 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST LOW SET 3
+    CONST HIGH SET 9
+
+    IF HIGH GT LOW AND LOW LT HIGH:
+        PRINTLN("RANGE_PASS")
+```
+
+Result:
+
+COMPILER: PASS
+SEMANTICS:PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let low = 3
+  let high = 9
+if high > low and low < high:
+    println("RANGE_PASS")
+```
+
+Notes:
+
+
+---
+
+
+### ST027 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST READY SET false
+
+    IF NOT READY:
+        RETURN none
+```
+
+Result:
+
+COMPILER: PASS
+SEMANTICS: PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let ready = false
+if not ready:
+    return nil
+```
+
+Notes:
+
+
+---
+
+
+### ST028 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST VALUE SET 42
+
+    IF VALUE IS int:
+        PRINTLN(VALUE AS int)
+```
+
+Result:
+
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1374,15 +1571,23 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST029 (micro test)
 
 NXD Sample:
 
+```nxd
+MODULE TEST
 
+FUNC MAIN()
+    CONST VALUE SET 5
+
+    VALUE PIPE PRINTLN
+```
 
 Result:
 
-
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1396,15 +1601,115 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST030 (micro test)
 
 NXD Sample:
 
+```nxd
+MODULE TEST
 
+FUNC MAIN()
+    CONST COUNT SET 1
+
+    LOOP:
+        PRINTLN(COUNT ADD 1)
+```
 
 Result:
 
+COMPILER: PASS
+SEMANTICS: PASS
 
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let count = 1
+  while true:
+    println(count + 1)
+```
+
+Notes:
+
+
+---
+
+
+### ST031 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST STATE SET "READY"
+
+    MATCH STATE:
+        CASE "READY":
+            PRINTLN("GO")
+
+        CASE "WAIT":
+            PRINTLN("HOLD")
+
+        OTHERWISE:
+            PRINTLN("UNKNOWN")
+```
+
+Result:
+
+COMPILER: PASS
+SEMANTICS: PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let state = "READY"
+case state:
+  of "READY":
+    println("GO")
+  of "WAIT":
+    println("HOLD")
+  else:
+    println("UNKNOWN")
+```
+
+Notes:
+
+
+---
+
+
+### ST032 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    CONST NAMES SET ["ALPHA", "BETA", "GAMMA"]
+    CONST FLAGS SET [true, false, true]
+
+    PRINTLN(NAMES)
+    PRINTLN(FLAGS)
+```
+
+Result:
+
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1418,15 +1723,113 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST033 (micro test)
 
 NXD Sample:
 
+```nxd
+MODULE TEST
 
+TYPE PERSON STRUCT:
+    NAME: string
+    AGE: int
+
+FUNC MAIN()
+    PRINTLN("STRUCT_DECLARED")
+```
 
 Result:
 
+COMPILER: PASS
+SEMANTICS: PASS
 
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+type
+  PERSON = object
+    name: string
+    age: int
+
+proc main() =
+  println("STRUCT_DECLARED")
+```
+
+Notes:
+
+
+---
+
+
+### ST034 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+TYPE STATUS ENUM:
+    READY
+    WAITING
+    FAILED
+
+FUNC MAIN()
+    PRINTLN("ENUM_DECLARED")
+```
+
+Result:
+
+COMPILER: PASS
+SEMANTICS: PASS
+
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+type
+  STATUS = enum
+    READY,
+    WAITING,
+    FAILED,
+
+proc main() =
+  println("ENUM_DECLARED")
+```
+
+Notes:
+
+
+---
+
+
+### ST035 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+TYPE RESULT UNION:
+    SUCCESS { VALUE: int }
+    FAILURE { MESSAGE: string }
+
+FUNC MAIN()
+    PRINTLN("UNION_DECLARED")
+```
+
+Result:
+
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1440,15 +1843,31 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST036 (micro test)
 
 NXD Sample:
 
+```nxd
+MODULE TEST
 
+TYPE PERSON STRUCT:
+    NAME: string
+
+TRAIT DISPLAYABLE:
+    FUNC DISPLAY()
+
+IMPL DISPLAYABLE FOR PERSON:
+    FUNC DISPLAY()
+        PRINTLN("PERSON")
+
+FUNC MAIN()
+    PRINTLN("TRAIT_IMPL_TEST")
+```
 
 Result:
 
-
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1462,15 +1881,69 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST037 (micro test)
 
 NXD Sample:
 
+```nxd
+MODULE TEST
 
+FUNC MAIN()
+    CONST VALUE SET 10
+
+    PRINTLN(CLONE VALUE)
+    PRINTLN(BORROW VALUE)
+    PRINTLN(MOVE VALUE)
+```
 
 Result:
 
+COMPILER: PASS
+SEMANTICS: PASS
 
+Expected Output:
+
+Actual Output:
+
+```nim
+# test
+
+
+proc main() =
+  let value = 10
+  println(CLONE value)
+  println(BORROW value)
+  println(MOVE value)
+```
+
+Notes:
+
+
+---
+
+
+### ST038 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+FUNC MAIN()
+    TRY:
+        PRINTLN("TRY")
+
+    CATCH:
+        PRINTLN("CATCH")
+
+    FINALLY:
+        PRINTLN("FINALLY")
+```
+
+Result:
+
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1484,15 +1957,28 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST039 (micro test)
 
 NXD Sample:
 
+```nxd
+MODULE TEST
 
+FUNC MAIN()
+    TRY:
+        PRINTLN("TRY")
+
+    CATCH:
+        PRINTLN("CATCH")
+
+    FINALLY:
+        PRINTLN("FINALLY")
+```
 
 Result:
 
-
+COMPILER: FAIL
+SEMANTICS: FAIL
 
 Expected Output:
 
@@ -1506,7 +1992,36 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST040 (micro test)
+
+NXD Sample:
+
+```nxd
+MODULE TEST
+
+IMPORT STD.IO
+
+FUNC MAIN()
+    PRINTLN("IMPORT_TEST")
+```
+
+Result:
+
+COMPILER: FAIL
+SEMANTICS: FAIL
+
+Expected Output:
+
+Actual Output:
+
+
+
+Notes:
+
+
+---
+
+### ST041 (micro test)
 
 NXD Sample:
 
@@ -1514,7 +2029,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1528,7 +2044,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST042 (micro test)
 
 NXD Sample:
 
@@ -1536,7 +2052,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1550,7 +2067,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST043 (micro test)
 
 NXD Sample:
 
@@ -1558,7 +2075,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1572,7 +2090,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST044 (micro test)
 
 NXD Sample:
 
@@ -1580,7 +2098,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1594,7 +2113,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST045 (micro test)
 
 NXD Sample:
 
@@ -1602,7 +2121,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1616,7 +2136,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST046 (micro test)
 
 NXD Sample:
 
@@ -1624,7 +2144,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1638,7 +2159,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST047 (micro test)
 
 NXD Sample:
 
@@ -1646,7 +2167,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1660,7 +2182,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST048 (micro test)
 
 NXD Sample:
 
@@ -1668,7 +2190,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1682,7 +2205,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST049 (micro test)
 
 NXD Sample:
 
@@ -1690,7 +2213,8 @@ NXD Sample:
 
 Result:
 
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 
@@ -1704,7 +2228,7 @@ Notes:
 ---
 
 
-### ST0 (micro test)
+### ST050 (micro test)
 
 NXD Sample:
 
@@ -1712,226 +2236,8 @@ NXD Sample:
 
 Result:
 
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
-
-Expected Output:
-
-Actual Output:
-
-
-
-Notes:
-
-
----
-
-
-### ST0 (micro test)
-
-NXD Sample:
-
-
-
-Result:
-
-
+COMPILER:
+SEMANTICS:
 
 Expected Output:
 

@@ -1,0 +1,80 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "VALUE",
+            "value": {
+              "Literal": {
+                "Int": 10
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Unary": {
+                    "kind": "CLONE",
+                    "expr": {
+                      "Var": "VALUE"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Unary": {
+                    "kind": "BORROW",
+                    "expr": {
+                      "Var": "VALUE"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Unary": {
+                    "kind": "MOVE",
+                    "expr": {
+                      "Var": "VALUE"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

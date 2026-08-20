@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use serde_json::Value;
 use std::fmt;
 // ===============================
 // IR MODULE
@@ -22,6 +23,7 @@ pub struct IRImport {
 // ===============================
 
 #[derive(Clone, Debug, Deserialize)]
+#[serde(tag = "kind", rename_all = "lowercase")]
 pub enum IRTypeDecl {
     Struct(IRStruct),
     Enum(IREnum),
@@ -140,7 +142,7 @@ pub struct IRMatch {
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct IRMatchArm {
-    pub pattern: String,
+    pub pattern: Value,
     pub body: Vec<IRStatement>,
 }
 

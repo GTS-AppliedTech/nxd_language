@@ -11,8 +11,8 @@ compile_to_ir_json(
 print("IR generated")
 import subprocess
 
-json_path = "tests/generated/st013_ir.json"
-nim_path = "tests/generated/st013_json_rust.nim"
+json_path = "tests/generated/partial_pipeline_tests/st013_ir.json"
+nim_path = "tests/generated/python_rust_ir_handoff/st013_json_rust.nim"
 
 subprocess.run(
     [

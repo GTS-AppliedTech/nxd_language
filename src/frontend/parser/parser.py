@@ -1,3 +1,6 @@
+from dataclasses import fields
+from os import name
+
 from src.frontend.lexer.scanner import lex
 from src.frontend.ast.nodes import *
 
@@ -71,6 +74,10 @@ class Parser:
         tok = self.peek()
         if tok[0] == "KEYWORD" and tok[1] == "TYPE":
             return self.parse_type_decl()
+        if tok[0] == "KEYWORD" and tok[1] == "TRAIT":
+            return self.parse_trait_decl()
+        if tok[0] == "KEYWORD" and tok[1] == "IMPL":
+            return self.parse_impl_decl()
         if tok[0] == "KEYWORD" and tok[1] == "FUNC":
             return self.parse_func_decl()
         # allow top-level statements
@@ -90,58 +97,112 @@ class Parser:
         if self.at("KEYWORD", "TRAIT"):
             self.eat("KEYWORD", "TRAIT")
             return self.parse_trait_type(name)
-        # default: struct with brace body
-        return self.parse_struct_type(name)
+        if self.at("KEYWORD", "STRUCT"):
+            self.eat("KEYWORD", "STRUCT")
+            return self.parse_struct_type(name)
+        raise Exception(f"Expected STRUCT, ENUM, UNION, or TRAIT, got {self.peek()}")
 
     def parse_struct_type(self, name):
-        self.eat("LBRACE")
+        self.eat("COLON")
+
+        while self.at("NEWLINE"):
+            self.eat("NEWLINE")
+
         fields = []
-        while not self.at("RBRACE"):
+
+        while self.at("IDENT") and self._next_is("COLON"):
             fname = self.eat("IDENT")[1]
             self.eat("COLON")
             ty = self.parse_type_ref()
+
             if self.at("COMMA"):
                 self.eat("COMMA")
+
             fields.append(ASTField(name=fname, ty=ty))
-        self.eat("RBRACE")
+
+            while self.at("NEWLINE"):
+                self.eat("NEWLINE")
+
         return ASTStruct(name=name, fields=fields)
 
     def parse_enum_type(self, name):
-        self.eat("LBRACE")
+        self.eat("COLON")
+
+        while self.at("NEWLINE"):
+            self.eat("NEWLINE")
+
         variants = []
-        while not self.at("RBRACE"):
-            v = self.eat("IDENT")[1]
-            variants.append(v)
+
+        while self.at("IDENT"):
+            variants.append(self.eat("IDENT")[1])
+
             if self.at("COMMA"):
                 self.eat("COMMA")
-        self.eat("RBRACE")
+
+            while self.at("NEWLINE"):
+                self.eat("NEWLINE")
+
         return ASTEnum(name=name, variants=variants)
 
     def parse_union_type(self, name):
-        self.eat("LBRACE")
+        self.eat("COLON")
+
+        while self.at("NEWLINE"):
+            self.eat("NEWLINE")
+
         variants = []
-        while not self.at("RBRACE"):
+
+        while self.at("IDENT"):
             kind = self.eat("IDENT")[1]
-            self.eat("LPAREN")
+            self.eat("LBRACE")
+
             fields = []
-            while not self.at("RPAREN"):
+
+            while self.at("NEWLINE"):
+                self.eat("NEWLINE")
+
+            while not self.at("RBRACE"):
                 fname = self.eat("IDENT")[1]
                 self.eat("COLON")
                 ty = self.parse_type_ref()
+
                 if self.at("COMMA"):
                     self.eat("COMMA")
-                fields.append(ASTField(name=fname, ty=ty))
-            self.eat("RPAREN")
-            if self.at("COMMA"):
-                self.eat("COMMA")
-            variants.append(ASTUnionVariant(kind=kind, fields=fields))
+
+                fields.append(
+                    ASTField(
+                        name=fname,
+                        ty=ty,
+                    )
+                )
+
+            while self.at("NEWLINE"):
+                self.eat("NEWLINE")
+
         self.eat("RBRACE")
-        return ASTUnion(name=name, variants=variants)
+
+        variants.append(
+            ASTUnionVariant(
+                kind=kind,
+                fields=fields,
+            )
+        )
+
+        # Consume newline after each complete variant.
+        while self.at("NEWLINE"):
+            self.eat("NEWLINE")
+
+            return ASTUnion(
+                name=name,
+                variants=variants,
+        )
 
     def parse_trait_type(self, name):
-        self.eat("LBRACE")
+        self.eat("COLON")
+        while self.at("NEWLINE"):
+            self.eat("NEWLINE")
         methods = []
-        while not self.at("RBRACE"):
+        while not self.at("COLON"):
             self.eat("KEYWORD", "FUNC")
             mname = self.eat("IDENT")[1]
             self.eat("LPAREN")
@@ -155,7 +216,7 @@ class Parser:
             self.eat("COLON")
             ret = self.parse_type_ref()
             methods.append(ASTFunctionSignature(name=mname, params=params, return_type=ret))
-        self.eat("RBRACE")
+        self.eat("COLON")
         return ASTTrait(name=name, methods=methods)
 
     def parse_type_ref(self):
@@ -380,7 +441,7 @@ class Parser:
         tok = self.peek()
         if tok[0] == "NUMBER" or tok[0] == "STRING":
             return self.parse_literal()
-        if tok[0] == "LOWNAME" and tok[1] in ("true", "false"):
+        if tok[0] == "LOWNAME" and tok[1] in ("true", "false", "none"):
             return self.parse_literal()
         if tok[0] == "LBRACK":
             return self.parse_list_literal()
@@ -409,6 +470,8 @@ class Parser:
                 return ASTLiteral(value=True)
             if value == "false":
                 return ASTLiteral(value=False)
+            if value == "none":
+                return ASTLiteral(value=None)
         raise Exception("Literal expected")
 
     def parse_list_literal(self):

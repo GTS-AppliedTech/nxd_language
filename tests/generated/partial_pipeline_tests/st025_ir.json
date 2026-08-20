@@ -1,0 +1,107 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "A",
+            "value": {
+              "Literal": {
+                "Int": 10
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "B",
+            "value": {
+              "Literal": {
+                "Int": 3
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "C",
+            "value": {
+              "Literal": {
+                "Int": 0
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Binary": {
+                "kind": "OR",
+                "left": {
+                  "Binary": {
+                    "kind": "NEQ",
+                    "left": {
+                      "Binary": {
+                        "kind": "MOD",
+                        "left": {
+                          "Var": "A"
+                        },
+                        "right": {
+                          "Var": "B"
+                        }
+                      }
+                    },
+                    "right": {
+                      "Var": "C"
+                    }
+                  }
+                },
+                "right": {
+                  "Binary": {
+                    "kind": "EQ",
+                    "left": {
+                      "Var": "C"
+                    },
+                    "right": {
+                      "Literal": {
+                        "Int": 0
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "MOD_OR_PASS"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

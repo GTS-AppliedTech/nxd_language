@@ -1,0 +1,92 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "STATE",
+            "value": {
+              "Literal": {
+                "String": "READY"
+              }
+            }
+          }
+        },
+        {
+          "Match": {
+            "scrutinee": {
+              "Var": "STATE"
+            },
+            "arms": [
+              {
+                "pattern": "READY",
+                "body": [
+                  {
+                    "Expr": {
+                      "Call": {
+                        "func": "PRINTLN",
+                        "args": [
+                          {
+                            "Literal": {
+                              "String": "GO"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "pattern": "WAIT",
+                "body": [
+                  {
+                    "Expr": {
+                      "Call": {
+                        "func": "PRINTLN",
+                        "args": [
+                          {
+                            "Literal": {
+                              "String": "HOLD"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "otherwise": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "UNKNOWN"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

@@ -1,0 +1,49 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "READY",
+            "value": {
+              "Literal": {
+                "Bool": false
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Unary": {
+                "kind": "NOT",
+                "expr": {
+                  "Var": "READY"
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Return": {
+                  "Literal": "None"
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

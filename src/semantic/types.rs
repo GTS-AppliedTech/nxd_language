@@ -1,10 +1,14 @@
+use std::any;
+
 use crate::semantic::errors::SemanticError;
 
 pub fn check_type(expected: &str, actual: &str) -> Result<(), SemanticError> {
+    if expected == "any" || actual == "any" {
+        return Ok(());
+    }
     if expected == actual {
         return Ok(());
     }
-
     // primitive mismatch
     if is_primitive(expected) && is_primitive(actual) {
         return Err(SemanticError::TypeMismatch {

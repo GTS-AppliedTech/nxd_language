@@ -18,12 +18,23 @@ pub struct Analyzer {
 
 impl Analyzer {
     pub fn new(traits: TraitRegistry) -> Self {
+
+        let mut symbols = SymbolTable::new();
+
+        symbols.define(
+       "PRINTLN",
+        Symbol::Func {
+                name: "PRINTLN".to_string(),
+                params: vec!["any".to_string()],
+                ret: Some("none".to_string()),
+            },
+        );
+
         Self {
-            symbols: SymbolTable::new(),
+            symbols,
             traits,
         }
     }
-
     pub fn analyze(&mut self, ir: &IRRoot) -> Result<(), SemanticError> {
         self.analyze_module(&ir.module)?;
         self.analyze_types(&ir.types)?;
@@ -120,81 +131,130 @@ impl Analyzer {
     }
 
     fn analyze_expr(&mut self, expr: &IRExpr) -> Result<String, SemanticError> {
-        match expr {
-            IRExpr::Literal(l) => Ok(self.literal_type(l)),
-            IRExpr::Var(name) => {
-                if let Some(sym) = self.symbols.resolve(name) {
-                    match sym {
-                        Symbol::Var { ty, .. } => Ok(ty.clone()),
-                        Symbol::Const { ty, .. } => Ok(ty.clone()),
-                        _ => Err(SemanticError::UndefinedSymbol { name: name.clone() }),
-                    }
-                } else {
-                    Err(SemanticError::UndefinedSymbol { name: name.clone() })
-                }
-            }
-            IRExpr::Binary(b) => {
-                let left = self.analyze_expr(&b.left)?;
-                let right = self.analyze_expr(&b.right)?;
+    match expr {
+        IRExpr::Literal(l) => Ok(self.literal_type(l)),
 
-                match b.kind.as_str() {
-                    "AS" => {
-                        check_as_cast(&left, &right)?;
-                        Ok(right)
-                    }
-                    "IS" => Ok("bool".to_string()),
-                    _ => {
-                        check_type(&left, &right)?;
-                        Ok(left)
-                    }
+        IRExpr::Var(name) => {
+            if let Some(sym) = self.symbols.resolve(name) {
+                match sym {
+                    Symbol::Var { ty, .. } => Ok(ty.clone()),
+                    Symbol::Const { ty, .. } => Ok(ty.clone()),
+                    _ => Err(SemanticError::UndefinedSymbol {
+                        name: name.clone(),
+                    }),
                 }
+            } else {
+                Err(SemanticError::UndefinedSymbol {
+                    name: name.clone(),
+                })
             }
-            IRExpr::Unary(u) => {
-                let inner = self.analyze_expr(&u.expr)?;
-                match u.kind.as_str() {
-                    "MOVE" => {
-                        check_ownership(OwnershipOp::Move, &inner)?;
-                        Ok(inner)
-                    }
-                    "CLONE" => {
-                        check_ownership(OwnershipOp::Clone, &inner)?;
-                        Ok(inner)
-                    }
-                    "BORROW" => {
-                        check_ownership(OwnershipOp::Borrow, &inner)?;
-                        Ok(inner)
-                    }
-                    _ => Ok(inner),
-                }
-            }
-            IRExpr::Call { func, args } => {
-                let sym = self.symbols.resolve(func)
-                    .ok_or_else(|| SemanticError::UndefinedSymbol { name: func.clone() })?;
+        }
 
-                if let Symbol::Func { params, ret, .. } = sym {
-                    for (i, arg) in args.iter().enumerate() {
-                        let arg_ty = self.analyze_expr(arg)?;
-                        check_type(&params[i], &arg_ty)?;
-                    }
-                    Ok(ret.clone().unwrap_or("none".to_string()))
-                } else {
-                    Err(SemanticError::UndefinedSymbol { name: func.clone() })
-                }
-            }
-            IRExpr::Pipeline { value, func } => {
-                let val_ty = self.analyze_expr(value)?;
-                let sym = self.symbols.resolve(func)
-                    .ok_or_else(|| SemanticError::UndefinedSymbol { name: func.clone() })?;
+        IRExpr::Binary(b) => {
+            let left = self.analyze_expr(&b.left)?;
+            let right = self.analyze_expr(&b.right)?;
 
-                if let Symbol::Func { params, ret, .. } = sym {
-                    check_type(&params[0], &val_ty)?;
-                    Ok(ret.clone().unwrap_or("none".to_string()))
-                } else {
-                    Err(SemanticError::UndefinedSymbol { name: func.clone() })
+            match b.kind.as_str() {
+                "AS" => {
+                    check_as_cast(&left, &right)?;
+                    Ok(right)
+                }
+
+                "IS" => Ok("bool".to_string()),
+
+                _ => {
+                    check_type(&left, &right)?;
+                    Ok(left)
                 }
             }
         }
+
+        IRExpr::Unary(u) => {
+            let inner = self.analyze_expr(&u.expr)?;
+
+            match u.kind.as_str() {
+                "MOVE" => {
+                    check_ownership(OwnershipOp::Move, &inner)?;
+                    Ok(inner)
+                }
+
+                "CLONE" => {
+                    check_ownership(OwnershipOp::Clone, &inner)?;
+                    Ok(inner)
+                }
+
+                "BORROW" => {
+                    check_ownership(OwnershipOp::Borrow, &inner)?;
+                    Ok(inner)
+                }
+
+                _ => Ok(inner),
+            }
+        }
+
+        IRExpr::Call { func, args } => {
+            let (params, ret) = {
+                let sym = self.symbols
+                    .resolve(func)
+                    .ok_or_else(|| SemanticError::UndefinedSymbol {
+                        name: func.clone(),
+                    })?;
+
+                if let Symbol::Func { params, ret, .. } = sym {
+                    (params.clone(), ret.clone())
+                } else {
+                    return Err(SemanticError::UndefinedSymbol {
+                        name: func.clone(),
+                    });
+                }
+            };
+
+            for (i, arg) in args.iter().enumerate() {
+                let arg_ty = self.analyze_expr(arg)?;
+
+                if i >= params.len() {
+                    return Err(SemanticError::UndefinedSymbol {
+                        name: func.clone(),
+                    });
+                }
+
+                check_type(&params[i], &arg_ty)?;
+            }
+
+            Ok(ret.unwrap_or("none".to_string()))
+        }
+
+        IRExpr::Pipeline { value, func } => {
+            let val_ty = self.analyze_expr(value)?;
+
+            let (params, ret) = {
+                let sym = self.symbols
+                    .resolve(func)
+                    .ok_or_else(|| SemanticError::UndefinedSymbol {
+                        name: func.clone(),
+                    })?;
+
+                if let Symbol::Func { params, ret, .. } = sym {
+                    (params.clone(), ret.clone())
+                } else {
+                    return Err(SemanticError::UndefinedSymbol {
+                        name: func.clone(),
+                    });
+                }
+            };
+
+            if params.is_empty() {
+                return Err(SemanticError::UndefinedSymbol {
+                    name: func.clone(),
+                });
+            }
+
+            check_type(&params[0], &val_ty)?;
+
+            Ok(ret.unwrap_or("none".to_string()))
+        }
     }
+}
 
     fn literal_type(&self, lit: &IRLiteral) -> String {
         match lit {

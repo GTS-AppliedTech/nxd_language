@@ -1,0 +1,7 @@
+MODULE TEST
+
+FUNC MAIN()
+    CONST VALUE SET 42
+
+    IF VALUE IS int:
+        PRINTLN(VALUE AS int)

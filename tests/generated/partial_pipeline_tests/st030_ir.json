@@ -1,0 +1,55 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "COUNT",
+            "value": {
+              "Literal": {
+                "Int": 1
+              }
+            }
+          }
+        },
+        {
+          "Loop": [
+            {
+              "Expr": {
+                "Call": {
+                  "func": "PRINTLN",
+                  "args": [
+                    {
+                      "Binary": {
+                        "kind": "ADD",
+                        "left": {
+                          "Var": "COUNT"
+                        },
+                        "right": {
+                          "Literal": {
+                            "Int": 1
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
