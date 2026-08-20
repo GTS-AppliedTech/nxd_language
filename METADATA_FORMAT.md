@@ -75,14 +75,20 @@ SE001
 #### SEMANTIC CONFORMITY
 SC001
 
-#### SAMPLE TESTS
-ST001 - ST299 (Nim)
-ST301 - ST599 (D)
-ST601 - ST999 (Elixir)
-
 #### Root (/Docs):
 RO001 - RO899 (Project Language Docs)
 RO900 - RO999(Project Repo Docs)
+
+####  TESTS 
+*all tests retain the same 3 digit portion,*
+*of the metadata id, PASS or FAIL.*
+PT001 - PT299 (Nim-passed tests)
+PT301 - PT599 (D-passed tests)
+PT601 - PT999 (Elixir-passed tests)
+FT001 - FT299 (Nim-failed tests)
+FT301 - FT599 (D-failed tests)
+FT601 - FT999 (Elixir-failed tests)
+CT001 (Compiler tests)
 
 ### ***FORMATTING EXAMPLE***
 

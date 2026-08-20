@@ -5,8 +5,8 @@ import subprocess
 TEST_ID = "st004"
 
 src_path = f"tests/fixtures/{TEST_ID}.nxd"
-json_path = f"tests/generated/partial_pipeline_tests/{TEST_ID}_ir.json"
-nim_path = f"tests/generated/full_pipeline_tests/{TEST_ID}.nim"
+json_path = f"tests/generated/LVL1_compiler_tests/{TEST_ID}_ir.json"
+d_path = f"tests/generated/LVL3_full_pipeline_d_tests/{TEST_ID}.d"
 
 src = Path(src_path).read_text()
 
@@ -24,7 +24,7 @@ subprocess.run(
         "--",
         "--semantics",
         json_path,
-        nim_path
+        d_path
     ],
     check=True
 )
