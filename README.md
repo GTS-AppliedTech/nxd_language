@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RO950",
-  "title": "",
+  "title": "Read me",
   "description": "",
   "layer": "Root",
   "category": "read me",
   "keywords": [],
-  "doc_version": "1.0",
+  "doc_version": "2.0",
   "status": "active"
 }
 ---
@@ -21,9 +21,217 @@
 
 NXD is an experimental language and compiler project focused on creating a portable, behavior-defined programming model that can be implemented across multiple runtime and ecosystem targets without changing the meaning of user code.
 
-The project is currently in the early specification and compiler development stage. Core language design, semantic definitions, backend mappings, runtime architecture, and intermediate representation guidelines are actively being documented and refined.
-
 ##### ***Warning: NXD is not production-ready. Specifications, compiler architecture, syntax, runtime behavior, and implementation details may change as the project evolves.***
+
+### Project Status
+
+Stage: Core Compiler & Open Source
+
+Compiler Status: Implemented
+
+Current Focus: Validation & Conformance Testing
+
+Validation Suite: 40 Base Validation Tests
+
+Current Results:
+
+21 Passing
+19 Failing
+
+Validation numbers are expected to change as parser coverage expands and current failure groups are resolved.
+
+
+### Current Status
+
+NXD has progressed beyond the initial specification phase and now includes a functional compiler pipeline, semantic analysis framework, intermediate representation system, and an actively validated Nim backend.
+
+Scanner
+→ Parser
+→ AST
+→ Lowering
+→ IR JSON
+→ Rust Loader
+→ IR Root
+→ NXD Semantics
+→ Backend Transpilation
+
+
+The current implementation utilizes a Python frontend and Rust backend connected through a serialized JSON intermediate representation (IR). This design provides clear validation boundaries, implementation separation, and simplified backend expansion.
+Current architecture:
+
+Scanner
+→ Parser
+→ AST
+→ Lowering
+→ IR JSON
+→ Rust Loader
+→ IR Root
+→ NXD Semantics
+→ Backend Transpilation
+
+
+The current implementation utilizes a Python frontend and Rust backend connected through a serialized JSON intermediate representation (IR). This design provides clear validation boundaries, implementation separation, and simplified backend expansion.
+
+Active Development Focus
+Parser refinement
+Lexer refinement
+Semantic conformance validation
+Nim backend validation
+Testing infrastructure expansion
+Documentation growth
+Contributor onboarding
+Current Backend
+Nim (Active Validation)
+Planned Backends
+D
+Elixir
+Long-Term Research
+Runtime Feasibility Study
+Standalone Execution Model
+Target Validation Architecture
+Runtime-Assisted Semantic Guarantees
+
+### Project Maturity
+
+#### Completed
+
+ Core Language Specification
+ Scanner
+ Parser Framework
+ AST Generation
+ Lowering Framework
+ JSON Intermediate Representation
+ Python → Rust IR Handoff
+ Rust IR Loader
+ IR Root Construction
+ NXD Semantic Analysis Framework
+ Nim Backend
+ Validation Framework
+ Test Documentation Standards
+ Metadata Standards
+ Contributor Documentation
+ Public Repository
+ Public Website
+ Project Changelog
+ Website Changelog
+
+#### In Progress
+
+ Parser Enhancement
+ Lexer Enhancement
+ Nim Conformance Validation
+ Semantic Conformance Expansion
+ Validation Documentation Expansion
+ Project Roadmap Publication
+
+#### Planned
+
+ D Backend
+ Elixir Backend
+ Public Playground
+ Runtime Feasibility Study
+ Standalone Runtime Prototype
+ Target Validation Research
+ Multi-Backend Conformance Matrix
+ Release Candidate Program
+ NXD v1.0 Launch
+
+### Validation Framework
+
+NXD follows a validation-first development methodology designed to verify behavior at multiple architectural layers.
+
+Rather than evaluating only final generated code, validation is performed at specific checkpoints throughout the compiler pipeline.
+
+#### Validation Pass 1 — Frontend Validation
+Scanner
+→ Parser
+→ AST
+→ Lowering
+→ IR JSON
+
+##### Purpose
+
+Validate:
+
+Lexical analysis
+Token classification
+Parsing
+AST generation
+Lowering
+IR generation
+Output
+IR JSON
+
+
+This pass verifies that NXD source code is successfully transformed into a valid intermediate representation.
+
+#### Validation Pass 2 — Backend Validation
+IR JSON
+→ Rust Loader
+→ IR Root
+→ Backend
+
+##### Purpose
+
+Validate:
+
+IR serialization
+IR deserialization
+Rust backend infrastructure
+Backend generation
+Output
+Target Language Source
+
+
+This pass validates backend processing independent of the frontend.
+
+#### Validation Pass 3 — Full Pipeline Validation
+Scanner
+→ Parser
+→ AST
+→ Lowering
+→ IR JSON
+→ Rust Loader
+→ IR Root
+→ NXD Semantics
+→ Backend
+
+##### Purpose
+
+Validate:
+
+Complete compiler execution
+Semantic analysis
+Backend generation
+End-to-end pipeline correctness
+Output
+Final Generated Target Code
+
+
+This pass represents a full production-style compiler run.
+
+### Validation Documentation
+
+Each validation case may include:
+
+NXD source input
+Generated IR JSON
+Generated target code
+Compiler validation status
+Semantic validation status
+Observations and notes
+
+This approach enables independent verification, reproducibility, auditing, and contributor review.
+
+Current validation documentation follows a status-based classification model:
+
+PT = Passed Test
+SP = Soft Pass
+SF = Soft Fail
+FT = Failed Test
+
+
+These categories allow known limitations and non-critical implementation issues to be tracked separately from functional failures.
 
 ### Project Goals
 
@@ -144,7 +352,27 @@ By separating language semantics from implementation strategy, NXD aims to creat
 
 Whether executed through transpilation, generated runtime support, native compilation, or a future standalone runtime, NXD's identity remains rooted in the behavior described by its specification.
 
-##### Status: *Early Specification & Compiler Development*
-##### License: *MIT License*
-##### Primary *Focus: Semantics Before Implementation*
+### Development Philoshophy
 
+NXD continues to follow a specification-first development model.
+
+Language behavior is defined by the specification and semantic model rather than by any specific backend implementation.
+
+Transpilation is an implementation strategy, not the definition of what NXD is.
+
+Backend targets provide access to existing ecosystems and tooling, while future runtime exploration may allow NXD to provide capabilities beyond those offered by any individual target ecosystem.
+
+NXD's long-term goal remains unchanged:
+
+A language whose meaning is defined by its specification rather than by any compiler, backend, runtime, or implementation strategy.
+
+
+### Status
+
+##### Compiler: Active Validation
+
+##### Stage: Core Compiler & Open Source
+
+##### License: MIT License
+
+##### Current Focus: Conformance Validation, Backend Verification, and Compiler Maturation
