@@ -19,7 +19,7 @@ Scanner → Parser → AST → Lowering → IR JSON
 
 ## Findings (Micro Test)
 
-### ST001
+### PT001
 
 NXD Sample:
 
@@ -70,7 +70,7 @@ Frontend pipeline successfully generated IR JSON.
 
 ---
 
-### ST002
+### PT002
 
 NXD Sample:
 
@@ -152,7 +152,7 @@ Confirmed function declaration parsing, return statement parsing, integer litera
 
 ---
 
-### ST003
+### PT003
 
 NXD Sample:
 
@@ -272,11 +272,11 @@ IR JSON → Rust Loader → IR Root → Nim Backend
 
 ## Findings (Micro Test)
 
-### ST004
+### PT004
 
 NXD Sample:
 
-(st001_ir.json)
+
 ```JSON
 {
   "module": {
@@ -309,11 +309,11 @@ Python → JSON → Rust → Nim path confirmed
 
 ---
 
-### ST005 (micro test)
+### PT005 (micro test)
 
 NXD Sample:
 
-(st002_ir.json)
+
 ```json
 {
   "module": {
@@ -384,11 +384,10 @@ Establishes baseline for statement emission.
 
 ---
 
-### ST006 (micro test)
+### PT006 (micro test)
 
 NXD Sample:
 
-(st003_ir.json)
 ```json
 {
   "module": {
@@ -480,7 +479,7 @@ Scanner → Parser → AST → Lowering → IR JSON → Rust Loader → IR Root 
 |--------|---------|---------|---------|---------|
 | ST007 |  | PASS | | |
 
-### ST007 (micro test)
+### PT007 (micro test)
 
 NXD Sample:
 
@@ -550,7 +549,7 @@ Scanner → Parser → AST → Lowering → IR JSON → Rust Loader → IR Root 
 
 ## Findings (Micro Test)
 
-### ST008
+### PT008
 
 NXD Sample:
 
@@ -600,7 +599,7 @@ Technical Significance:
 
 ---
 
-### ST009 (micro test)
+### PT009 (micro test)
 
 NXD Sample:
 
@@ -617,7 +616,7 @@ FUNC MAIN()
 Result:
 
 COMPILER: SOFT PASS *(see notes)
-SEMANTICS:
+SEMANTICS: PASS
 
 Expected Output:
 
@@ -666,7 +665,7 @@ This test represents the first successful validation of NXD control-flow stateme
 
 ---
 
-### ST010 (tiny test)
+### FT010 (tiny test)
 
 NXD Sample:
 
@@ -702,7 +701,7 @@ The pipeline reached function call parsing for `PRINTLN(P.NAME)`. Parsing failed
 
 
 
-### ST011 (micro test)
+### PT011 (micro test)
 
 NXD Sample:
 
@@ -758,7 +757,7 @@ is strong evidence that else_branch survived every compiler phase successfully. 
 ---
 
 
-### ST012 (micro test)
+### PT012 (micro test)
 
 NXD Sample:
 
@@ -831,7 +830,7 @@ No defects were identified during this test.
 ---
 
 
-### ST013 (micro test)
+### FT013 (micro test)
 
 NXD Sample:
 
@@ -873,7 +872,7 @@ Required Future Work:
 ---
 
 
-### ST014 (micro test)
+### FT014 (micro test)
 
 NXD Sample:
 
@@ -892,7 +891,7 @@ FUNC MAIN()
 
 Result:
 
-COMPILER: FAIL;
+COMPILER: FAIL
 SEMANTICS: FAIL
 
 Expected Output:
@@ -907,7 +906,7 @@ Notes:
 ---
 
 
-### ST015 (micro test)
+### FT015 (micro test)
 
 NXD Sample:
 
@@ -952,7 +951,7 @@ This test indicates a gap in comparison-expression handling rather than a contro
 ---
 
 
-### ST016 (micro test)
+### PT016 (micro test)
 
 NXD Sample:
 
@@ -992,7 +991,7 @@ Notes:
 ---
 
 
-### ST017 (micro test)
+### PT017 (micro test)
 
 NXD Sample:
 
@@ -1136,7 +1135,7 @@ This demonstrates that MATCH/CASE constructs are recognized by the NXD frontend 
 ---
 
 
-### ST018 (micro test)
+### FT018 (micro test)
 
 NXD Sample:
 
@@ -1177,7 +1176,7 @@ Notes:
 ---
 
 
-### ST019 (micro test)
+### FT019 (micro test)
 
 NXD Sample:
 
@@ -1213,7 +1212,7 @@ This test demonstrates that IMPORT exists in the lexical grammar but is not yet 
 ---
 
 
-### ST020 (micro test)
+### FT020 (micro test)
 
 NXD Sample:
 
@@ -1251,7 +1250,7 @@ Technical Significance
 The NXD specification states that negative values should be represented using: `SUB`
 
 ---
-### ST021 (micro test)
+### PT021 (micro test)
 
 NXD Sample:
 
@@ -1288,7 +1287,7 @@ Notes:
 ---
 
 
-### ST022 (micro test)
+### FT022 (micro test)
 
 NXD Sample:
 
@@ -1326,7 +1325,7 @@ Technical Significance
 This test demonstrates that list literals are recognized by the NXD frontend and represented in the AST. The failure occurs during translation from AST structures into serialized IR.
 
 ---
-### ST023 (micro test)
+### PT023 (micro test)
 
 NXD Sample:
 
@@ -1375,7 +1374,7 @@ Notes:
 ---
 
 
-### ST024 (micro test)
+### PT024 (micro test)
 
 NXD Sample:
 
@@ -1417,7 +1416,7 @@ Notes:
 ---
 
 
-### ST025 (micro test)
+### PT025 (micro test)
 
 NXD Sample:
 
@@ -1460,7 +1459,7 @@ Notes:
 ---
 
 
-### ST026 (micro test)
+### PT026 (micro test)
 
 NXD Sample:
 
@@ -1501,7 +1500,7 @@ Notes:
 ---
 
 
-### ST027 (micro test)
+### PT027 (micro test)
 
 NXD Sample:
 
@@ -1540,7 +1539,7 @@ Notes:
 ---
 
 
-### ST028 (micro test)
+### FT028 (micro test)
 
 NXD Sample:
 
@@ -1571,7 +1570,7 @@ Notes:
 ---
 
 
-### ST029 (micro test)
+### FT029 (micro test)
 
 NXD Sample:
 
@@ -1601,7 +1600,7 @@ Notes:
 ---
 
 
-### ST030 (micro test)
+### PT030 (micro test)
 
 NXD Sample:
 
@@ -1640,7 +1639,7 @@ Notes:
 ---
 
 
-### ST031 (micro test)
+### PT031 (micro test)
 
 NXD Sample:
 
@@ -1691,7 +1690,7 @@ Notes:
 ---
 
 
-### ST032 (micro test)
+### FT032 (micro test)
 
 NXD Sample:
 
@@ -1723,7 +1722,7 @@ Notes:
 ---
 
 
-### ST033 (micro test)
+### PT033 (micro test)
 
 NXD Sample:
 
@@ -1766,7 +1765,7 @@ Notes:
 ---
 
 
-### ST034 (micro test)
+### PT034 (micro test)
 
 NXD Sample:
 
@@ -1811,7 +1810,7 @@ Notes:
 ---
 
 
-### ST035 (micro test)
+### FT035 (micro test)
 
 NXD Sample:
 
@@ -1843,7 +1842,7 @@ Notes:
 ---
 
 
-### ST036 (micro test)
+### FT036 (micro test)
 
 NXD Sample:
 
@@ -1881,7 +1880,7 @@ Notes:
 ---
 
 
-### ST037 (micro test)
+### PT037 (micro test)
 
 NXD Sample:
 
@@ -1922,7 +1921,7 @@ Notes:
 ---
 
 
-### ST038 (micro test)
+### FT038 (micro test)
 
 NXD Sample:
 
@@ -1957,7 +1956,7 @@ Notes:
 ---
 
 
-### ST039 (micro test)
+### FT039 (micro test)
 
 NXD Sample:
 
@@ -1992,7 +1991,7 @@ Notes:
 ---
 
 
-### ST040 (micro test)
+### FT040 (micro test)
 
 NXD Sample:
 

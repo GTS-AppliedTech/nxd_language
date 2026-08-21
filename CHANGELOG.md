@@ -2,8 +2,8 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RO900",
-  "title": "Changelog",
-  "description": "",
+  "title": "Changelog (repo)",
+  "description": "Project Repo Changelog",
   "layer": "Root",
   "category": "change log",
   "keywords": [],
