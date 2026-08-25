@@ -7,4 +7,3 @@ FUNC MAIN()
         PRINTLN("PASS")
     ELSE:
         PRINTLN("FAIL")
-``

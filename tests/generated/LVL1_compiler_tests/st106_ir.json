@@ -1,0 +1,36 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Return": {
+            "Binary": {
+              "kind": "ADD",
+              "left": {
+                "Literal": {
+                  "Int": 1
+                }
+              },
+              "right": {
+                "Literal": {
+                  "Int": 2
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

@@ -1,0 +1,48 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [
+    {
+      "kind": "struct",
+      "name": "PERSON",
+      "fields": [
+        {
+          "name": "NAME",
+          "ty": "string"
+        },
+        {
+          "name": "AGE",
+          "ty": "int"
+        }
+      ]
+    }
+  ],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Literal": {
+                    "String": "STRUCT_DECLARED"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

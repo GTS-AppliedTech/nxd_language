@@ -1,0 +1,87 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "LOW",
+            "value": {
+              "Literal": {
+                "Int": 3
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "HIGH",
+            "value": {
+              "Literal": {
+                "Int": 9
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Binary": {
+                "kind": "AND",
+                "left": {
+                  "Binary": {
+                    "kind": "GT",
+                    "left": {
+                      "Var": "HIGH"
+                    },
+                    "right": {
+                      "Var": "LOW"
+                    }
+                  }
+                },
+                "right": {
+                  "Binary": {
+                    "kind": "LT",
+                    "left": {
+                      "Var": "LOW"
+                    },
+                    "right": {
+                      "Var": "HIGH"
+                    }
+                  }
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "RANGE_PASS"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

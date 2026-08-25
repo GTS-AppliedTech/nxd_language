@@ -1,6 +1,6 @@
 MODULE TEST
 
-FUNC MAIN()
+FUNC MAIN():
     LET P SET PERSON {
         NAME: "gabriel",
         AGE: 42
