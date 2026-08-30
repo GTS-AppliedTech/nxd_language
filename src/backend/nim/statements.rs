@@ -34,13 +34,36 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
         }
         IRStatement::If(if_node) => emit_if(if_node),
         IRStatement::Match(m) => emit_match(m),
+        IRStatement::Try(t) => {
+            let mut out = String::new();
+
+            out.push_str("  # TRY\n");
+
+            for stmt in &t.try_body {
+                out.push_str(&indent(&emit_statement(stmt)));
+            }
+
+            out.push_str("  # CATCH\n");
+
+            for stmt in &t.catch_body {
+                out.push_str(&indent(&emit_statement(stmt)));
+            }
+
+            out.push_str("  # FINALLY\n");
+
+            for stmt in &t.finally_body {
+                out.push_str(&indent(&emit_statement(stmt)));
+            }
+
+            out
+        }
         IRStatement::Expr(expr) => {
             format!("  {}\n", emit_expr(expr))
         }
     }
 }
 
-// Expression lowering stub
+
 fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
     use crate::ir::nodes::IRExpr::*;
 
@@ -48,19 +71,30 @@ fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
         Literal(l) => emit_literal(l),
         Binary(b) => emit_binary_op(b),
         Unary(u) => emit_unary_op(u),
+
         Call { func, args } => {
             let args_str: Vec<String> = args.iter().map(emit_expr).collect();
-            format!("{}({})", func.to_lowercase(), args_str.join(", "))
+
+            let nim_func = match func.as_str() {
+                "PRINTLN" => "echo".to_string(),
+                _ => func.to_lowercase(),
+            };
+
+            format!("{}({})", nim_func, args_str.join(", "))
         }
+
         Var(name) => name.to_lowercase(),
+
         Pipeline { value, func } => {
-            crate::backend::nim::operators::emit_pipeline(&emit_expr(value), func)
+            crate::backend::nim::operators::emit_pipeline(
+                &emit_expr(value),
+                func,
+            )
         }
     }
 }
-
-fn indent(s: &str) -> String {
-    s.lines()
+    fn indent(s: &str) -> String {
+        s.lines()
         .map(|line| format!("    {}\n", line.trim_end()))
         .collect()
 }

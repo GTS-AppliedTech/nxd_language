@@ -26,13 +26,13 @@
           "Let": {
             "name": "Y",
             "value": {
-              "Var": "CLONE"
+              "Unary": {
+                "kind": "CLONE",
+                "expr": {
+                  "Var": "X"
+                }
+              }
             }
-          }
-        },
-        {
-          "Expr": {
-            "Var": "X"
           }
         },
         {

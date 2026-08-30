@@ -66,7 +66,10 @@ fn emit_trait(tr: &IRTrait) -> String {
     out.push_str(&format!("  {} = concept x\n", tr.name));
 
     for func in &tr.methods {
-        out.push_str(&format!("    {}(x) is {}\n", func.name.to_lowercase(), func.return_type));
+        out.push_str(&format!("    {}(x) is {}\n", func.name.to_lowercase(),
+        func.return_type
+            .clone()
+            .unwrap_or_else(|| "void".to_string()))) 
     }
 
     out

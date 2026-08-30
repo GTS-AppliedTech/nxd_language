@@ -2,7 +2,7 @@ from pathlib import Path
 from src.frontend.ir.main import compile_to_ir_json
 import subprocess
 
-TEST_ID = "test"
+TEST_ID = "st032"
 
 src_path = f"tests/fixtures/expected_pass_tests/{TEST_ID}.nxd"
 json_path = f"tests/generated/LVL1_compiler_tests/{TEST_ID}_ir.json"

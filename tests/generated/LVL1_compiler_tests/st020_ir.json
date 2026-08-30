@@ -1,0 +1,68 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "NEG",
+            "value": {
+              "Unary": {
+                "kind": "SUB",
+                "expr": {
+                  "Literal": {
+                    "Int": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "PI",
+            "value": {
+              "Literal": {
+                "Float": 3.14
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "NEG"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "PI"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

@@ -7,6 +7,17 @@ import json
 def compile_to_ir_json(src: str, out_path: str):
     ast_module, ast_types, ast_functions = parse(src)
 
+    from pprint import pprint
+
+    print("\n=== AST MODULE ===")
+    pprint(ast_module)
+
+    print("\n=== AST TYPES ===")
+    pprint(ast_types)
+
+    print("\n=== AST FUNCTIONS ===")
+    pprint(ast_functions)
+
     ir_module = lower_module(ast_module)
     ir_types = lower_types(ast_types)
     ir_functions = [lower_function(f) for f in ast_functions]
@@ -112,6 +123,15 @@ def serialize_statements(stmts):
                 }
             })
 
+        elif isinstance(s, IRStatement.Try):
+            out.append({
+                "Try": {
+                    "try_body": serialize_statements(s.try_body),
+                    "catch_body": serialize_statements(s.catch_body),
+                    "finally_body": serialize_statements(s.finally_body),
+                }
+            })
+
         elif isinstance(s, IRStatement.Match):
             out.append({
                 "Match": {
@@ -132,6 +152,11 @@ def serialize_statements(stmts):
             out.append({
                 "Expr": serialize_expr(s.expr)
             })
+
+        else:
+            raise Exception(
+                f"Unknown IR statement during serialization: {type(s).__name__}"
+    )
 
     return out
 
@@ -178,7 +203,18 @@ def serialize_expr(e):
                 "func": e.func,
             }
         }
-
+    
+    if isinstance(e, IRExpr.ObjectInit):
+        return {
+            "ObjectInit": {
+                "type_name": e.type_name,
+                "fields": {
+                    name: serialize_expr(value)
+                    for name, value in e.fields.items()
+            },
+        }
+    }
+    
     raise Exception(f"Unknown IR expression: {e}")
 
 def serialize_literal(value):

@@ -1,0 +1,55 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [
+    {
+      "kind": "struct",
+      "name": "PERSON",
+      "fields": [
+        {
+          "name": "NAME",
+          "ty": "string"
+        }
+      ]
+    },
+    {
+      "kind": "trait",
+      "name": "DISPLAYABLE",
+      "methods": [
+        {
+          "name": "DISPLAY",
+          "params": [],
+          "return_type": null
+        }
+      ]
+    }
+  ],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Literal": {
+                    "String": "TRAIT_IMPL_TEST"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

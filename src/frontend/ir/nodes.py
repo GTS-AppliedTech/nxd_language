@@ -119,11 +119,14 @@ class IRStatement:
     class Match:
         def __init__(self, matchnode):
             self.matchnode = matchnode
-
+    class Try:
+        def __init__(self, try_body, catch_body, finally_body):
+            self.try_body = try_body
+            self.catch_body = catch_body
+            self.finally_body = finally_body
     class Expr:
         def __init__(self, expr):
             self.expr = expr
-
 
 class IRIf:
     def __init__(self, condition, then_branch, else_branch):
@@ -174,6 +177,10 @@ class IRExpr:
             self.value = value
             self.func = func
 
+    class ObjectInit:
+        def __init__(self, type_name, fields):
+            self.type_name = type_name
+            self.fields = fields
 
 class IRBinaryOp:
     def __init__(self, kind, left, right):

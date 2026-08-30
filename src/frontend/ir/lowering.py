@@ -77,6 +77,21 @@ def lower_statement(ast):
             then_branch=[lower_statement(s) for s in ast.then_branch],
             else_branch=[lower_statement(s) for s in ast.else_branch],
         ))
+    if isinstance(ast, ASTTry):
+        return IRStatement.Try(
+            try_body=[
+                lower_statement(s)
+                for s in ast.try_body
+            ],
+            catch_body=[
+                lower_statement(s)
+                for s in ast.catch_body
+            ],
+            finally_body=[
+                lower_statement(s)
+                for s in ast.finally_body
+        ],
+    )
     if isinstance(ast, ASTMatch):
         return IRStatement.Match(IRMatch(
             scrutinee=lower_expr(ast.scrutinee),
@@ -104,6 +119,8 @@ def lower_expr(ast):
         return IRExpr.Var(ast.name)
     if isinstance(ast, ASTPipeline):
         return IRExpr.Pipeline(value=lower_expr(ast.value), func=ast.func)
+    if isinstance(ast, ASTObjectInit):
+        return IRExpr.ObjectInit(type_name=ast.type_name,fields={k: lower_expr(v) for k, v in ast.fields.items()})
 
     raise Exception("Unknown AST expression")
 

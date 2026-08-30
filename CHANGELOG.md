@@ -7,13 +7,41 @@
   "layer": "Root",
   "category": "change log",
   "keywords": [],
-  "project_version": "1.0.1",
-  "site_version": "1.6.8
+  "project_version": "1.0.2",
+  "site_version": "1.6.9
   "status": "active"
 }
 ---
 
 # **NXD Language Changelog**
+
+### Version 1.0.2
+### August 26, 2026
+
+#### Validation Program Expansion
+Continued NXD → Nim backend validation effort.
+Expanded positive validation coverage through ongoing compiler conformance testing.
+Expanded negative validation coverage through intentional compiler rejection testing.
+Added and documented additional failure-condition test cases designed to verify compiler rejection behavior.
+Continued verification of parser, semantic, IR, and backend-stage behavior through structured validation workflows.
+
+#### Test Documentation
+Added comprehensive public-facing documentation for validation results.
+Expanded test result coverage available through project documentation.
+Improved organization of compiler validation records.
+Standardized documentation structure for positive and negative validation reporting.
+
+#### Compiler Development
+Continued refinement and validation of the Nim backend implementation.
+Continued investigation and tracking of remaining validation failures.
+Ongoing review of compiler behavior against documented NXD language specifications.
+Continued stabilization efforts surrounding compiler conformance and expected language behavior.
+
+#### Project Status
+Stage 2: Core Compiler & Open Source remains in progress.
+Validation efforts continue to be a primary development focus.
+Positive and negative validation suites continue to expand as compiler development progresses.
+
 
 ## **Version 1.0.1‑dev — August 16, 2026**  
 *(Post‑1.0.0 milestone — Semantic Conformance + Compiler Infrastructure)*

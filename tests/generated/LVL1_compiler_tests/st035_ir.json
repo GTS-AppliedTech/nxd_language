@@ -1,0 +1,58 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [
+    {
+      "kind": "union",
+      "name": "RESULT",
+      "variants": [
+        {
+          "kind": "SUCCESS",
+          "fields": [
+            {
+              "name": "VALUE",
+              "ty": "int"
+            }
+          ]
+        },
+        {
+          "kind": "FAILURE",
+          "fields": [
+            {
+              "name": "MESSAGE",
+              "ty": "string"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Literal": {
+                    "String": "UNION_DECLARED"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

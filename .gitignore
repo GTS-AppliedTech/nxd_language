@@ -1,0 +1,101 @@
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Secrets / Credentials
+# =========================
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# =========================
+# Rust
+# =========================
+target/
+Cargo.lock
+
+# Uncomment if this is an application rather than a library
+# !Cargo.lock
+
+# =========================
+# Nim
+# =========================
+nimcache/
+nimblecache/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# =========================
+# Editors / IDEs
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Operating Systems
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Build Artifacts
+# =========================
+build/
+dist/
+out/
+bin/
+
+# =========================
+# Coverage / Testing
+# =========================
+.coverage
+htmlcov/
+.pytest_cache/
+
+# =========================
+# Temporary Files
+# =========================
+tmp/
+temp/
+*.tmp
+
+# =========================
+# Archives
+# =========================
+*.zip
+*.tar
+*.gz
+*.7z
+
+# =========================
+# Local Project Notes
+# =========================
+.private/
+internal/

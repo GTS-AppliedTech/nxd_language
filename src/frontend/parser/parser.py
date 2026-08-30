@@ -38,25 +38,44 @@ class Parser:
         return True
 
     # ---------- top level ----------
-
     def parse_program(self):
-        module = self.parse_module()
-        # for now, everything else hangs off module.body
-        return module
+        # MODULE is optional.
+        if self.at("KEYWORD", "MODULE"):
+            return self.parse_module()
 
-    def parse_module(self):
-        self.eat("KEYWORD", "MODULE")
-        name = self.eat("IDENT")[1]
         imports = []
         body = []
-        while self.at("KEYWORD", "IMPORT"):
-            imports.append(self.parse_import())
 
         while not self.at("EOF"):
             if self.at("NEWLINE"):
                 self.eat("NEWLINE")
                 continue
 
+            if self.at("KEYWORD", "IMPORT"):
+                imports.append(self.parse_import())
+                continue
+
+            body.append(self.parse_top_level())
+
+        return ASTModule(
+            name="ANONYMOUS",
+            imports=imports,
+            body=body,
+    )
+
+    def parse_module(self):
+        self.eat("KEYWORD", "MODULE")
+        name = self.eat("IDENT")[1]
+        imports = []
+        body = []
+
+        while not self.at("EOF"):
+            if self.at("NEWLINE"):
+                self.eat("NEWLINE")
+                continue
+            if self.at("KEYWORD", "IMPORT"):
+                imports.append(self.parse_import())
+                continue
             body.append(self.parse_top_level())
 
         return ASTModule(name=name, imports=imports, body=body)
@@ -78,6 +97,8 @@ class Parser:
             return self.parse_trait_decl()
         if tok[0] == "KEYWORD" and tok[1] == "IMPL":
             return self.parse_impl_decl()
+        if tok[0] == "KEYWORD" and tok[1] == "IMPORT":
+            return self.parse_import()
         if tok[0] == "KEYWORD" and tok[1] == "FUNC":
             return self.parse_func_decl()
         # allow top-level statements
@@ -101,6 +122,87 @@ class Parser:
             self.eat("KEYWORD", "STRUCT")
             return self.parse_struct_type(name)
         raise Exception(f"Expected STRUCT, ENUM, UNION, or TRAIT, got {self.peek()}")
+
+    def parse_impl_decl(self):
+        impl_column = self.peek()[3]
+
+        self.eat("KEYWORD", "IMPL")
+        trait_name = self.eat("IDENT")[1]
+        self.eat("KEYWORD", "FOR")
+        target_type = self.eat("IDENT")[1]
+        self.eat("COLON")
+
+        while self.at("NEWLINE"):
+            self.eat("NEWLINE")
+
+        methods = []
+
+        while (
+            self.at("KEYWORD", "FUNC")
+            and self.peek()[3] > impl_column
+        ):
+            method_column = self.peek()[3]
+
+            self.eat("KEYWORD", "FUNC")
+            method_name = self.eat("IDENT")[1]
+            self.eat("LPAREN")
+
+            params = []
+
+            if not self.at("RPAREN"):
+                params.append(self.eat("IDENT")[1])
+
+                while self.at("COMMA"):
+                    self.eat("COMMA")
+                    params.append(self.eat("IDENT")[1])
+
+            self.eat("RPAREN")
+
+            return_type = None
+
+            if self.at("COLON"):
+                self.eat("COLON")
+
+                if not self.at("NEWLINE"):
+                    return_type = self.parse_type_ref()
+
+            if self.at("NEWLINE"):
+                self.eat("NEWLINE")
+
+            body = []
+
+            while not self.at("EOF"):
+                while self.at("NEWLINE"):
+                    self.eat("NEWLINE")
+
+                if self.at("EOF"):
+                    break
+
+                if self.peek()[3] <= method_column:
+                    break
+
+                body.append(self.parse_statement())
+
+            methods.append(
+                ASTFunction(
+                    name=method_name,
+                    params=params,
+                    return_type=return_type,
+                    body=body,
+                )
+            )
+
+        return ASTImpl(
+            trait_name=trait_name,
+            target_type=target_type,
+            methods=methods,
+        )
+
+    def parse_trait_decl(self):
+        self.eat("KEYWORD", "TRAIT")
+        name = self.eat("IDENT")[1]
+
+        return self.parse_trait_type(name)
 
     def parse_struct_type(self, name):
         self.eat("COLON")
@@ -146,29 +248,22 @@ class Parser:
 
     def parse_union_type(self, name):
         self.eat("COLON")
-
         while self.at("NEWLINE"):
             self.eat("NEWLINE")
-
         variants = []
-
         while self.at("IDENT"):
             kind = self.eat("IDENT")[1]
             self.eat("LBRACE")
-
             fields = []
-
             while self.at("NEWLINE"):
                 self.eat("NEWLINE")
-
             while not self.at("RBRACE"):
+                if self.at("NEWLINE"):
+                    self.eat("NEWLINE")
+                    continue
                 fname = self.eat("IDENT")[1]
                 self.eat("COLON")
                 ty = self.parse_type_ref()
-
-                if self.at("COMMA"):
-                    self.eat("COMMA")
-
                 fields.append(
                     ASTField(
                         name=fname,
@@ -176,33 +271,31 @@ class Parser:
                     )
                 )
 
+                if self.at("COMMA"):
+                    self.eat("COMMA")
+            self.eat("RBRACE")
+            variants.append(
+                ASTUnionVariant(
+                    kind=kind,
+                    fields=fields,
+                )
+            )
+
             while self.at("NEWLINE"):
                 self.eat("NEWLINE")
 
-        self.eat("RBRACE")
-
-        variants.append(
-            ASTUnionVariant(
-                kind=kind,
-                fields=fields,
-            )
+        return ASTUnion(
+            name=name,
+            variants=variants,
         )
-
-        # Consume newline after each complete variant.
-        while self.at("NEWLINE"):
-            self.eat("NEWLINE")
-
-            return ASTUnion(
-                name=name,
-                variants=variants,
-        )
-
+    
     def parse_trait_type(self, name):
         self.eat("COLON")
+
         while self.at("NEWLINE"):
             self.eat("NEWLINE")
         methods = []
-        while not self.at("COLON"):
+        while self.at("KEYWORD", "FUNC"):
             self.eat("KEYWORD", "FUNC")
             mname = self.eat("IDENT")[1]
             self.eat("LPAREN")
@@ -213,11 +306,23 @@ class Parser:
                     self.eat("COMMA")
                     params.append(self.eat("IDENT")[1])
             self.eat("RPAREN")
-            self.eat("COLON")
-            ret = self.parse_type_ref()
-            methods.append(ASTFunctionSignature(name=mname, params=params, return_type=ret))
-        self.eat("COLON")
-        return ASTTrait(name=name, methods=methods)
+            ret = None
+            if self.at("COLON"):
+                self.eat("COLON")
+                ret = self.parse_type_ref()
+            methods.append(
+                ASTFunctionSignature(
+                    name=mname,
+                    params=params,
+                    return_type=ret,
+                )
+            )
+            while self.at("NEWLINE"):
+                self.eat("NEWLINE")
+        return ASTTrait(
+            name=name,
+            methods=methods,
+        )
 
     def parse_type_ref(self):
         if self.peek()[0] == "LOWTYPE":
@@ -267,7 +372,7 @@ class Parser:
     def parse_block(self):
         # simplified: read until blank line or dedent; for now, just read statements until keyword that closes
         stmts = []
-        while not self.at("EOF") and not self.at("KEYWORD", "ELSE") and not self.at("KEYWORD", "CASE") and not self.at("KEYWORD", "OTHERWISE"):
+        while not self.at("EOF") and not self.at("KEYWORD", "ELSE") and not self.at("KEYWORD", "CASE") and not self.at("KEYWORD", "OTHERWISE") and not self.at("KEYWORD", "CATCH") and not self.at("KEYWORD", "FINALLY"):
             if self.at("NEWLINE"):
                 self.eat("NEWLINE")
                 continue
@@ -286,6 +391,8 @@ class Parser:
                 return self.parse_const()
             if kw == "RETURN":
                 return self.parse_return()
+            if kw == "TRY":
+                return self.parse_try()
             if kw == "LOOP":
                 return self.parse_loop()
             if kw == "IF":
@@ -354,6 +461,31 @@ class Parser:
             self.expect_block_colon()
             otherwise = self.parse_block()
         return ASTMatch(scrutinee=scrutinee, arms=arms, otherwise=otherwise)
+
+    def parse_try(self):
+        self.eat("KEYWORD", "TRY")
+        self.eat("COLON")
+
+        try_body = self.parse_block()
+
+        catch_body = []
+        finally_body = []
+
+        if self.at("KEYWORD", "CATCH"):
+            self.eat("KEYWORD", "CATCH")
+            self.eat("COLON")
+            catch_body = self.parse_block()
+
+        if self.at("KEYWORD", "FINALLY"):
+            self.eat("KEYWORD", "FINALLY")
+            self.eat("COLON")
+            finally_body = self.parse_block()
+
+        return ASTTry(
+            try_body=try_body,
+            catch_body=catch_body,
+            finally_body=finally_body,
+    )
 
     def parse_case_block(self):
         self.eat("KEYWORD", "CASE")
@@ -431,7 +563,7 @@ class Parser:
         return left
 
     def parse_unary(self):
-        if self.at("OP") and self.peek()[1] in ("NOT", "MOVE", "CLONE", "BORROW"):
+        if self.at("OP") and self.peek()[1] in ("NOT", "MOVE", "CLONE", "BORROW", "SUB"):
             op = self.eat("OP")[1]
             expr = self.parse_primary()
             return ASTUnary(kind=op, expr=expr)
@@ -439,7 +571,8 @@ class Parser:
 
     def parse_primary(self):
         tok = self.peek()
-        if tok[0] == "NUMBER" or tok[0] == "STRING":
+
+        if tok[0] in ("NUMBER", "STRING"):
             return self.parse_literal()
         if tok[0] == "LOWNAME" and tok[1] in ("true", "false", "none"):
             return self.parse_literal()
@@ -450,10 +583,14 @@ class Parser:
         if tok[0] == "FN":
             return self.parse_lambda()
         if tok[0] == "IDENT":
-            # could be var or call
+            # Could be a call, typed object initializer, or variable.
             if self._next_is("LPAREN"):
                 return self.parse_call_expr()
+            if self._next_is("LBRACE"):
+                return self.parse_object_init()
+
             return ASTVar(name=self.eat("IDENT")[1])
+
         raise Exception(f"Unexpected token in primary: {tok}")
 
     def parse_literal(self):
@@ -483,6 +620,15 @@ class Parser:
                 self.eat("COMMA")
         self.eat("RBRACK")
         return ASTLiteral(value=[items])
+
+    def parse_object_init(self):
+        type_name = self.eat("IDENT")[1]
+        map_literal = self.parse_map_literal()
+
+        return ASTObjectInit(
+            type_name=type_name,
+            fields=map_literal.value
+        )
 
     def parse_map_literal(self):
         self.eat("LBRACE")

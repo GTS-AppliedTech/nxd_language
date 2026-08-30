@@ -307,7 +307,67 @@ Expected Rejection Stage:
 
 Actual Output:
 
-N/A
+```json
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 1
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Literal": {
+                "Int": 2
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "ECHO",
+              "args": [
+                {
+                  "Binary": {
+                    "kind": "ADD",
+                    "left": {
+                      "Var": "X"
+                    },
+                    "right": {
+                      "Var": "Y"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
+```
 
 Notes:
 
@@ -352,7 +412,59 @@ Expected Rejection Stage:
 
 Actual Output:
 
-
+```json
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "VALID",
+            "value": {
+              "Var": "TRUE"
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Var": "VALID"
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "True"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
+```
 
 Notes:
 
@@ -487,7 +599,51 @@ Expected Rejection Stage:
 
 Actual Output:
 
-
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "COUNT",
+            "value": {
+              "Literal": {
+                "Int": 0
+              }
+            }
+          }
+        },
+        {
+          "Loop": [
+            {
+              "Expr": {
+                "Call": {
+                  "func": "PRINTLN",
+                  "args": [
+                    {
+                      "Var": "COUNTX"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
 
 Notes:
 

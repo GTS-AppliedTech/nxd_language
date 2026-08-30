@@ -123,6 +123,19 @@ impl Analyzer {
                 self.analyze_expr(&m.scrutinee)?;
                 validate_match_arms(&m.arms)?;
             }
+            IRStatement::Try(t) => {
+                for s in &t.try_body {
+                    self.analyze_statement(s)?;
+                }
+
+                for s in &t.catch_body {
+                    self.analyze_statement(s)?;
+                }
+
+                for s in &t.finally_body {
+                    self.analyze_statement(s)?;
+                }
+            }
             IRStatement::Expr(expr) => {
                 self.analyze_expr(expr)?;
             }

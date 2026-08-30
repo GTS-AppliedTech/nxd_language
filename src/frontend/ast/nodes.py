@@ -120,6 +120,11 @@ class ASTIf:
     then_branch: List["ASTStatement"]
     else_branch: List["ASTStatement"]
 
+@dataclass
+class ASTTry:
+    try_body: List["ASTStatement"]
+    catch_body: List["ASTStatement"]
+    finally_body: List["ASTStatement"]
 
 @dataclass
 class ASTMatch:
@@ -135,7 +140,7 @@ class ASTMatchArm:
 
 
 ASTStatement = Union[
-    ASTLet, ASTConst, ASTReturn, ASTLoop, ASTIf, ASTMatch, "ASTExpr"
+    ASTLet, ASTConst, ASTReturn, ASTLoop, ASTIf, ASTTry, ASTMatch, "ASTExpr"
 ]
 
 
@@ -147,6 +152,11 @@ ASTStatement = Union[
 class ASTLiteral:
     value: Union[int, float, str, bool, None, list]
 
+
+@dataclass
+class ASTObjectInit:
+    type_name: str
+    fields: dict
 
 @dataclass
 class ASTBinary:

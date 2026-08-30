@@ -66,7 +66,7 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
 
             out
         }
-
+        
         IRStatement::If(if_node) => {
     crate::backend::nim::control_flow::emit_if(if_node)
 }
@@ -74,6 +74,23 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
         IRStatement::Match(m) => {
     crate::backend::nim::control_flow::emit_match(m)
 }
+        IRStatement::Try(t) => {
+            let mut out = String::new();
+            out.push_str("  # TRY\n");
+            for stmt in &t.try_body {
+                out.push_str(&emit_statement(stmt));
+            }
+            out.push_str("  # CATCH\n");
+            for stmt in &t.catch_body {
+                out.push_str(&emit_statement(stmt));
+            }
+            out.push_str("  # FINALLY\n");
+            for stmt in &t.finally_body {
+                out.push_str(&emit_statement(stmt));
+            }
+
+            out
+        }
         IRStatement::Expr(expr) => {
             format!("  {}\n", expr)
         }

@@ -71,7 +71,7 @@ pub struct IRTrait {
 pub struct IRFunctionSignature {
     pub name: String,
     pub params: Vec<IRParam>,
-    pub return_type: String,
+    pub return_type: Option<String>,
 }
 
 
@@ -118,8 +118,10 @@ pub enum IRStatement {
     Loop(Vec<IRStatement>),
     If(IRIf),
     Match(IRMatch),
+    Try(IRTry),
     Expr(IRExpr),
 }
+
 
 
 // ===============================
@@ -146,6 +148,13 @@ pub struct IRMatchArm {
     pub body: Vec<IRStatement>,
 }
 
+#[derive(Clone, Debug, Deserialize)]
+pub struct IRTry {
+    pub try_body: Vec<IRStatement>,
+    pub catch_body: Vec<IRStatement>,
+    pub finally_body: Vec<IRStatement>,
+}
+
 // ===============================
 // IR EXPRESSIONS
 // ===============================
@@ -159,7 +168,6 @@ pub enum IRExpr {
     Var(String),
     Pipeline { value: Box<IRExpr>, func: String },
 }
-
 
 // ===============================
 // IR OPERATORS

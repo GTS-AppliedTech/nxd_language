@@ -850,9 +850,52 @@ Expected Output:
 
 Actual Output:
 
+```json
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "P",
+            "value": {
+              "ObjectInit": {
+                "type_name": "PERSON",
+                "fields": {
+                  "NAME": {
+                    "Literal": {
+                      "String": "gabriel"
+                    }
+                  },
+                  "AGE": {
+                    "Literal": {
+                      "Int": 42
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
+```
+```nim
 N/A
-
-Notes:
+```
 
 Notes:
 
@@ -872,7 +915,7 @@ Required Future Work:
 ---
 
 
-### FT014 (micro test)
+### PT014 (micro test)
 
 NXD Sample:
 
@@ -891,14 +934,119 @@ FUNC MAIN()
 
 Result:
 
-COMPILER: FAIL
-SEMANTICS: FAIL
+COMPILER: PASS
+SEMANTICS: PASS
 
 Expected Output:
 
 Actual Output:
 
+```json
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "LIMIT",
+            "value": {
+              "Literal": {
+                "Int": 10
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Unary": {
+                "kind": "SUB",
+                "expr": {
+                  "Literal": {
+                    "Int": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Literal": {
+                "Float": 2.5
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "LIMIT"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "X"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "Y"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
+```
 
+```nim
+# test
+
+
+proc main() =
+  let limit = 10
+  var x = SUB 5
+  var y = 2.5
+  println(limit)
+  println(x)
+  println(y)
+
+```
 
 Notes:
 
@@ -926,13 +1074,12 @@ FUNC MAIN()
 
 Result:
 
-COMPILER: FAIL
-SEMANTICS: FAIL
+COMPILER: 
+SEMANTICS: 
 
 Expected Output:
 
 Actual Output:
-
 
 
 Notes:
@@ -1135,7 +1282,7 @@ This demonstrates that MATCH/CASE constructs are recognized by the NXD frontend 
 ---
 
 
-### FT018 (micro test)
+### PT018 (micro test)
 
 NXD Sample:
 
@@ -1152,11 +1299,68 @@ FUNC MAIN()
 Result:
 
 COMPILER: PASS
-SEMANTICS: FAIL
+SEMANTICS: PASS
 
 Expected Output:
 
 Actual Output:
+
+```JSON
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 5
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Unary": {
+                "kind": "CLONE",
+                "expr": {
+                  "Var": "X"
+                }
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "Y"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
+```
 
 ```nim
 # test
@@ -1212,7 +1416,7 @@ This test demonstrates that IMPORT exists in the lexical grammar but is not yet 
 ---
 
 
-### FT020 (micro test)
+### PT020 (micro test)
 
 NXD Sample:
 
@@ -1229,14 +1433,95 @@ FUNC MAIN()
 
 Result:
 
-COMPILER: FAIL
-SEMANTICS: FAIL
+COMPILER: PASS
+SEMANTICS: PASS
 
 Expected Output:
 
 Actual Output:
 
+```json
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "NEG",
+            "value": {
+              "Unary": {
+                "kind": "SUB",
+                "expr": {
+                  "Literal": {
+                    "Int": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "PI",
+            "value": {
+              "Literal": {
+                "Float": 3.14
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "NEG"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "PI"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
+```
 
+```nim
+# test
+
+
+proc main() =
+  var neg = SUB 5
+  var pi = 3.14
+  println(neg)
+  println(pi)
+
+```
 
 Notes:
 

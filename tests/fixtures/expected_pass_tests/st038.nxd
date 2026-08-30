@@ -2,10 +2,10 @@ MODULE TEST
 
 FUNC MAIN()
     TRY:
-        PRINTLN("TRY")
+        PRINTLN("True")
 
     CATCH:
-        PRINTLN("CATCH")
+        PRINTLN("FALSE")
 
     FINALLY:
-        PRINTLN("FINALLY")
+        PRINTLN("NONE")
