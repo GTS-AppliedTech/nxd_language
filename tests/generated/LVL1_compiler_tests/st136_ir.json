@@ -1,0 +1,71 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [
+    {
+      "kind": "struct",
+      "name": "PERSON",
+      "fields": [
+        {
+          "name": "NAME",
+          "ty": "string"
+        }
+      ]
+    },
+    {
+      "kind": "trait",
+      "name": "DISPLAYABLE",
+      "methods": [
+        {
+          "name": "DISPLAY",
+          "params": [],
+          "return_type": null
+        }
+      ]
+    }
+  ],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "P",
+            "value": {
+              "Var": "PERSON"
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Var": "CALL"
+          }
+        },
+        {
+          "Expr": {
+            "Var": "STRINGABLE"
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "DISPLAY",
+              "args": [
+                {
+                  "Var": "P"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

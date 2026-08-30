@@ -1,0 +1,91 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 1
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 2
+              }
+            }
+          }
+        },
+        {
+          "Try": {
+            "try_body": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "TRY"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "catch_body": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "CATCH"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "finally_body": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "FINALLY"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

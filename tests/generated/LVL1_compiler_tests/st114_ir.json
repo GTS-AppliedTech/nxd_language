@@ -1,0 +1,90 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "LIMIT",
+            "value": {
+              "Literal": {
+                "Int": 10
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Unary": {
+                "kind": "SUB",
+                "expr": {
+                  "Literal": {
+                    "Int": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Literal": {
+                "Float": 2.5
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "LIMITS"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "X"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "Y"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

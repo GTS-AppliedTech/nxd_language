@@ -1,7 +1,12 @@
 {
   "module": {
     "name": "TEST",
-    "imports": []
+    "imports": [
+      {
+        "path": "STD",
+        "alias": null
+      }
+    ]
   },
   "types": [],
   "traits": [],
@@ -19,7 +24,7 @@
               "args": [
                 {
                   "Literal": {
-                    "String": "Hello World!"
+                    "String": "IMPORT_TEST"
                   }
                 }
               ]

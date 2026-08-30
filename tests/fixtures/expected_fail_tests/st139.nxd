@@ -1,0 +1,14 @@
+MODULE TEST
+
+FUNC MAIN()
+    LET X SET 1
+    LET X SET 2
+
+    TRY:
+        PRINTLN("TRY")
+
+    CATCH:
+        PRINTLN("CATCH")
+
+    FINALLY:
+        PRINTLN("FINALLY")
