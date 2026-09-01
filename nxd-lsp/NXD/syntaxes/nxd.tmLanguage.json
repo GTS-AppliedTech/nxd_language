@@ -1,0 +1,51 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "NXD",
+    "scopeName": "source.nxd",
+
+    "patterns": [
+        {
+            "match": "\\b(MODULE|IMPORT|TYPE|ENUM|STRUCT|UNION|TRAIT|IMPL|FUNC|LET|CONST|RETURN|IF|ELSE|MATCH|CASE|OTHERWISE|LOOP|SPAWN|SEND|RECV|AWAIT|TRY|CATCH|FINALLY|SET|FOR)\\b",
+            "name": "keyword.control.nxd"
+        },
+
+        {
+            "match": "\\b(ADD|SUB|MUL|DIV|MOD|EQ|NEQ|GT|LT|GTE|LTE|AND|OR|NOT|AS|IS|PIPE|MOVE|CLONE|BORROW)\\b",
+            "name": "keyword.operator.nxd"
+        },
+
+		{
+			"match": "\\b(PRINTLN)\\b",
+			"name": "entity.name.function.nxd"
+		},
+
+        {
+            "match": "\\b(int|float|string|bool)\\b",
+            "name": "storage.type.nxd"
+        },
+
+        {
+            "match": "\"([^\"\\\\]|\\\\.)*\"",
+            "name": "string.quoted.double.nxd"
+        },
+
+        {
+            "match": "\\b\\d+(\\.\\d+)?\\b",
+            "name": "constant.numeric.nxd"
+        },
+
+		{
+			"match": "\\b[A-Z][A-Z0-9_]*\\b",
+			"name": "entity.name.type.nxd"
+		},
+		{
+			"match": "\\b[a-z_][a-z0-9_]*\\b",
+			"name": "variable.other.nxd"
+		},
+
+		{
+    		"match": "//.*$",
+    		"name": "comment.line.double-slash.nxd"
+		}
+    ]
+}

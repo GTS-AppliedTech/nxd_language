@@ -1,0 +1,30 @@
+
+{
+    "scopeName": "source.nxd",
+    "patterns": [
+        {
+            "match": "\\b(MODULE|FUNC|LET|CONST|RETURN|IF|ELSE|MATCH)\\b",
+            "name": "keyword.control.nxd"
+        },
+
+        {
+            "match": "\\b(MOVE|BORROW|CLONE)\\b",
+            "name": "keyword.operator.nxd"
+        },
+
+        {
+            "match": "\\b(int|float|string|bool)\\b",
+            "name": "storage.type.nxd"
+        },
+
+        {
+            "match": "\"([^\"\\\\]|\\\\.)*\"",
+            "name": "string.quoted.double.nxd"
+        },
+
+        {
+            "match": "\\b\\d+(\\.\\d+)?\\b",
+            "name": "constant.numeric.nxd"
+        }
+    ]
+}

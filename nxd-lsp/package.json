@@ -1,0 +1,27 @@
+{
+  "name": "nxd-language",
+  "displayName": "NXD Language",
+  "version": "0.0.1",
+
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+
+  "contributes": {
+    "languages": [
+      {
+        "id": "nxd",
+        "aliases": ["NXD"],
+        "extensions": [".nxd"]
+      }
+    ],
+
+    "grammars": [
+      {
+        "language": "nxd",
+        "scopeName": "source.nxd",
+        "path": "./syntaxes/nxd.tmLanguage.json"
+      }
+    ]
+  }
+}

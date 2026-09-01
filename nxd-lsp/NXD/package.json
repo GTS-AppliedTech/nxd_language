@@ -1,0 +1,25 @@
+{
+  "name": "NXD",
+  "displayName": "NXD Language",
+  "description": "Official VS Code language support for the NXD programming language.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.134.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "nxd",
+      "aliases": ["NXD", "nxd"],
+      "extensions": [".nxd"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "nxd",
+      "scopeName": "source.nxd",
+      "path": "./syntaxes/nxd.tmLanguage.json"
+    }]
+  }
+}

@@ -90,6 +90,9 @@ FT301 - FT599 (D-failed tests)
 FT601 - FT999 (Elixir-failed tests)
 CT001 (Compiler tests)
 
+#### TEST SUITE
+TS001
+
 ### ***FORMATTING EXAMPLE***
 
 
