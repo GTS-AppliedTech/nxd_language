@@ -9,7 +9,17 @@
   "categories": [
     "Programming Languages"
   ],
+  "main": "./extension.js",
+  "activationEvents": [
+     "onLanguage:nxd"
+  ],
   "contributes": {
+    "commands": [
+    {
+        "command": "nxd.test",
+        "title": "NXD Test Command"
+    }
+  ],
     "languages": [{
       "id": "nxd",
       "aliases": ["NXD", "nxd"],
