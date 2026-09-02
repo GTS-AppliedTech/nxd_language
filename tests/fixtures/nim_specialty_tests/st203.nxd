@@ -1,0 +1,9 @@
+MODULE NIM_CLONE_INDEPENDENCE
+
+FUNC MAIN()
+    LET SOURCE SET "NXD"
+    CLONE SOURCE TO COPY
+    PRINTLN(SOURCE)
+    PRINTLN(COPY)
+
+    // testing clone independence. source is cloned to copy and then println is called on both. this should succeed.

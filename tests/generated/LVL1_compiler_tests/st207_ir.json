@@ -1,0 +1,61 @@
+{
+  "module": {
+    "name": "NIM_MOIVE_INVALID_REUSE",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "SOURCE",
+            "value": {
+              "Literal": {
+                "String": "NXD"
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Unary": {
+              "kind": "MOVE",
+              "expr": {
+                "Var": "TARGET"
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Var": "TO"
+          }
+        },
+        {
+          "Expr": {
+            "Var": "SOURCE"
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "SOURCE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

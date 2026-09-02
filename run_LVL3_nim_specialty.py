@@ -2,9 +2,9 @@ from pathlib import Path
 from src.frontend.ir.main import compile_to_ir_json
 import subprocess
 
-TEST_ID = "st032"
+TEST_ID = "st206"
 
-src_path = f"tests/fixtures/nim_expected_fail_tests/{TEST_ID}.nxd"
+src_path = f"tests/fixtures/nim_specialty_tests/{TEST_ID}.nxd"
 json_path = f"tests/generated/LVL1_compiler_tests/{TEST_ID}_ir.json"
 nim_path = f"tests/generated/LVL3_full_pipeline_nim_tests/{TEST_ID}.nim"
 

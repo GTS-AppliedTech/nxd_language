@@ -1,0 +1,29 @@
+{
+  "module": {
+    "name": "NIM_MOVE_BASIC",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "SOURCE",
+            "value": {
+              "Literal": {
+                "String": "NXD"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

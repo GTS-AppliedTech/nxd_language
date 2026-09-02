@@ -1,0 +1,11 @@
+MODULE NIM_SCOPE_LIFETIME
+
+FUNC CREATE_VALUE()
+    LET VALUE SET "temporary"
+    PRINTLN(VALUE)
+
+FUNC MAIN()
+    CREATE_VALUE()
+    PRINTLN("complete")
+
+

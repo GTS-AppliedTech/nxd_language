@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "TEST",
+    "name": "NIM_MOIVE_INVALID_REUSE",
     "imports": []
   },
   "types": [],
@@ -13,17 +13,12 @@
       "return_type": null,
       "body": [
         {
-          "Expr": {
-            "Call": {
-              "func": "PRINTLN",
-              "args": [
-                {
-                  "Var": "P"
-                },
-                {
-                  "Var": "NAME"
-                }
-              ]
+          "Let": {
+            "name": "SOURCE",
+            "value": {
+              "Literal": {
+                "String": "NXD"
+              }
             }
           }
         }

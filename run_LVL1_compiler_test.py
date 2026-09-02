@@ -3,11 +3,11 @@
 from pathlib import Path
 from src.frontend.ir.main import compile_to_ir_json
 
-src = Path("tests/fixtures/st001.nxd").read_text()
+src = Path("tests/fixtures/nim_specialty_tests/st201.nxd").read_text()
 
 compile_to_ir_json(
     src,
-    "tests/generated/partial_pipeline_tests/st001_ir.json"
+    "tests/generated/partial_pipeline_tests/st201_ir.json"
 )
 
 print("IR generated")

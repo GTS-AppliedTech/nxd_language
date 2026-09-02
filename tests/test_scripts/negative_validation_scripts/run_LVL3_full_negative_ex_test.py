@@ -4,7 +4,7 @@ import subprocess
 
 TEST_ID = "st732"
 
-src_path = f"tests/fixtures/expected_fail_tests/{TEST_ID}.nxd"
+src_path = f"tests/fixtures/ex_expected_fail_tests/{TEST_ID}.nxd"
 json_path = f"tests/generated/LVL1_compiler_tests/{TEST_ID}_ir.json"
 ex_path = f"tests/generated/LVL3_full_pipeline_ex_tests/{TEST_ID}.ex"
 

@@ -19,7 +19,7 @@ for test_id in TESTS:
 
     print(f"\n=== Running {test_id} ===")
 
-    src_path = f"tests/fixtures/expected_fail_tests/{test_id}.nxd"
+    src_path = f"tests/fixtures/d_expected_fail_tests/{test_id}.nxd"
     json_path = f"tests/generated/LVL1_compiler_tests/{test_id}_ir.json"
     d_path = f"tests/generated/LVL3_full_pipeline_d_tests/{test_id}.d"
 

@@ -39,6 +39,9 @@ class Parser:
 
     # ---------- top level ----------
     def parse_program(self):
+        # Skip leading blank lines
+        while self.at("NEWLINE"):
+            self.eat("NEWLINE")
         # MODULE is optional.
         if self.at("KEYWORD", "MODULE"):
             return self.parse_module()
@@ -370,16 +373,34 @@ class Parser:
             self.eat("NEWLINE")
 
     def parse_block(self):
-        # simplified: read until blank line or dedent; for now, just read statements until keyword that closes
-        stmts = []
-        while not self.at("EOF") and not self.at("KEYWORD", "ELSE") and not self.at("KEYWORD", "CASE") and not self.at("KEYWORD", "OTHERWISE") and not self.at("KEYWORD", "CATCH") and not self.at("KEYWORD", "FINALLY"):
-            if self.at("NEWLINE"):
-                self.eat("NEWLINE")
-                continue
-            stmts.append(self.parse_statement())
-        return stmts
+       stmts = []
 
-    # ---------- statements ----------
+       while (
+            not self.at("EOF")
+            and not self.at("KEYWORD", "ELSE")
+            and not self.at("KEYWORD", "CASE")
+            and not self.at("KEYWORD", "OTHERWISE")
+            and not self.at("KEYWORD", "CATCH")
+            and not self.at("KEYWORD", "FINALLY")
+
+        # Top-level declarations end the current block.
+            and not self.at("KEYWORD", "FUNC")
+            and not self.at("KEYWORD", "IMPORT")
+            and not self.at("KEYWORD", "TYPE")
+            and not self.at("KEYWORD", "ENUM")
+            and not self.at("KEYWORD", "STRUCT")
+            and not self.at("KEYWORD", "UNION")
+            and not self.at("KEYWORD", "TRAIT")
+            and not self.at("KEYWORD", "IMPL")
+    ):
+        if self.at("NEWLINE"):
+            self.eat("NEWLINE")
+            continue
+
+        stmts.append(self.parse_statement())
+
+        return stmts    
+     # ---------- statements ----------
 
     def parse_statement(self):
         tok = self.peek()

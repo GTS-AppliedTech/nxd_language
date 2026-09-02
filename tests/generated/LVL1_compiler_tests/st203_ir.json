@@ -1,0 +1,73 @@
+{
+  "module": {
+    "name": "NIM_CLONE_INDEPENDENCE",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "SOURCE",
+            "value": {
+              "Literal": {
+                "String": "NXD"
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Unary": {
+              "kind": "CLONE",
+              "expr": {
+                "Var": "SOURCE"
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Var": "TO"
+          }
+        },
+        {
+          "Expr": {
+            "Var": "COPY"
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "SOURCE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "COPY"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

@@ -1,0 +1,13 @@
+MODULE NIM_SCOPE_LIFETIME
+
+FUNC CREATE_VALUE()
+    LET VALUE SET "temporary"
+    PRINTLN(VALUE)
+
+// testing scope destruction candidate. The VALUE variable is created in the CREATE_VALUE function and should be destroyed when the function scope ends. This should succeed.
+
+FUNC MAIN()
+    CREATE_VALUE()
+    PRINTLN("complete")
+
+

@@ -1,0 +1,51 @@
+{
+  "module": {
+    "name": "NIM_COMPTIME_CONSTANT",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "RESULT",
+            "value": {
+              "Binary": {
+                "kind": "ADD",
+                "left": {
+                  "Literal": {
+                    "Int": 40
+                  }
+                },
+                "right": {
+                  "Literal": {
+                    "Int": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "RESULT"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

@@ -3,25 +3,25 @@ from src.frontend.ir.main import compile_to_ir_json
 import subprocess
 
 TESTS = [
-    "st703",
-    "st705",
-    "st706",
-    "st712",
-    "st717",
-    "st726",
-    "st733",
-    "st739",
-    "st740",
-    "st710"
+    "st001",
+    "st002",
+    "st003",
+    "st004",
+    "st005",
+    "st006",
+    "st007",
+    "st008",
+    "st009",
+    "st010"
 ]
 
 for test_id in TESTS:
 
     print(f"\n=== Running {test_id} ===")
 
-    src_path = f"tests/fixtures/ex_expected_fail_tests/{test_id}.nxd"
+    src_path = f"tests/fixtures/nim_expected_pass_tests/{test_id}.nxd"
     json_path = f"tests/generated/LVL1_compiler_tests/{test_id}_ir.json"
-    ex_path = f"tests/generated/LVL3_full_pipeline_ex_tests/{test_id}.ex"
+    nim_path = f"tests/generated/LVL3_full_pipeline_nim_tests/{test_id}.nim"
 
     try:
         src = Path(src_path).read_text()
@@ -40,7 +40,7 @@ for test_id in TESTS:
                 "--",
                 "--semantics",
                 json_path,
-                ex_path
+                nim_path
             ],
             check=True
         )

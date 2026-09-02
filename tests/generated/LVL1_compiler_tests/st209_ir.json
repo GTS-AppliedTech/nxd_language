@@ -1,0 +1,44 @@
+{
+  "module": {
+    "name": "NIM_SCOPE_LIFETIME",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "CREATE_VALUE",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "VALUE",
+            "value": {
+              "Literal": {
+                "String": "temporary"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Expr": {
+            "Call": {
+              "func": "CREATE_VALUE",
+              "args": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
