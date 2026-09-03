@@ -4,6 +4,12 @@ from os import name
 from src.frontend.lexer.scanner import lex
 from src.frontend.ast.nodes import *
 
+class ParserError(Exception):
+    def __init__(self, message, line, col):
+        super().__init__(message)
+        self.message = message
+        self.line = line
+        self.col = col
 class Parser:
     def __init__(self, src: str):
         self.tokens = lex(src)
@@ -22,13 +28,24 @@ class Parser:
 
     def eat(self, kind=None, val=None):
         tok = self.peek()
+
         if kind and tok[0] != kind:
-            raise Exception(f"Expected {kind}, got {tok}")
+            raise ParserError(
+                f"Expected {kind}, got {tok[0]}",
+                tok[2],
+                tok[3]
+           )
+
         if val and tok[1] != val:
-            raise Exception(f"Expected {val}, got {tok}")
+            raise ParserError(
+                f"Expected {val}, got {tok[1]}",
+                tok[2],
+                tok[3]
+            )
+
         self.pos += 1
         return tok
-
+    
     def at(self, kind, val=None):
         tok = self.peek()
         if tok[0] != kind:
@@ -108,24 +125,33 @@ class Parser:
         return self.parse_statement()
 
     # ---------- types ----------
-
     def parse_type_decl(self):
         self.eat("KEYWORD", "TYPE")
         name = self.eat("IDENT")[1]
+
         if self.at("KEYWORD", "ENUM"):
             self.eat("KEYWORD", "ENUM")
             return self.parse_enum_type(name)
+
         if self.at("KEYWORD", "UNION"):
             self.eat("KEYWORD", "UNION")
             return self.parse_union_type(name)
+
         if self.at("KEYWORD", "TRAIT"):
             self.eat("KEYWORD", "TRAIT")
             return self.parse_trait_type(name)
+
         if self.at("KEYWORD", "STRUCT"):
             self.eat("KEYWORD", "STRUCT")
             return self.parse_struct_type(name)
-        raise Exception(f"Expected STRUCT, ENUM, UNION, or TRAIT, got {self.peek()}")
 
+        tok = self.peek()
+
+        raise ParserError(
+            f"Expected STRUCT, ENUM, UNION, or TRAIT, got {tok[0]} {tok[1]}",
+            tok[2],
+            tok[3]
+        )
     def parse_impl_decl(self):
         impl_column = self.peek()[3]
 
@@ -612,8 +638,11 @@ class Parser:
 
             return ASTVar(name=self.eat("IDENT")[1])
 
-        raise Exception(f"Unexpected token in primary: {tok}")
-
+        raise ParserError(
+        f"Unexpected token in primary: {tok[1]}",
+            tok[2],
+            tok[3]
+)
     def parse_literal(self):
         tok = self.peek()
         if tok[0] == "NUMBER":
@@ -630,8 +659,13 @@ class Parser:
                 return ASTLiteral(value=False)
             if value == "none":
                 return ASTLiteral(value=None)
-        raise Exception("Literal expected")
+        tok = self.peek()
 
+        raise ParserError(
+            f"Literal expected, got {tok[0]} {tok[1]}",
+            tok[2],
+            tok[3]
+        )
     def parse_list_literal(self):
         self.eat("LBRACK")
         items = []
@@ -667,7 +701,13 @@ class Parser:
             elif self.at("STRING"):
                 key = self.eat("STRING")[1][1:-1]
             else:
-                raise Exception(f"Expected map key, got {self.peek()}")
+                tok = self.peek()
+
+                raise ParserError(
+                    f"Expected map key, got {tok[0]} {tok[1]}",
+                    tok[2],
+                    tok[3]
+                )
             self.eat("COLON")
             val = self.parse_expr()
             entries[key] = val
