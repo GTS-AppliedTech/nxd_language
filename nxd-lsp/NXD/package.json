@@ -30,6 +30,18 @@
       "language": "nxd",
       "scopeName": "source.nxd",
       "path": "./syntaxes/nxd.tmLanguage.json"
-    }]
+    }],
+{
+  "contributes": {
+    "iconThemes": [
+      {
+        "id": "nxd-icons",
+        "label": "NXD Icons",
+        "path": "./fileicons/nxd-icon-theme.json"
+      }
+    ]
+  }
+}
+
   }
 }
