@@ -1,6 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 use std::fmt;
+use std::collections::HashMap;
 // ===============================
 // IR MODULE
 // ===============================
@@ -17,6 +18,17 @@ pub struct IRImport {
     pub alias: Option<String>,
 }
 
+#[derive(Clone, Debug, Deserialize)]
+pub struct IRMove {
+    pub source: IRExpr,
+    pub target: IRExpr,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct IRClone {
+    pub source: IRExpr,
+    pub target: IRExpr,
+}
 
 // ===============================
 // IR TYPES
@@ -120,9 +132,9 @@ pub enum IRStatement {
     Match(IRMatch),
     Try(IRTry),
     Expr(IRExpr),
+    Move(IRMove),
+    Clone(IRClone),
 }
-
-
 
 // ===============================
 // IR CONTROL FLOW
@@ -167,6 +179,7 @@ pub enum IRExpr {
     Call { func: String, args: Vec<IRExpr> },
     Var(String),
     Pipeline { value: Box<IRExpr>, func: String },
+    ObjectInit(IRObjectInit),
 }
 
 // ===============================
@@ -178,6 +191,12 @@ pub struct IRBinaryOp {
     pub kind: String,     // ADD, SUB, MUL, DIV, EQ, GT, etc.
     pub left: Box<IRExpr>,
     pub right: Box<IRExpr>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct IRObjectInit {
+    pub type_name: String,
+    pub fields: HashMap<String, IRExpr>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -275,6 +294,19 @@ impl fmt::Display for IRExpr {
 
             IRExpr::Pipeline { value, func } => {
                 write!(f, "{} |> {}", value, func.to_lowercase())
+            }
+
+            IRExpr::ObjectInit(init) => {
+                let mut fields = init.fields.iter().collect::<Vec<_>>();
+                fields.sort_by(|a, b| a.0.cmp(b.0));
+
+                let fields = fields
+                    .into_iter()
+                    .map(|(name, value)| format!("{}: {}", name, value))
+                    .collect::<Vec<_>>()
+                    .join(", ");
+
+                write!(f, "{}({})", init.type_name, fields)
             }
         }
     }

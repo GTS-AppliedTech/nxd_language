@@ -93,6 +93,16 @@ class ASTFunction:
 # ============================
 
 @dataclass
+class ASTMove:
+    source: any
+    target: any
+
+@dataclass
+class ASTClone:
+    source: any
+    target: any
+
+@dataclass
 class ASTLet:
     name: str
     value: "ASTExpr"

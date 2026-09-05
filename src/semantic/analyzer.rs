@@ -136,6 +136,50 @@ impl Analyzer {
                     self.analyze_statement(s)?;
                 }
             }
+            IRStatement::Move(move_node) => {
+                let source_type = self.analyze_expr(&move_node.source)?;
+
+                let target_name = match &move_node.target {
+                    IRExpr::Var(name) => name.clone(),
+                    _ => {
+                        return Err(SemanticError::UndefinedSymbol {
+                            name: "MOVE target must be an identifier".to_string(),
+                        });
+                    }
+                };
+
+                check_ownership(OwnershipOp::Move, &source_type)?;
+
+                self.symbols.define(
+                    &target_name,
+                    Symbol::Var {
+                        name: target_name.clone(),
+                        ty: source_type,
+                    },
+                );
+            }
+            IRStatement::Clone(clone_node) => {
+                let source_type = self.analyze_expr(&clone_node.source)?;
+
+                let target_name = match &clone_node.target {
+                    IRExpr::Var(name) => name.clone(),
+                    _ => {
+                        return Err(SemanticError::UndefinedSymbol {
+                            name: "CLONE target must be an identifier".to_string(),
+                        });
+                    }
+                };
+
+                check_ownership(OwnershipOp::Clone, &source_type)?;
+
+                self.symbols.define(
+                    &target_name,
+                    Symbol::Var {
+                        name: target_name.clone(),
+                        ty: source_type,
+                    },
+                );
+            }
             IRStatement::Expr(expr) => {
                 self.analyze_expr(expr)?;
             }
@@ -146,6 +190,13 @@ impl Analyzer {
     fn analyze_expr(&mut self, expr: &IRExpr) -> Result<String, SemanticError> {
     match expr {
         IRExpr::Literal(l) => Ok(self.literal_type(l)),
+
+        IRExpr::ObjectInit(init) => {
+            for value in init.fields.values() {
+                self.analyze_expr(value)?;
+            }
+            Ok(init.type_name.clone())
+        }
 
         IRExpr::Var(name) => {
             if let Some(sym) = self.symbols.resolve(name) {
@@ -162,26 +213,45 @@ impl Analyzer {
                 })
             }
         }
-
         IRExpr::Binary(b) => {
-            let left = self.analyze_expr(&b.left)?;
-            let right = self.analyze_expr(&b.right)?;
+    let left = self.analyze_expr(&b.left)?;
 
-            match b.kind.as_str() {
-                "AS" => {
-                    check_as_cast(&left, &right)?;
-                    Ok(right)
-                }
-
-                "IS" => Ok("bool".to_string()),
-
+    match b.kind.as_str() {
+        "AS" => {
+            let target_type = match b.right.as_ref() {
+                IRExpr::Var(name) => name.clone(),
                 _ => {
-                    check_type(&left, &right)?;
-                    Ok(left)
+                    return Err(SemanticError::UndefinedSymbol {
+                        name: "Expected type name after AS".to_string(),
+                    });
                 }
-            }
+            };
+
+            check_as_cast(&left, &target_type)?;
+            Ok(target_type)
         }
 
+        "IS" => {
+            let target_type = match b.right.as_ref() {
+                IRExpr::Var(name) => name.clone(),
+                _ => {
+                    return Err(SemanticError::UndefinedSymbol {
+                        name: "Expected type name after IS".to_string(),
+                    });
+                }
+            };
+
+            let _ = check_is(&left, &target_type);
+            Ok("bool".to_string())
+        }
+
+        _ => {
+            let right = self.analyze_expr(&b.right)?;
+            check_type(&left, &right)?;
+            Ok(left)
+        }
+    }
+}
         IRExpr::Unary(u) => {
             let inner = self.analyze_expr(&u.expr)?;
 

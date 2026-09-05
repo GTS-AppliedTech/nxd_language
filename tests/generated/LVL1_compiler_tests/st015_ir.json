@@ -1,0 +1,103 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 5
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Literal": {
+                "Int": 10
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Binary": {
+                "kind": "GTE",
+                "left": {
+                  "Var": "Y"
+                },
+                "right": {
+                  "Var": "X"
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "GTE"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "If": {
+                  "condition": {
+                    "Binary": {
+                      "kind": "LTE",
+                      "left": {
+                        "Var": "X"
+                      },
+                      "right": {
+                        "Var": "Y"
+                      }
+                    }
+                  },
+                  "then_branch": [
+                    {
+                      "Expr": {
+                        "Call": {
+                          "func": "PRINTLN",
+                          "args": [
+                            {
+                              "Literal": {
+                                "String": "LTE"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "else_branch": []
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

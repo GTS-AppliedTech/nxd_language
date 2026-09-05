@@ -1,0 +1,51 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "VALUES",
+            "value": {
+              "Literal": {
+                "List": [
+                  {
+                    "Int": 1
+                  },
+                  {
+                    "Int": 2
+                  },
+                  {
+                    "Int": 3
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "VALUES"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

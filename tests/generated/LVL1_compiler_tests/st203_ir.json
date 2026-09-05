@@ -23,23 +23,13 @@
           }
         },
         {
-          "Expr": {
-            "Unary": {
-              "kind": "CLONE",
-              "expr": {
-                "Var": "SOURCE"
-              }
+          "Clone": {
+            "source": {
+              "Var": "SOURCE"
+            },
+            "target": {
+              "Var": "COPY"
             }
-          }
-        },
-        {
-          "Expr": {
-            "Var": "TO"
-          }
-        },
-        {
-          "Expr": {
-            "Var": "COPY"
           }
         },
         {

@@ -128,6 +128,23 @@ class IRStatement:
         def __init__(self, expr):
             self.expr = expr
 
+    class Move:
+        def __init__(self, movenode):
+            self.movenode = movenode
+
+    class Clone:
+        def __init__(self, clonenode):
+            self.clonenode = clonenode
+
+class IRMove:
+    def __init__(self, source, target):
+        self.source = source
+        self.target = target
+class IRClone:
+    def __init__(self, source, target):
+        self.source = source
+        self.target = target
+
 class IRIf:
     def __init__(self, condition, then_branch, else_branch):
         self.condition = condition
@@ -181,6 +198,8 @@ class IRExpr:
         def __init__(self, type_name, fields):
             self.type_name = type_name
             self.fields = fields
+
+    
 
 class IRBinaryOp:
     def __init__(self, kind, left, right):

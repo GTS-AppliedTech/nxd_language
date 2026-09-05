@@ -1,0 +1,59 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "VALUE",
+            "value": {
+              "Literal": {
+                "Int": 42
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Binary": {
+                "kind": "IS",
+                "left": {
+                  "Var": "VALUE"
+                },
+                "right": {
+                  "Var": "int"
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Var": "VALUE"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

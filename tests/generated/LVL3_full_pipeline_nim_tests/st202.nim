@@ -3,4 +3,6 @@
 
 proc main() =
   var source = "NXD"
+  var target = move(source)
+  println(source)
 

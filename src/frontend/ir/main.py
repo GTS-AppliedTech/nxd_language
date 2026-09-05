@@ -1,4 +1,5 @@
 from src.frontend.parser.parser import parse
+from src.frontend.ast.nodes import ASTLiteral
 from src.frontend.ir.lowering import lower_module, lower_types, lower_function
 from src.frontend.ir.validate import validate_ir
 from src.frontend.ir.nodes import * # plus others
@@ -148,6 +149,22 @@ def serialize_statements(stmts):
                 }
             })
 
+        elif isinstance(s, IRStatement.Move):
+            out.append({
+                "Move": {
+                    "source": serialize_expr(s.movenode.source),
+                    "target": serialize_expr(s.movenode.target)
+                }
+            })
+
+        elif isinstance(s, IRStatement.Clone):
+            out.append({
+                "Clone": {
+                    "source": serialize_expr(s.clonenode.source),
+                    "target": serialize_expr(s.clonenode.target),
+                }
+            })
+
         elif isinstance(s, IRStatement.Expr):
             out.append({
                 "Expr": serialize_expr(s.expr)
@@ -218,6 +235,9 @@ def serialize_expr(e):
     raise Exception(f"Unknown IR expression: {e}")
 
 def serialize_literal(value):
+    if isinstance(value, ASTLiteral):
+        return serialize_literal(value.value)
+    
     if isinstance(value, bool):
         return {"Bool": value}
 

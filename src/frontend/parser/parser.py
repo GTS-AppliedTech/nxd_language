@@ -1,5 +1,6 @@
 from dataclasses import fields
 from os import name
+from turtle import left
 
 from src.frontend.lexer.scanner import lex
 from src.frontend.ast.nodes import *
@@ -399,9 +400,9 @@ class Parser:
             self.eat("NEWLINE")
 
     def parse_block(self):
-       stmts = []
+        stmts = []
 
-       while (
+        while (
             not self.at("EOF")
             and not self.at("KEYWORD", "ELSE")
             and not self.at("KEYWORD", "CASE")
@@ -409,7 +410,6 @@ class Parser:
             and not self.at("KEYWORD", "CATCH")
             and not self.at("KEYWORD", "FINALLY")
 
-        # Top-level declarations end the current block.
             and not self.at("KEYWORD", "FUNC")
             and not self.at("KEYWORD", "IMPORT")
             and not self.at("KEYWORD", "TYPE")
@@ -418,45 +418,114 @@ class Parser:
             and not self.at("KEYWORD", "UNION")
             and not self.at("KEYWORD", "TRAIT")
             and not self.at("KEYWORD", "IMPL")
-    ):
-        if self.at("NEWLINE"):
-            self.eat("NEWLINE")
-            continue
+        ):
+            if self.at("NEWLINE"):
+                self.eat("NEWLINE")
+                continue
 
-        stmts.append(self.parse_statement())
+            stmts.append(self.parse_statement())
 
-        return stmts    
+        return stmts
      # ---------- statements ----------
 
     def parse_statement(self):
         tok = self.peek()
+
         if tok[0] == "KEYWORD":
             kw = tok[1]
+
             if kw == "LET":
                 return self.parse_let()
+
             if kw == "CONST":
                 return self.parse_const()
+
             if kw == "RETURN":
                 return self.parse_return()
+
             if kw == "TRY":
                 return self.parse_try()
+
             if kw == "LOOP":
                 return self.parse_loop()
+
             if kw == "IF":
                 return self.parse_if()
+
             if kw == "MATCH":
                 return self.parse_match()
+
             if kw == "SPAWN":
                 return self.parse_spawn()
+
             if kw == "SEND":
                 return self.parse_send()
+
             if kw == "RECV":
                 return self.parse_recv()
+
             if kw == "AWAIT":
                 return self.parse_await_stmt()
-        # fallback: expression statement
+
+        if tok[0] == "OP" and tok[1] == "MOVE":
+            return self.parse_move()
+        if tok[0] == "OP" and tok[1] == "CLONE":
+            return self.parse_clone()
+
+    # Fallback: expression statement
         expr = self.parse_expr()
         return expr
+
+    def parse_clone(self):
+        token = self.eat("OP")
+
+        if token[1] != "CLONE":
+            raise ParserError(
+                f"Expected CLONE, got {token[0]} {token[1]}"
+            )
+
+        if not self.at("IDENT"):
+            raise ParserError(
+                f"Expected source identifier after CLONE, "
+                f"got {self.peek()[0]} {self.peek()[1]}"
+            )
+
+        source = ASTVar(name=self.eat("IDENT")[1])
+
+        if not (self.at("IDENT") and self.peek()[1] == "TO"):
+            raise ParserError(
+                f"Expected TO after CLONE source, "
+                f"got {self.peek()[0]} {self.peek()[1]}"
+            )
+
+        self.eat("IDENT")
+
+        if not self.at("IDENT"):
+            raise ParserError(
+                f"Expected target identifier after TO, "
+                f"got {self.peek()[0]} {self.peek()[1]}"
+            )
+
+        target = ASTVar(name=self.eat("IDENT")[1])
+
+        return ASTClone(
+            source=source,
+            target=target,
+        )
+
+    def parse_move(self):
+        self.eat("OP")      # MOVE
+
+        source = self.parse_primary()
+
+        if not (self.at("IDENT") and self.peek()[1] == "TO"):
+            raise SyntaxError("Expected TO")
+
+        self.eat("IDENT")   # TO
+
+        target = self.parse_primary()
+
+        return ASTMove(source=source, target=target)
 
     def parse_let(self):
         self.eat("KEYWORD", "LET")
@@ -587,12 +656,33 @@ class Parser:
 
     def parse_comp(self):
         left = self.parse_add()
-        while self.at("OP") and self.peek()[1] in ("EQ", "NEQ", "GT", "LT", "GTE", "LTE", "AS", "IS"):
-            op = self.eat("OP")[1]
-            right = self.parse_add()
-            left = ASTBinary(kind=op, left=left, right=right)
-        return left
 
+        while self.at("OP") and self.peek()[1] in (
+            "EQ", "NEQ", "GT", "LT", "GTE", "LTE", "AS", "IS"
+        ):
+            op = self.eat("OP")[1]
+
+            if op in ("IS", "AS"):
+                if self.at("LOWTYPE"):
+                    right = ASTVar(self.eat("LOWTYPE")[1])
+                else:
+                    raise SyntaxError(
+                        f"Expected type after {op}, got {self.peek()[0]} {self.peek()[1]}"
+                    )
+            else:
+                right = self.parse_add()
+
+            print("OP:", op)
+            print("NEXT:", self.peek())
+
+            left = ASTBinary(
+                kind=op,
+                left=left,
+                right=right
+            )
+
+        return left
+    
     def parse_add(self):
         left = self.parse_mul()
         while self.at("OP") and self.peek()[1] in ("ADD", "SUB"):
@@ -610,7 +700,7 @@ class Parser:
         return left
 
     def parse_unary(self):
-        if self.at("OP") and self.peek()[1] in ("NOT", "MOVE", "CLONE", "BORROW", "SUB"):
+        if self.at("OP") and self.peek()[1] in ("NOT", "BORROW", "SUB"):
             op = self.eat("OP")[1]
             expr = self.parse_primary()
             return ASTUnary(kind=op, expr=expr)
@@ -674,7 +764,7 @@ class Parser:
             if self.at("COMMA"):
                 self.eat("COMMA")
         self.eat("RBRACK")
-        return ASTLiteral(value=[items])
+        return ASTLiteral(value=items)
 
     def parse_object_init(self):
         type_name = self.eat("IDENT")[1]

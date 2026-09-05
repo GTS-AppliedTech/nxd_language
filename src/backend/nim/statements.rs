@@ -57,6 +57,20 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
 
             out
         }
+        IRStatement::Move(movenode) => {
+            format!(
+                "  var {} = move({})\n",
+                movenode.target.to_string().to_lowercase(),
+                movenode.source.to_string().to_lowercase()
+            )
+        }
+        IRStatement::Clone(clone_node) => {
+            format!(
+                "  var {} = deepCopy({})\n",
+                clone_node.target.to_string().to_lowercase(),
+                clone_node.source.to_string().to_lowercase()
+            )
+        }
         IRStatement::Expr(expr) => {
             format!("  {}\n", emit_expr(expr))
         }
@@ -69,7 +83,9 @@ fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
 
     match expr {
         Literal(l) => emit_literal(l),
+
         Binary(b) => emit_binary_op(b),
+
         Unary(u) => emit_unary_op(u),
 
         Call { func, args } => {
@@ -91,10 +107,26 @@ fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
                 func,
             )
         }
+
+        ObjectInit(init) => {
+            let mut fields = init.fields.iter().collect::<Vec<_>>();
+            fields.sort_by(|a, b| a.0.cmp(b.0));
+
+            let fields = fields
+                .into_iter()
+                .map(|(name, value)| {
+                    format!("{}: {}", name, emit_expr(value))
+                })
+                .collect::<Vec<_>>()
+                .join(", ");
+
+            format!("{}({})", init.type_name, fields)
+        }
     }
 }
-    fn indent(s: &str) -> String {
-        s.lines()
+
+fn indent(s: &str) -> String {
+    s.lines()
         .map(|line| format!("    {}\n", line.trim_end()))
         .collect()
 }

@@ -52,6 +52,22 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
             format!("  let {} = {}\n", name.to_lowercase(), value)
         }
 
+        IRStatement::Move(movenode) => {
+            format!(
+                "  var {} = move({})\n",
+                movenode.target,
+                movenode.source
+            )
+        }
+
+        IRStatement::Clone(clone_node) => {
+            format!(
+                "  var {} = deepCopy({})\n",
+                clone_node.target.to_string().to_lowercase(),
+                clone_node.source.to_string().to_lowercase()
+            )
+        }
+
         IRStatement::Return(expr) => {
             format!("  return {}\n", expr)
         }
@@ -66,7 +82,7 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
 
             out
         }
-        
+        // Keep your remaining existing arms here
         IRStatement::If(if_node) => {
     crate::backend::nim::control_flow::emit_if(if_node)
 }

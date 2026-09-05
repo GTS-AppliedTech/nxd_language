@@ -3,16 +3,8 @@ from src.frontend.ir.main import compile_to_ir_json
 import subprocess
 
 TESTS = [
-    "st001",
-    "st002",
-    "st003",
-    "st004",
-    "st005",
-    "st006",
-    "st007",
-    "st008",
-    "st009",
-    "st010"
+    "st010",
+    "st029"
 ]
 
 for test_id in TESTS:

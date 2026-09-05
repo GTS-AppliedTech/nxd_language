@@ -1,3 +1,5 @@
+
+
 from src.frontend.ir.nodes import *
 from src.frontend.ast.nodes import *
 
@@ -63,6 +65,7 @@ def lower_function(ast):
     )
 
 def lower_statement(ast):
+    print("LOWERING:", type(ast).__name__)
     if isinstance(ast, ASTLet):
         return IRStatement.Let(name=ast.name, value=lower_expr(ast.value))
     if isinstance(ast, ASTConst):
@@ -92,6 +95,20 @@ def lower_statement(ast):
                 for s in ast.finally_body
         ],
     )
+    if isinstance(ast, ASTMove):
+        return IRStatement.Move(
+            IRMove(
+        source=lower_expr(ast.source),
+        target=lower_expr(ast.target)
+    )
+)    
+    if isinstance(ast, ASTClone):
+        return IRStatement.Clone(
+            IRClone(
+        source=lower_expr(ast.source),
+        target=lower_expr(ast.target),
+    )
+)       
     if isinstance(ast, ASTMatch):
         return IRStatement.Match(IRMatch(
             scrutinee=lower_expr(ast.scrutinee),
@@ -104,8 +121,9 @@ def lower_statement(ast):
     if isinstance(ast, ASTExpr):
         return IRStatement.Expr(lower_expr(ast))
 
-    raise Exception("Unknown AST statement")
-
+    raise Exception(
+            f"Unknown AST statement: {type(ast).__name__}"
+)
 def lower_expr(ast):
     if isinstance(ast, ASTLiteral):
         return IRExpr.Literal(lower_literal(ast))

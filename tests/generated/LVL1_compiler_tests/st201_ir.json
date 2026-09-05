@@ -23,23 +23,13 @@
           }
         },
         {
-          "Expr": {
-            "Unary": {
-              "kind": "MOVE",
-              "expr": {
-                "Var": "SOURCE"
-              }
+          "Move": {
+            "source": {
+              "Var": "SOURCE"
+            },
+            "target": {
+              "Var": "TARGET"
             }
-          }
-        },
-        {
-          "Expr": {
-            "Var": "TO"
-          }
-        },
-        {
-          "Expr": {
-            "Var": "TARGET"
           }
         },
         {

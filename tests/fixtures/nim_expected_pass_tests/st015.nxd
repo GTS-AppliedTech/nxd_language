@@ -4,8 +4,8 @@ FUNC MAIN()
     LET X SET 5
     LET Y SET 10
 
-    IF Y GTE X:
+    IF Y GTE X
         PRINTLN("GTE")
 
-    IF X LTE Y:
+    IF X LTE Y
         PRINTLN("LTE")

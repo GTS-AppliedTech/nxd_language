@@ -2,7 +2,7 @@
   "name": "NXD",
   "displayName": "NXD Language",
   "description": "Official VS Code language support for the NXD programming language.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.134.0"
@@ -36,14 +36,6 @@
       "language": "nxd",
       "scopeName": "source.nxd",
       "path": "./syntaxes/nxd.tmLanguage.json"
-    }
-  ],
-
-  "iconThemes": [
-    {
-      "id": "nxd-icons",
-      "label": "NXD Icons",
-      "path": "./fileicons/nxd-icon-theme.json"
     }
   ]
   }}

@@ -21,6 +21,28 @@
               }
             }
           }
+        },
+        {
+          "Move": {
+            "source": {
+              "Var": "SOURCE"
+            },
+            "target": {
+              "Var": "TARGET"
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "SOURCE"
+                }
+              ]
+            }
+          }
         }
       ]
     }
