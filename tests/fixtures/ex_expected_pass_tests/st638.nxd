@@ -1,0 +1,11 @@
+MODULE TEST
+
+FUNC MAIN()
+    TRY:
+        PRINTLN("True")
+
+    CATCH:
+        PRINTLN("FALSE")
+
+    FINALLY:
+        PRINTLN("NONE")

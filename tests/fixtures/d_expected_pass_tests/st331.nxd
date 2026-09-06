@@ -1,0 +1,14 @@
+MODULE TEST
+
+FUNC MAIN()
+    CONST STATE SET "READY"
+
+    MATCH STATE:
+        CASE "READY":
+            PRINTLN("GO")
+
+        CASE "WAIT":
+            PRINTLN("HOLD")
+
+        OTHERWISE:
+            PRINTLN("UNKNOWN")

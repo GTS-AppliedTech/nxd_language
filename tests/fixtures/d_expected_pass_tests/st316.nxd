@@ -1,0 +1,7 @@
+MODULE TEST
+
+FUNC MAIN()
+    LET COUNT SET 0
+
+    LOOP:
+        PRINTLN(COUNT)
