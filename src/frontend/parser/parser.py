@@ -6,11 +6,19 @@ from src.frontend.lexer.scanner import lex
 from src.frontend.ast.nodes import *
 
 class ParserError(Exception):
-    def __init__(self, message, line, col):
+    def __init__(self, code, message, line, col):
         super().__init__(message)
+        self.code = code
         self.message = message
         self.line = line
         self.col = col
+
+class WarningDiagnostic:
+    def __init__(self, line, col, message):
+        self.line = line
+        self.col = col
+        self.message = message
+
 class Parser:
     def __init__(self, src: str):
         self.tokens = lex(src)
@@ -32,6 +40,7 @@ class Parser:
 
         if kind and tok[0] != kind:
             raise ParserError(
+                "NXD-P1001",
                 f"Expected {kind}, got {tok[0]}",
                 tok[2],
                 tok[3]
@@ -39,6 +48,7 @@ class Parser:
 
         if val and tok[1] != val:
             raise ParserError(
+                "NXD-P1002",
                 f"Expected {val}, got {tok[1]}",
                 tok[2],
                 tok[3]
@@ -46,7 +56,8 @@ class Parser:
 
         self.pos += 1
         return tok
-    
+
+  
     def at(self, kind, val=None):
         tok = self.peek()
         if tok[0] != kind:
@@ -529,10 +540,11 @@ class Parser:
 
     def parse_let(self):
         self.eat("KEYWORD", "LET")
-        name = self.eat("IDENT")[1]
+        ident_tok = self.eat("IDENT")
+        name = ident_tok[1]
         self.eat("KEYWORD", "SET")
         value = self.parse_expr()
-        return ASTLet(name=name, value=value)
+        return ASTLet(name=name, value=value, line=ident_tok[2], col=ident_tok[3])
 
     def parse_const(self):
         self.eat("KEYWORD", "CONST")
@@ -726,8 +738,13 @@ class Parser:
             if self._next_is("LBRACE"):
                 return self.parse_object_init()
 
-            return ASTVar(name=self.eat("IDENT")[1])
+            ident_tok = self.eat("IDENT")
 
+            return ASTVar(
+                name=ident_tok[1],
+                line=ident_tok[2],
+                col=ident_tok[3]
+            )
         raise ParserError(
         f"Unexpected token in primary: {tok[1]}",
             tok[2],

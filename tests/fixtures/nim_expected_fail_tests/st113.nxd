@@ -1,0 +1,8 @@
+// expected parser failure - assignment syntax not implemented
+
+MODULE TEST
+
+FUNC MAIN()
+    CONST VALUE SET 42
+
+    VALUE SET 99

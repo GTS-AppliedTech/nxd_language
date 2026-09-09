@@ -11,5 +11,5 @@ try:
 
 except ParserError as e:
     print(
-        f"{e.line}|{e.col}|{e.message}"
+        f"{e.line}|{e.col}|{e.code}: {e.message}"
     )

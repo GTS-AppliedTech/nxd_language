@@ -19,8 +19,14 @@ def lex(src: str):
             line += 1
             col = 1
             continue
+        if kind == "MISMATCH":
+            raise SyntaxError(
+        f"Unexpected character {val!r} at line {line}, column {col}"
+            )
+
         tokens.append((kind, val, line, col))
         col += len(val)
+
     tokens.append(("EOF", "", line, col))
     return tokens
 
@@ -79,6 +85,52 @@ def strip_line_comments(source: str) -> str:
 
     return "".join(output)
 
+def tokenize(source):
+    tokens = []
+    position = 0
+
+    for match in TOKEN_SPEC.finditer(source):
+        if match.start() != position:
+            invalid_text = source[position:match.start()]
+            line = source.count("\n", 0, position) + 1
+            last_newline = source.rfind("\n", 0, position)
+            column = position + 1 if last_newline == -1 else position - last_newline
+
+            raise SyntaxError(
+                f"Unexpected character sequence {invalid_text!r} "
+                f"at line {line}, column {column}"
+            )
+
+        kind = match.lastgroup
+        value = match.group()
+
+        if kind == "SKIP":
+            pass
+        elif kind == "NEWLINE":
+            tokens.append((kind, value))
+        elif kind == "MISMATCH":
+            raise SyntaxError(
+                f"Unexpected character {value!r}"
+            )
+        else:
+            tokens.append((kind, value))
+
+        position = match.end()
+
+    if position != len(source):
+        invalid_text = source[position:]
+        line = source.count("\n", 0, position) + 1
+        last_newline = source.rfind("\n", 0, position)
+        column = position + 1 if last_newline == -1 else position - last_newline
+
+        raise SyntaxError(
+            f"Unexpected character sequence {invalid_text!r} "
+            f"at line {line}, column {column}"
+        )
+
+    tokens.append(("EOF", ""))
+    return tokens
+
 TOKEN_SPEC = [
     ("NEWLINE", r"\n"),
     ("SKIP", r"[ \t]+"),
@@ -99,6 +151,7 @@ TOKEN_SPEC = [
     ("LOWTYPE", r"int|float|string|bool"),
     ("FN", r"fn"),
     ("LOWNAME", r"[a-z_][a-z0-9_]*"),
+    ("MISMATCH", r".")
 ]
 
 MASTER = re.compile("|".join(f"(?P<{n}>{r})" for n, r in TOKEN_SPEC))

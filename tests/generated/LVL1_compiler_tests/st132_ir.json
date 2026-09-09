@@ -1,0 +1,81 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Const": {
+            "name": "NAMES",
+            "value": {
+              "Literal": {
+                "List": [
+                  {
+                    "String": "ALPHA"
+                  },
+                  {
+                    "String": "BETA"
+                  },
+                  {
+                    "Int": 42
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "FLAGS",
+            "value": {
+              "Literal": {
+                "List": [
+                  {
+                    "Bool": true
+                  },
+                  {
+                    "Bool": false
+                  },
+                  "None"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "NAMES"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": "FLAGS"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

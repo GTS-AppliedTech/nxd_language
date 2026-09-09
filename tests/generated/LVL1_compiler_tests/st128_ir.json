@@ -1,0 +1,55 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "params": [],
+      "return_type": null,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 42
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Literal": {
+                "String": "hello"
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Z",
+            "value": {
+              "Binary": {
+                "kind": "ADD",
+                "left": {
+                  "Var": "X"
+                },
+                "right": {
+                  "Var": "Y"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

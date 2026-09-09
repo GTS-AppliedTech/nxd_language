@@ -1,3 +1,4 @@
+from src.frontend.warnings import find_unused_variables
 from src.frontend.parser.parser import parse
 from src.frontend.ast.nodes import ASTLiteral
 from src.frontend.ir.lowering import lower_module, lower_types, lower_function
@@ -7,6 +8,7 @@ import json
 
 def compile_to_ir_json(src: str, out_path: str):
     ast_module, ast_types, ast_functions = parse(src)
+    warnings = find_unused_variables(ast_module)
 
     from pprint import pprint
 

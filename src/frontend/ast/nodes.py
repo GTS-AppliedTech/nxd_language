@@ -106,6 +106,8 @@ class ASTClone:
 class ASTLet:
     name: str
     value: "ASTExpr"
+    line: int
+    col: int
 
 
 @dataclass
@@ -190,6 +192,8 @@ class ASTCall:
 @dataclass
 class ASTVar:
     name: str
+    line: int
+    col: int
 
 
 @dataclass
