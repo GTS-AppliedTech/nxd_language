@@ -5,6 +5,7 @@ import sys
 
 from src.frontend.parser.parser import parse, ParserError
 from src.frontend.warnings import find_unused_variables
+from src.frontend.warnings import find_unreachable_code
 
 source = sys.stdin.read()
 
@@ -13,10 +14,12 @@ try:
     with contextlib.redirect_stdout(io.StringIO()):
         module, ast_types, ast_functions = parse(source)
 
-    warnings = find_unused_variables(module)
+    unused_warnings = find_unused_variables(module)
+    unreachable_warnings = find_unreachable_code(module)
+
     diagnostics = []
 
-    for warning in warnings:
+    for warning in unused_warnings:
         diagnostics.append(
             {
                 "line": warning["line"],
@@ -26,6 +29,15 @@ try:
             }
         )
 
+    for warning in unreachable_warnings:
+        diagnostics.append(
+            {
+                "line": warning["line"],
+                "column": warning["col"],
+                "message": warning["message"],
+                "severity": "warning"
+            }
+        )
     print(json.dumps({
         "ok": True,
         "diagnostics": diagnostics

@@ -548,10 +548,11 @@ class Parser:
 
     def parse_const(self):
         self.eat("KEYWORD", "CONST")
-        name = self.eat("IDENT")[1]
+        ident_tok = self.eat("IDENT")
+        name = ident_tok[1]
         self.eat("KEYWORD", "SET")
         value = self.parse_expr()
-        return ASTConst(name=name, value=value)
+        return ASTConst(name=name, value=value, line=ident_tok[2], col=ident_tok[3])
 
     def parse_return(self):
         self.eat("KEYWORD", "RETURN")
@@ -841,17 +842,29 @@ class Parser:
         return ASTLiteral(value=("lambda", params, body))
 
     def parse_call_expr(self):
-        name = self.eat("IDENT")[1]
+        ident_tok = self.eat("IDENT")
+
+        name = ident_tok[1]
+
         self.eat("LPAREN")
+
         args = []
+
         if not self.at("RPAREN"):
             args.append(self.parse_expr())
+
             while self.at("COMMA"):
                 self.eat("COMMA")
                 args.append(self.parse_expr())
-        self.eat("RPAREN")
-        return ASTCall(func=name, args=args)
 
+        self.eat("RPAREN")
+
+        return ASTCall(
+            func=name,
+            args=args,
+            line=ident_tok[2],
+            col=ident_tok[3]
+        )
     def _next_is(self, kind):
         if self.pos + 1 >= len(self.tokens):
             return False

@@ -114,6 +114,8 @@ class ASTLet:
 class ASTConst:
     name: str
     value: "ASTExpr"
+    line: int
+    col: int
 
 
 @dataclass
@@ -187,6 +189,8 @@ class ASTUnary:
 class ASTCall:
     func: str
     args: List["ASTExpr"]
+    line: int
+    col: int
 
 
 @dataclass

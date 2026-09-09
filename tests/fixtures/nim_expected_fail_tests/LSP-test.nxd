@@ -1,5 +1,12 @@
 MODULE TEST
 
 FUNC MAIN()
-    LET X SET 42
+    RETURN 42
+
+    PRINTLN("hello")
+    
+
+
+
+    
     

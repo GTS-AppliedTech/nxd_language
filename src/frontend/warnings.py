@@ -17,6 +17,10 @@ def collect_usage(node, declared, used):
     elif isinstance(node, ASTVar):
         used.add(node.name)
 
+    elif isinstance(node, ASTConst):
+        declared[node.name] = node
+        collect_usage(node.value, declared, used)
+
     elif isinstance(node, ASTBinary):
         collect_usage(node.left, declared, used)
         collect_usage(node.right, declared, used)
@@ -62,6 +66,48 @@ def find_unused_variables(module):
                     "message": f"Variable '{name}' declared but never used."
                 }
             )
+
+
+    return warnings
+
+def find_unreachable_code(module):
+
+    warnings = []
+
+    for item in module.body:
+
+        if not isinstance(item, ASTFunction):
+            continue
+
+        found_return = False
+
+        for stmt in item.body:
+
+            if found_return:
+
+                warnings.append(
+                    {
+                        "line": stmt.line,
+                        "col": stmt.col,
+                        "message": "Unreachable code."
+                    }
+                )
+
+            if isinstance(stmt, ASTReturn):
+                found_return = True
+
+    return warnings
+
+def find_shadowed_bindings(module):
+    warnings = []
+
+
+
+    return warnings
+
+def find_unused_imports(module):
+    warnings = []
+
 
 
     return warnings
