@@ -4,9 +4,4 @@ FUNC MAIN()
     RETURN 42
 
     PRINTLN("hello")
-    
 
-
-
-    
-    
