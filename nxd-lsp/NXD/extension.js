@@ -54,8 +54,13 @@ function validateDocument(document, diagnostics) {
         'lsp_validate.py'
     );
 
+    const pythonCmd =
+        Process.platform === 'win32'
+            ? 'python'
+            : 'python3';
+
     const result = cp.spawnSync(
-        'python',
+        pythonCmd,
         [validatorPath],
         {
             cwd: workspaceRoot,
