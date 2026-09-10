@@ -29,6 +29,7 @@
       "extensions": [".nxd"],
       "icon": {
         "light": "./fileicons/nxd-light.svg",
+        "dusk": "./fileicons/nxd-dusk.svg",
         "dark": "./fileicons/nxd-dark.svg"
       },
       "configuration": "./language-configuration.json"
