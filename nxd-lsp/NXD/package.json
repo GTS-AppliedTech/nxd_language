@@ -2,7 +2,7 @@
   "name": "NXD",
   "displayName": "NXD Language",
   "description": "Official VS Code language support for the NXD programming language.",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.134.0"
