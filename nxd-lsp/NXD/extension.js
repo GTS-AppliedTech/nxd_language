@@ -55,7 +55,7 @@ function validateDocument(document, diagnostics) {
     );
 
     const pythonCmd =
-        Process.platform === 'win32'
+        process.platform === 'win32'
             ? 'python'
             : 'python3';
 
