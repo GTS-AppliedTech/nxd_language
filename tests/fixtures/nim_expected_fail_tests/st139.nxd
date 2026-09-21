@@ -2,7 +2,7 @@ MODULE TEST
 
 FUNC MAIN()
     LET X SET 1
-    LET X SET 2
+    LET Y SET 2
 
     TRY:
         PRINTLN("TRY")
@@ -12,3 +12,5 @@ FUNC MAIN()
 
     FINALLY:
         PRINTLN("FINALLY")
+
+        

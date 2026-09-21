@@ -6,7 +6,6 @@ source = sys.stdin.read()
 
 try:
     parse(source)
-
     print("OK")
 
 except ParserError as e:

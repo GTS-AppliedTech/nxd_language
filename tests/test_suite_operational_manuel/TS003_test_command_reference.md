@@ -20,6 +20,18 @@ This document focuses exclusively on test execution.
 
 For testing methodology see TS002.
 
+**Linux Note:**
+***When running test commands, some Linux Distributions may not provide a python alias by default. If you recieve: 'python: command not found' substitute:***
+
+```shell
+python3 <test_script_name>.py
+```
+***In place of:***
+
+```shell
+python <test_script_name>.py
+```
+
 #### Level 1 Commands
 ##### Frontend Validation
 **Bash**

@@ -1,6 +1,6 @@
 from dataclasses import fields
 from os import name
-from turtle import left
+import sys
 
 from src.frontend.lexer.scanner import lex
 from src.frontend.ast.nodes import *
@@ -12,18 +12,34 @@ class ParserError(Exception):
         self.message = message
         self.line = line
         self.col = col
+        self.severity = "error"
 
 class WarningDiagnostic:
-    def __init__(self, line, col, message):
+    def __init__(self, code, message, line, col):
+        self.code = code
+        self.message = message
         self.line = line
         self.col = col
-        self.message = message
+        self.severity = "warning"
 
 class Parser:
-    def __init__(self, src: str):
+    def __init__(self, src: str, recover_errors=False):
         self.tokens = lex(src)
         self.pos = 0
         self.indent_stack = [0]
+
+        self.errors = []
+        self.recover_errors = recover_errors
+
+    def report_error(self, error):
+        self.errors.append(error)
+
+    def synchronize(self):
+        while not self.at("EOF"):
+            if self.at("NEWLINE"):
+                self.eat("NEWLINE")
+                return
+            self.pos += 1
 
     def peek(self):
         if self.pos >= len(self.tokens):
@@ -68,10 +84,9 @@ class Parser:
 
     # ---------- top level ----------
     def parse_program(self):
-        # Skip leading blank lines
         while self.at("NEWLINE"):
             self.eat("NEWLINE")
-        # MODULE is optional.
+
         if self.at("KEYWORD", "MODULE"):
             return self.parse_module()
 
@@ -83,21 +98,40 @@ class Parser:
                 self.eat("NEWLINE")
                 continue
 
-            if self.at("KEYWORD", "IMPORT"):
-                imports.append(self.parse_import())
-                continue
+            try:
+                if self.at("KEYWORD", "IMPORT"):
+                    imports.append(self.parse_import())
+                    continue
 
-            body.append(self.parse_top_level())
+                node = self.parse_top_level()
+
+                if node is not None:
+                    body.append(node)
+
+            except ParserError as error:
+                if not self.recover_errors:
+                    raise
+
+                self.report_error(error)
+
+                print(
+                    f"Collected: {error.code} "
+                    f"{error.message} "
+                    f"{error.line}:{error.col}"
+                )
+
+                self.synchronize()
 
         return ASTModule(
             name="ANONYMOUS",
             imports=imports,
             body=body,
-    )
+        )
 
     def parse_module(self):
         self.eat("KEYWORD", "MODULE")
         name = self.eat("IDENT")[1]
+
         imports = []
         body = []
 
@@ -105,13 +139,38 @@ class Parser:
             if self.at("NEWLINE"):
                 self.eat("NEWLINE")
                 continue
-            if self.at("KEYWORD", "IMPORT"):
-                imports.append(self.parse_import())
-                continue
-            body.append(self.parse_top_level())
 
-        return ASTModule(name=name, imports=imports, body=body)
+            try:
+                if self.at("KEYWORD", "IMPORT"):
+                    imports.append(self.parse_import())
+                    continue
 
+                node = self.parse_top_level()
+
+                if node is not None:
+                    body.append(node)
+
+            
+            except ParserError as error:
+                if not self.recover_errors:
+                    raise
+
+                self.report_error(error)
+
+                print(
+                    f"Collected: {error.code} "
+                    f"{error.message} "
+                    f"{error.line}:{error.col}"
+                )
+
+                self.synchronize()
+
+        return ASTModule(
+            name=name,
+            imports=imports,
+            body=body,
+        )
+    
     def parse_import(self):
         self.eat("KEYWORD", "IMPORT")
         path = self.eat("IDENT")[1]
@@ -160,6 +219,7 @@ class Parser:
         tok = self.peek()
 
         raise ParserError(
+            "NXD-P1003",
             f"Expected STRUCT, ENUM, UNION, or TRAIT, got {tok[0]} {tok[1]}",
             tok[2],
             tok[3]
@@ -488,33 +548,39 @@ class Parser:
         return expr
 
     def parse_clone(self):
-        token = self.eat("OP")
+        tok = self.peek()
 
-        if token[1] != "CLONE":
+        if tok[1] != "CLONE":
             raise ParserError(
-                f"Expected CLONE, got {token[0]} {token[1]}"
+                "NXD-P1004",
+                f"Expected CLONE, got {tok[0]} {tok[1]}", tok[2], tok[3]
             )
 
         if not self.at("IDENT"):
+            tok = self.peek()
             raise ParserError(
-                f"Expected source identifier after CLONE, "
-                f"got {self.peek()[0]} {self.peek()[1]}"
+                "NXD-P1005",
+                f"Expected source identifier after CLONE, got {tok[0]} {tok[1]}",
+                tok[2], tok[3]
             )
 
         source = ASTVar(name=self.eat("IDENT")[1])
 
         if not (self.at("IDENT") and self.peek()[1] == "TO"):
+            tok = self.peek()
             raise ParserError(
-                f"Expected TO after CLONE source, "
-                f"got {self.peek()[0]} {self.peek()[1]}"
+                "NXD-P1006",
+                f"Expected TO after CLONE source, got {tok[0]} {tok[1]}",
+                tok[2], tok[3]
             )
 
         self.eat("IDENT")
 
         if not self.at("IDENT"):
             raise ParserError(
+                "NXD-P1007",
                 f"Expected target identifier after TO, "
-                f"got {self.peek()[0]} {self.peek()[1]}"
+                f"got {tok[0]} {tok[1]}", tok[2], tok[3]
             )
 
         target = ASTVar(name=self.eat("IDENT")[1])
@@ -747,7 +813,8 @@ class Parser:
                 col=ident_tok[3]
             )
         raise ParserError(
-        f"Unexpected token in primary: {tok[1]}",
+            "NXD-P1008",
+            f"Unexpected token in primary: {tok[1]}",
             tok[2],
             tok[3]
 )
@@ -770,6 +837,7 @@ class Parser:
         tok = self.peek()
 
         raise ParserError(
+            "NXD-P1009",
             f"Literal expected, got {tok[0]} {tok[1]}",
             tok[2],
             tok[3]
@@ -812,6 +880,7 @@ class Parser:
                 tok = self.peek()
 
                 raise ParserError(
+                    "NXD-P1010",
                     f"Expected map key, got {tok[0]} {tok[1]}",
                     tok[2],
                     tok[3]
@@ -887,4 +956,31 @@ def parse(src: str):
 
     return module, ast_types, ast_functions
 
+def parse_with_diagnostics(src: str):
+    parser = Parser(src, recover_errors=True)
+    module = parser.parse_program()
 
+    ast_types = []
+    ast_functions = []
+    ast_statements = []
+
+    for node in module.body:
+        if isinstance(
+            node,
+            (ASTStruct, ASTEnum, ASTUnion, ASTTrait, ASTImpl)
+        ):
+            ast_types.append(node)
+
+        elif isinstance(node, ASTFunction):
+            ast_functions.append(node)
+
+        else:
+            ast_statements.append(node)
+
+
+    return (
+        module,
+        ast_types,
+        ast_functions,
+        parser.errors,
+    )
