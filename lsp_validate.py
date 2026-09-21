@@ -6,6 +6,8 @@ import sys
 from src.frontend.parser.parser import (parse_with_diagnostics, ParserError)
 from src.frontend.warnings import find_unused_variables
 from src.frontend.warnings import find_unreachable_code
+from src.frontend.warnings import find_shadowed_bindings
+
 
 source = sys.stdin.read()
 
@@ -17,6 +19,7 @@ try:
 
     unused_warnings = find_unused_variables(module)
     unreachable_warnings = find_unreachable_code(module)
+    shadowed_warnings = find_shadowed_bindings(module)
 
     diagnostics = []
 
@@ -34,6 +37,7 @@ try:
     for warning in unused_warnings:
         diagnostics.append(
             {
+                "code": warning["code"],
                 "message": warning["message"],
                 "line": warning["line"],
                 "column": warning["col"],
@@ -44,6 +48,18 @@ try:
     for warning in unreachable_warnings:
         diagnostics.append(
             {
+                "code": warning["code"],
+                "message": warning["message"],
+                "line": warning["line"],
+                "column": warning["col"],
+                "severity": "warning"
+            }
+        )
+
+    for warning in shadowed_warnings:
+        diagnostics.append(
+            {
+                "code": warning["code"],
                 "message": warning["message"],
                 "line": warning["line"],
                 "column": warning["col"],
@@ -65,6 +81,7 @@ except ParserError as error:
                 "message": error.message,
                 "line": error.line,
                 "column": error.col,
+                "end_column": error.end_col,
                 "severity": error.severity
             }
         ]

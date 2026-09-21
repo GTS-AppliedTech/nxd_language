@@ -5,7 +5,6 @@ FUNC MAIN()
 
     PRINTLN("hello")
 
-MODULE TEST
 
 FUNC MAIN()
     CONST VALUE LET 10
@@ -42,6 +41,7 @@ MODULE TEST_MODULE
 FUNC TEST()
     LET X SET 1
     LET Y SET 2
+    LET X SET 3
 
     TRY:
         PRINTLN("TRY")

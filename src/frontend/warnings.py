@@ -61,9 +61,12 @@ def find_unused_variables(module):
 
             warnings.append(
                 {
+                    "code": "NXD-W2001",
+                    "message": (f"NXD-W2001: Variable '{name}' declared but never used."),
                     "line": node.line,
                     "col": node.col,
-                    "message": f"Variable '{name}' declared but never used."
+                    "severity": "warning"
+                    
                 }
             )
 
@@ -87,9 +90,11 @@ def find_unreachable_code(module):
 
                 warnings.append(
                     {
+                        "code": "NXD-W2002",
+                        "message": (f"NXD-W2002: Unreachable code."),
                         "line": stmt.line,
                         "col": stmt.col,
-                        "message": "Unreachable code."
+                        "severity": "warning"
                     }
                 )
 
@@ -101,7 +106,55 @@ def find_unreachable_code(module):
 def find_shadowed_bindings(module):
     warnings = []
 
+    def visit_statements(statements, outer_names=None):
+        if outer_names is None:
+            outer_names = set()
 
+        current_names = set()
+
+        for stmt in statements:
+            if isinstance(stmt, (ASTLet, ASTConst)):
+                name = stmt.name
+
+                if name in current_names or name in outer_names:
+                    warnings.append(
+                        {
+                            "code": "NXD-W2003",
+                            "message": (f"NXD-W2003: Binding '{name}' shadows a previous binding."),
+                            "line": stmt.line,
+                            "col": stmt.col,
+                        }
+                    )
+
+                current_names.add(name)
+
+            if isinstance(stmt, ASTFunction):
+                visit_statements(
+                    stmt.body,
+                    outer_names | current_names,
+                )
+
+            elif isinstance(stmt, ASTIf):
+                visible_names = outer_names | current_names
+
+                visit_statements(
+                    stmt.then_branch,
+                    visible_names,
+                )
+
+                visit_statements(
+                    stmt.else_branch,
+                    visible_names,
+                )
+
+            elif isinstance(stmt, ASTLoop):
+                visit_statements(
+                    stmt.body,
+                    outer_names | current_names,
+                )
+
+    if isinstance(module, ASTModule):
+        visit_statements(module.body)
 
     return warnings
 
