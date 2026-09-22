@@ -52,7 +52,9 @@ FUNC TEST()
     FINALLY:
         PRINTLN("FINALLY")
 
-        
+     FUNC MAIN():
+    PRINTLN(UNKNOWN_SYMBOL)
+       
 
 
 

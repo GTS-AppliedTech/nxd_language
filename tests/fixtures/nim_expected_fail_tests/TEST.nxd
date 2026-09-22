@@ -1,4 +1,2 @@
 FUNC MAIN():
-    LET X SET true
-
-    X AS string
+    PRINTLN(UNKNOWN_SYMBOL)
