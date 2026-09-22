@@ -1,4 +1,4 @@
-LET UNUSED SET 1
+FUNC MAIN():
+    LET X SET true
 
-LET X LET 2
-
+    X AS string

@@ -169,7 +169,7 @@ function createDiagnostic(
         startColumn + 1,
         lineLength
     );
-
+        
     const diagnostic = new vscode.Diagnostic(
         new vscode.Range(
             line,

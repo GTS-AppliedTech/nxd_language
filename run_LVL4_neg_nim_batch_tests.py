@@ -6,7 +6,8 @@ TESTS = [
     "st113",
     "st115",
     "st110",
-    "LSP-test"
+    "LSP-test",
+    "TEST"
 ]
 
 for test_id in TESTS:

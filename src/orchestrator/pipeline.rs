@@ -28,7 +28,7 @@ pub fn compile_from_ir_json_with_semantics(path: &str) -> Result<String, String>
 
     analyzer
         .analyze(&ir_root)
-        .map_err(|e| format!("Semantic error: {:?}", e))?;
+        .map_err(|e| format!("Semantic error: {}", e.message()))?;
 
     let nim_code = emitter::emit(&ir_root);
 

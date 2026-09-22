@@ -30,6 +30,7 @@ try:
                 "message": error.message,
                 "line": error.line,
                 "column": error.col,
+                "end_column": error.end_col,
                 "severity": error.severity
             }
         )

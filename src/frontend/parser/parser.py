@@ -61,7 +61,7 @@ class Parser:
                 f"NXD-P1001: Expected {kind}, got {tok[0]}",
                 tok[2],
                 tok[3],
-                tok[3] + len(tok[1])
+                tok[3] + max(1, len(tok[1]))
            )
 
         if val and tok[1] != val:
@@ -70,7 +70,7 @@ class Parser:
                 f"NXD-P1002: Expected {val}, got {tok[1]}",
                 tok[2],
                 tok[3],
-                tok[3] + len(tok[1])
+                tok[3] + max(1, len(tok[1]))
             )
 
         self.pos += 1
@@ -226,7 +226,7 @@ class Parser:
             f"NXD-P1003: Expected STRUCT, ENUM, UNION, or TRAIT, got {tok[0]} {tok[1]}",
             tok[2],
             tok[3],
-            tok[3] + len(tok[1])
+            tok[3] + max(1, len(tok[1]))
         )
     def parse_impl_decl(self):
         impl_column = self.peek()[3]
@@ -557,7 +557,8 @@ class Parser:
         if tok[1] != "CLONE":
             raise ParserError(
                 "NXD-P1004",
-                f"NXD-P1004: Expected CLONE, got {tok[0]} {tok[1]}", tok[2], tok[3], tok[3] + len(tok[1])
+                f"NXD-P1004: Expected CLONE, got {tok[0]} {tok[1]}", tok[2],
+                tok[3], tok[3] + max(1, len(tok[1]))
             )
 
         if not self.at("IDENT"):
@@ -565,7 +566,7 @@ class Parser:
             raise ParserError(
                 "NXD-P1005",
                 f"NXD-P1005: Expected source identifier after CLONE, got {tok[0]} {tok[1]}",
-                tok[2], tok[3], tok[3] + len(tok[1])
+                tok[2], tok[3], tok[3] + max(1, len(tok[1]))
             )
 
         source = ASTVar(name=self.eat("IDENT")[1])
@@ -575,7 +576,7 @@ class Parser:
             raise ParserError(
                 "NXD-P1006",
                 f"NXD-P1006: Expected TO after CLONE source, got {tok[0]} {tok[1]}",
-                tok[2], tok[3], tok[3] + len(tok[1])
+                tok[2], tok[3], tok[3] + max(1, len(tok[1]))
             )
 
         self.eat("IDENT")
@@ -584,7 +585,7 @@ class Parser:
             raise ParserError(
                 "NXD-P1007",
                 f"NXD-P1007: Expected target identifier after TO, "
-                f"got {tok[0]} {tok[1]}", tok[2], tok[3], tok[3] + len(tok[1])
+                f"got {tok[0]} {tok[1]}", tok[2], tok[3], tok[3] + max(1, len(tok[1]))
             )
 
         target = ASTVar(name=self.eat("IDENT")[1])
@@ -821,7 +822,7 @@ class Parser:
             f"NXD-P1008: Unexpected token in primary: {tok[1]}",
             tok[2],
             tok[3],
-            tok[3] + len(tok[1])
+            tok[3] + max(1, len(tok[1]))
 )
     def parse_literal(self):
         tok = self.peek()
@@ -846,7 +847,7 @@ class Parser:
             f"NXD-P1009: Literal expected, got {tok[0]} {tok[1]}",
             tok[2],
             tok[3],
-            tok[3] + len(tok[1])
+            tok[3] + max(1, len(tok[1]))
         )
     def parse_list_literal(self):
         self.eat("LBRACK")
@@ -890,7 +891,7 @@ class Parser:
                     f"NXD-P1010: Expected map key, got {tok[0]} {tok[1]}",
                     tok[2],
                     tok[3],
-                    tok[3] + len(tok[1])
+                    tok[3] + max(1, len(tok[1]))
                 )
             self.eat("COLON")
             val = self.parse_expr()
