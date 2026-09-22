@@ -7,6 +7,25 @@ pub enum SemanticError {
 }
 
 impl SemanticError {
+    pub fn code(&self) -> &'static str {
+    match self {
+        SemanticError::UndefinedSymbol { .. } => {
+            "NXD-S3001"
+        }
+
+        SemanticError::TypeMismatch { .. } => {
+            "NXD-S3002"
+        }
+
+        SemanticError::TraitNotImplemented { .. } => {
+            "NXD-S3003"
+        }
+
+        SemanticError::CastFailure { .. } => {
+            "NXD-S3004"
+        }
+    }
+}
     pub fn message(&self) -> String {
         match self {
             SemanticError::UndefinedSymbol { name } => {

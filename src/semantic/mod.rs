@@ -6,3 +6,4 @@ pub mod casts;
 pub mod ownership;
 pub mod patterns;
 pub mod errors;
+pub mod diagnostics;

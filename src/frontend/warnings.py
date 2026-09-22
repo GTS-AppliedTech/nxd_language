@@ -61,7 +61,7 @@ def find_unused_variables(module):
 
             warnings.append(
                 {
-                    "code": "NXD-W2001",
+                    "code": "01",
                     "message": (f"NXD-W2001: Variable '{name}' declared but never used."),
                     "line": node.line,
                     "col": node.col,

@@ -3,11 +3,38 @@ mod ir;
 mod backend;
 mod semantic;
 
+
 use std::env;
 use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+
+    if args.len() == 3
+    && args[1] == "--semantic-diagnostics"
+{
+    let response =
+        orchestrator::semantic_diagnostics_from_ir_json(
+            &args[2]
+        );
+
+    match response {
+        Ok(result) => {
+            println!(
+                "{}",
+                serde_json::to_string(&result)
+                    .unwrap()
+            );
+        }
+
+        Err(error) => {
+            eprintln!("{}", error);
+            std::process::exit(1);
+        }
+    }
+
+    return;
+}
 
     if args.len() != 3 && args.len() != 4 {
         eprintln!("Usage:");
