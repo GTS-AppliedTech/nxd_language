@@ -3,7 +3,8 @@ from src.frontend.ir.main import compile_to_ir_json
 import subprocess
 
 TESTS = [
-    "TEST"
+    "TEST", 
+    "LSP-test"
 ]
 
 for test_id in TESTS:

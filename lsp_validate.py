@@ -90,6 +90,7 @@ def get_semantic_diagnostics(source):
             response = json.loads(
                 result.stdout.strip()
             )
+
         except json.JSONDecodeError as error:
             return [
                 {
