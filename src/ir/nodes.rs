@@ -180,12 +180,19 @@ pub struct IRTry {
 // ===============================
 
 #[derive(Clone, Debug, Deserialize)]
+pub struct IRVar {
+    pub name: String,
+    pub line: u32,
+    pub column: u32,
+}
+
+#[derive(Clone, Debug, Deserialize)]
 pub enum IRExpr {
     Literal(IRLiteral),
     Binary(Box<IRBinaryOp>),
     Unary(Box<IRUnaryOp>),
     Call { func: String, args: Vec<IRExpr> },
-    Var(String),
+    Var(IRVar),
     Pipeline { value: Box<IRExpr>, func: String },
     ObjectInit(IRObjectInit),
 }
@@ -252,10 +259,10 @@ impl fmt::Display for IRExpr {
                 write!(f, "{}", lit)
             }
 
-            IRExpr::Var(name) => {
-                write!(f, "{}", name.to_lowercase())
+            IRExpr::Var(var) => {
+                write!(f, "{}", var.name.to_lowercase())
             }
-
+            
             IRExpr::Binary(op) => {
                 let op_str = match op.kind.as_str() {
                     "ADD" => "+",

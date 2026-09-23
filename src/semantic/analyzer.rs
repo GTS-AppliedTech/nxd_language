@@ -140,10 +140,12 @@ impl Analyzer {
                 let source_type = self.analyze_expr(&move_node.source)?;
 
                 let target_name = match &move_node.target {
-                    IRExpr::Var(name) => name.clone(),
+                    IRExpr::Var(var) => var.name.clone(),
                     _ => {
                         return Err(SemanticError::UndefinedSymbol {
                             name: "MOVE target must be an identifier".to_string(),
+                            line: 1,
+                            column: 1,
                         });
                     }
                 };
@@ -162,10 +164,12 @@ impl Analyzer {
                 let source_type = self.analyze_expr(&clone_node.source)?;
 
                 let target_name = match &clone_node.target {
-                    IRExpr::Var(name) => name.clone(),
+                    IRExpr::Var(var) => var.name.clone(),
                     _ => {
                         return Err(SemanticError::UndefinedSymbol {
                             name: "CLONE target must be an identifier".to_string(),
+                            line: 1,
+                            column: 1,
                         });
                     }
                 };
@@ -187,166 +191,320 @@ impl Analyzer {
         Ok(())
     }
 
-    fn analyze_expr(&mut self, expr: &IRExpr) -> Result<String, SemanticError> {
-    match expr {
-        IRExpr::Literal(l) => Ok(self.literal_type(l)),
-
-        IRExpr::ObjectInit(init) => {
-            for value in init.fields.values() {
-                self.analyze_expr(value)?;
+    fn analyze_expr(
+        &mut self,
+        expr: &IRExpr,
+    ) -> Result<String, SemanticError> {
+        match expr {
+            IRExpr::Literal(literal) => {
+                Ok(self.literal_type(literal))
             }
-            Ok(init.type_name.clone())
-        }
 
-        IRExpr::Var(name) => {
-            if let Some(sym) = self.symbols.resolve(name) {
-                match sym {
-                    Symbol::Var { ty, .. } => Ok(ty.clone()),
-                    Symbol::Const { ty, .. } => Ok(ty.clone()),
-                    _ => Err(SemanticError::UndefinedSymbol {
-                        name: name.clone(),
-                    }),
+            IRExpr::ObjectInit(init) => {
+                for value in init.fields.values() {
+                    self.analyze_expr(value)?;
                 }
-            } else {
-                Err(SemanticError::UndefinedSymbol {
-                    name: name.clone(),
-                })
+
+                Ok(init.type_name.clone())
             }
-        }
-        IRExpr::Binary(b) => {
-    let left = self.analyze_expr(&b.left)?;
 
-    match b.kind.as_str() {
-        "AS" => {
-            let target_type = match b.right.as_ref() {
-                IRExpr::Var(name) => name.clone(),
-                _ => {
-                    return Err(SemanticError::UndefinedSymbol {
-                        name: "Expected type name after AS".to_string(),
-                    });
-                }
-            };
+            IRExpr::Var(var) => {
+                if let Some(symbol) =
+                    self.symbols.resolve(&var.name)
+                {
+                    match symbol {
+                        Symbol::Var { ty, .. } => {
+                            Ok(ty.clone())
+                        }
 
-            check_as_cast(&left, &target_type)?;
-            Ok(target_type)
-        }
+                        Symbol::Const { ty, .. } => {
+                            Ok(ty.clone())
+                        }
 
-        "IS" => {
-            let target_type = match b.right.as_ref() {
-                IRExpr::Var(name) => name.clone(),
-                _ => {
-                    return Err(SemanticError::UndefinedSymbol {
-                        name: "Expected type name after IS".to_string(),
-                    });
-                }
-            };
-
-            let _ = check_is(&left, &target_type);
-            Ok("bool".to_string())
-        }
-
-        _ => {
-            let right = self.analyze_expr(&b.right)?;
-            check_type(&left, &right)?;
-            Ok(left)
-        }
-    }
-}
-        IRExpr::Unary(u) => {
-            let inner = self.analyze_expr(&u.expr)?;
-
-            match u.kind.as_str() {
-                "MOVE" => {
-                    check_ownership(OwnershipOp::Move, &inner)?;
-                    Ok(inner)
-                }
-
-                "CLONE" => {
-                    check_ownership(OwnershipOp::Clone, &inner)?;
-                    Ok(inner)
-                }
-
-                "BORROW" => {
-                    check_ownership(OwnershipOp::Borrow, &inner)?;
-                    Ok(inner)
-                }
-
-                _ => Ok(inner),
-            }
-        }
-
-        IRExpr::Call { func, args } => {
-            let (params, ret) = {
-                let sym = self.symbols
-                    .resolve(func)
-                    .ok_or_else(|| SemanticError::UndefinedSymbol {
-                        name: func.clone(),
-                    })?;
-
-                if let Symbol::Func { params, ret, .. } = sym {
-                    (params.clone(), ret.clone())
+                        _ => {
+                            Err(
+                                SemanticError::UndefinedSymbol {
+                                    name: var.name.clone(),
+                                    line: var.line,
+                                    column: var.column,
+                                }
+                            )
+                        }
+                    }
                 } else {
-                    return Err(SemanticError::UndefinedSymbol {
-                        name: func.clone(),
-                    });
+                    Err(
+                        SemanticError::UndefinedSymbol {
+                            name: var.name.clone(),
+                            line: var.line,
+                            column: var.column,
+                        }
+                    )
                 }
-            };
-
-            for (i, arg) in args.iter().enumerate() {
-                let arg_ty = self.analyze_expr(arg)?;
-
-                if i >= params.len() {
-                    return Err(SemanticError::UndefinedSymbol {
-                        name: func.clone(),
-                    });
-                }
-
-                check_type(&params[i], &arg_ty)?;
             }
 
-            Ok(ret.unwrap_or("none".to_string()))
-        }
+            IRExpr::Binary(binary) => {
+                let left =
+                    self.analyze_expr(&binary.left)?;
 
-        IRExpr::Pipeline { value, func } => {
-            let val_ty = self.analyze_expr(value)?;
+                match binary.kind.as_str() {
+                    "AS" => {
+                        let target_type =
+                            match binary.right.as_ref() {
+                                IRExpr::Var(var) => {
+                                    var.name.clone()
+                                }
 
-            let (params, ret) = {
-                let sym = self.symbols
-                    .resolve(func)
-                    .ok_or_else(|| SemanticError::UndefinedSymbol {
-                        name: func.clone(),
-                    })?;
+                                _ => {
+                                    return Err(
+                                        SemanticError::UndefinedSymbol {
+                                            name: (
+                                                "Expected type name after AS"
+                                            ).to_string(),
+                                            line: 1,
+                                            column: 1,
+                                        }
+                                    );
+                                }
+                            };
 
-                if let Symbol::Func { params, ret, .. } = sym {
-                    (params.clone(), ret.clone())
-                } else {
-                    return Err(SemanticError::UndefinedSymbol {
-                        name: func.clone(),
-                    });
+                        check_as_cast(
+                            &left,
+                            &target_type,
+                        )?;
+
+                        Ok(target_type)
+                    }
+
+                    "IS" => {
+                        let target_type =
+                            match binary.right.as_ref() {
+                                IRExpr::Var(var) => {
+                                    var.name.clone()
+                                }
+
+                                _ => {
+                                    return Err(
+                                        SemanticError::UndefinedSymbol {
+                                            name: (
+                                                "Expected type name after IS"
+                                            ).to_string(),
+                                            line: 1,
+                                            column: 1,
+                                        }
+                                    );
+                                }
+                            };
+
+                        let _ = check_is(
+                            &left,
+                            &target_type,
+                        );
+
+                        Ok("bool".to_string())
+                    }
+
+                    _ => {
+                        let right =
+                            self.analyze_expr(
+                                &binary.right
+                            )?;
+
+                        check_type(
+                            &left,
+                            &right,
+                        )?;
+
+                        Ok(left)
+                    }
                 }
-            };
-
-            if params.is_empty() {
-                return Err(SemanticError::UndefinedSymbol {
-                    name: func.clone(),
-                });
             }
 
-            check_type(&params[0], &val_ty)?;
+            IRExpr::Unary(unary) => {
+                let inner =
+                    self.analyze_expr(&unary.expr)?;
 
-            Ok(ret.unwrap_or("none".to_string()))
+                match unary.kind.as_str() {
+                    "MOVE" => {
+                        check_ownership(
+                            OwnershipOp::Move,
+                            &inner,
+                        )?;
+
+                        Ok(inner)
+                    }
+
+                    "CLONE" => {
+                        check_ownership(
+                            OwnershipOp::Clone,
+                            &inner,
+                        )?;
+
+                        Ok(inner)
+                    }
+
+                    "BORROW" => {
+                        check_ownership(
+                            OwnershipOp::Borrow,
+                            &inner,
+                        )?;
+
+                        Ok(inner)
+                    }
+
+                    _ => Ok(inner),
+                }
+            }
+
+            IRExpr::Call { func, args } => {
+                let (params, ret) = {
+                    let symbol = self.symbols
+                        .resolve(func)
+                        .ok_or_else(|| {
+                            SemanticError::UndefinedSymbol {
+                                name: func.clone(),
+                                line: 1,
+                                column: 1,
+                            }
+                        })?;
+
+                    if let Symbol::Func {
+                        params,
+                        ret,
+                        ..
+                    } = symbol
+                    {
+                        (
+                            params.clone(),
+                            ret.clone(),
+                        )
+                    } else {
+                        return Err(
+                            SemanticError::UndefinedSymbol {
+                                name: func.clone(),
+                                line: 1,
+                                column: 1,
+                            }
+                        );
+                    }
+                };
+
+                for (index, argument)
+                    in args.iter().enumerate()
+                {
+                    let argument_type =
+                        self.analyze_expr(argument)?;
+
+                    if index >= params.len() {
+                        return Err(
+                            SemanticError::UndefinedSymbol {
+                                name: func.clone(),
+                                line: 1,
+                                column: 1,
+                            }
+                        );
+                    }
+
+                    check_type(
+                        &params[index],
+                        &argument_type,
+                    )?;
+                }
+
+                Ok(
+                    ret.unwrap_or(
+                        "none".to_string()
+                    )
+                )
+            }
+
+            IRExpr::Pipeline { value, func } => {
+                let value_type =
+                    self.analyze_expr(value)?;
+
+                let (params, ret) = {
+                    let symbol = self.symbols
+                        .resolve(func)
+                        .ok_or_else(|| {
+                            SemanticError::UndefinedSymbol {
+                                name: func.clone(),
+                                line: 1,
+                                column: 1,
+                            }
+                        })?;
+
+                    if let Symbol::Func {
+                        params,
+                        ret,
+                        ..
+                    } = symbol
+                    {
+                        (
+                            params.clone(),
+                            ret.clone(),
+                        )
+                    } else {
+                        return Err(
+                            SemanticError::UndefinedSymbol {
+                                name: func.clone(),
+                                line: 1,
+                                column: 1,
+                            }
+                        );
+                    }
+                };
+
+                if params.is_empty() {
+                    return Err(
+                        SemanticError::UndefinedSymbol {
+                            name: func.clone(),
+                            line: 1,
+                            column: 1,
+                        }
+                    );
+                }
+
+                check_type(
+                    &params[0],
+                    &value_type,
+                )?;
+
+                Ok(
+                    ret.unwrap_or(
+                        "none".to_string()
+                    )
+                )
+            }
         }
     }
-}
 
-    fn literal_type(&self, lit: &IRLiteral) -> String {
-        match lit {
-            IRLiteral::Int(_) => "int".to_string(),
-            IRLiteral::Float(_) => "float".to_string(),
-            IRLiteral::String(_) => "string".to_string(),
-            IRLiteral::Bool(_) => "bool".to_string(),
-            IRLiteral::None => "none".to_string(),
-            IRLiteral::List(_) => "list".to_string(),
+    fn literal_type(
+        &self,
+        literal: &IRLiteral,
+    ) -> String {
+        match literal {
+            IRLiteral::Int(_) => {
+                "int".to_string()
+            }
+
+            IRLiteral::Float(_) => {
+                "float".to_string()
+            }
+
+            IRLiteral::String(_) => {
+                "string".to_string()
+            }
+
+            IRLiteral::Bool(_) => {
+                "bool".to_string()
+            }
+
+            IRLiteral::None => {
+                "none".to_string()
+            }
+
+            IRLiteral::List(_) => {
+                "list".to_string()
+            }
         }
     }
-}
+    }

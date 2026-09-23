@@ -134,7 +134,7 @@ def lower_expr(ast):
     if isinstance(ast, ASTCall):
         return IRExpr.Call(func=ast.func, args=[lower_expr(a) for a in ast.args])
     if isinstance(ast, ASTVar):
-        return IRExpr.Var(ast.name)
+        return IRExpr.Var(ast.name, ast.line, ast.col,)
     if isinstance(ast, ASTPipeline):
         return IRExpr.Pipeline(value=lower_expr(ast.value), func=ast.func)
     if isinstance(ast, ASTObjectInit):

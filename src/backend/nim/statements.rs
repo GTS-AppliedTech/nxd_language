@@ -99,7 +99,7 @@ fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
             format!("{}({})", nim_func, args_str.join(", "))
         }
 
-        Var(name) => name.to_lowercase(),
+        Var(var) => var.name.to_lowercase(),
 
         Pipeline { value, func } => {
             crate::backend::nim::operators::emit_pipeline(

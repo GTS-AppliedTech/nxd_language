@@ -186,8 +186,10 @@ class IRExpr:
             self.args = args
 
     class Var:
-        def __init__(self, name):
+        def __init__(self, name, line, col,):
             self.name = name
+            self.line = line
+            self.col = col
 
     class Pipeline:
         def __init__(self, value, func):
