@@ -1,3 +1,6 @@
 FUNC MAIN():
-    PRINTLN(UNKNOWN_SYMBOL)
-    
+    LET X SET "hello"
+    LET Y SET X AS int
+
+
+

@@ -748,7 +748,13 @@ class Parser:
 
             if op in ("IS", "AS"):
                 if self.at("LOWTYPE"):
-                    right = ASTVar(self.eat("LOWTYPE")[1])
+                    type_tok = self.eat("LOWTYPE")
+
+                    right = ASTVar(
+                        name=type_tok[1],
+                        line=type_tok[2],
+                        col=type_tok[3]
+                    )
                 else:
                     raise SyntaxError(
                         f"Expected type after {op}, got {self.peek()[0]} {self.peek()[1]}"

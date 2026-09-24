@@ -36,6 +36,11 @@ impl SemanticError {
                 "NXD-S3002"
             }
 
+//==================================================
+//========== S3003 exists but generic constraints ==
+//========== are not implemented yet. ==============
+//==================================================
+
             SemanticError::TraitNotImplemented { .. } => {
                 "NXD-S3003"
             }
@@ -118,7 +123,7 @@ impl SemanticError {
                 ty,
             } => {
                 format!(
-                    "NXD-S3003: Trait '{}' not implemented for '{}'",
+                    "NXD-: Trait '{}' not implemented for '{}'",
                     trait_name,
                     ty
                 )
