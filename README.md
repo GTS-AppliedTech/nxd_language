@@ -3,17 +3,16 @@
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RO950",
   "title": "Read me",
-  "description": "",
+  "description": "nxdlang project repository read-me",
   "layer": "Root",
   "category": "read me",
   "keywords": [],
-  "doc_version": "2.0",
+  "doc_version": "2.1",
   "status": "active"
 }
 ---
 
-
-#  RO950 README : NXD
+# RO950 README : NXD
 
 ##### Copyright (c) 2026 G.T.S. Applied Technologies LLC
 
@@ -23,28 +22,54 @@ NXD is an experimental language and compiler project focused on creating a porta
 
 ##### ***Warning: NXD is not production-ready. Specifications, compiler architecture, syntax, runtime behavior, and implementation details may change as the project evolves.***
 
-### Project Status
+---
 
-Stage: Core Compiler & Open Source
+# Project Status
 
-Compiler Status: Implemented
+### Stage
 
-Current Focus: Validation & Conformance Testing
+Core Compiler & Open Source
 
-Validation Suite: 40 Base Validation Tests
+### Compiler Status
 
-Current Results:
+Implemented
 
-21 Passing
-19 Failing
+### Current Focus
+
+Compiler Maturation, Semantic Validation, Runtime Research, and Conformance Testing
+
+### Validation Suite
+
+- 40 Base Positive Validation Tests
+- 38 Base Negative Validation Tests
+- 10 Nim Specialty Backend Tests
+
+### Current Results
+
+#### Positive Tests
+
+- 38 Passing
+- 2 Failing
+
+#### Negative Tests
+
+- 25 Passing
+- 13 Failing
+
+#### Nim Specialty Tests
+
+- 8 Passing
+- 2 Failing
 
 Validation numbers are expected to change as parser coverage expands and current failure groups are resolved.
 
+---
 
-### Current Status
+# Current Compiler Pipeline
 
-NXD has progressed beyond the initial specification phase and now includes a functional compiler pipeline, semantic analysis framework, intermediate representation system, and an actively validated Nim backend.
+NXD currently utilizes a Python frontend and a Rust semantic backend connected through a JSON Intermediate Representation (IR).
 
+```text
 Scanner
 → Parser
 → AST
@@ -54,320 +79,465 @@ Scanner
 → IR Root
 → NXD Semantics
 → Backend Transpilation
+```
 
+This separation creates clear validation boundaries and allows frontend, semantic, and backend validation to occur independently.
 
-The current implementation utilizes a Python frontend and Rust backend connected through a serialized JSON intermediate representation (IR). This design provides clear validation boundaries, implementation separation, and simplified backend expansion.
-Current architecture:
+---
 
+# Recent Compiler Milestones
+
+### Diagnostic Infrastructure
+
+During the current compiler maturation phase, NXD completed full semantic source location propagation through:
+
+```text
 Scanner
-→ Parser
 → AST
-→ Lowering
-→ IR JSON
-→ Rust Loader
-→ IR Root
-→ NXD Semantics
-→ Backend Transpilation
+→ IR
+→ JSON
+→ Rust Semantic Loader
+→ Semantic Diagnostics
+→ VS Code LSP
+```
 
+---
 
-The current implementation utilizes a Python frontend and Rust backend connected through a serialized JSON intermediate representation (IR). This design provides clear validation boundaries, implementation separation, and simplified backend expansion.
+# Diagnostic Coverage
 
-Active Development Focus
-Parser refinement
-Lexer refinement
-Semantic conformance validation
-Nim backend validation
-Testing infrastructure expansion
-Documentation growth
-Contributor onboarding
-Current Backend
-Nim (Active Validation)
-Planned Backends
-D
-Elixir
-Long-Term Research
-Runtime Feasibility Study
-Standalone Execution Model
-Target Validation Architecture
-Runtime-Assisted Semantic Guarantees
+NXD provides parser, warning, semantic, and compiler diagnostics through the integrated semantic analysis and VS Code LSP infrastructure.
 
-### Project Maturity
+All diagnostics support source location tracking and editor integration.
 
-#### Completed
+## Parser Diagnostics (NXD-P Series)
 
- Core Language Specification
- Scanner
- Parser Framework
- AST Generation
- Lowering Framework
- JSON Intermediate Representation
- Python → Rust IR Handoff
- Rust IR Loader
- IR Root Construction
- NXD Semantic Analysis Framework
- Nim Backend
- Validation Framework
- Test Documentation Standards
- Metadata Standards
- Contributor Documentation
- Public Repository
- Public Website
- Project Changelog
- Website Changelog
+Parser diagnostics are emitted when a valid token stream cannot be transformed into a valid NXD syntax structure.
 
-#### In Progress
+| Code | Description |
+|--------|-------------|
+| NXD-P1001 | Expected `{kind}`, got `"..."` |
+| NXD-P1002 | Expected `{val}`, got `"..."` |
+| NXD-P1003 | Expected `STRUCT`, `ENUM`, `UNION`, or `TRAIT`, got `"..."` |
+| NXD-P1004 | Expected `CLONE`, got `"..."` |
+| NXD-P1005 | Expected source identifier after `CLONE`, got `"..."` |
+| NXD-P1006 | Expected `TO` after `CLONE` source, got `"..."` |
+| NXD-P1007 | Expected target identifier after `TO`, got `"..."` |
+| NXD-P1008 | Expected token in primary |
+| NXD-P1009 | Literal expected, got `"..."` |
+| NXD-P1010 | Expected map key, got `"..."` |
 
- Parser Enhancement
- Lexer Enhancement
- Nim Conformance Validation
- Semantic Conformance Expansion
- Validation Documentation Expansion
- Project Roadmap Publication
+---
+
+## Warning Diagnostics (NXD-W Series)
+
+Warnings indicate potentially unintended code while still allowing compilation to continue.
+
+### NXD-W2001
+
+```text
+Variable '<name>' declared but never used
+```
+
+Generated when a variable is declared but never subsequently referenced.
+
+### NXD-W2002
+
+```text
+Unreachable code
+```
+
+Generated when the compiler determines that a statement or block can never be executed due to control-flow analysis.
+
+### NXD-W2003
+
+```text
+Variable shadows existing binding
+```
+
+Generated when an identifier hides an existing symbol in the current scope hierarchy.
+
+---
+
+## Semantic Diagnostics (NXD-S Series)
+
+Semantic diagnostics are produced after parsing during semantic analysis.
+
+### NXD-S3001
+
+```text
+Undefined symbol
+```
+
+Generated when a referenced symbol cannot be resolved from the active symbol table.
+
+### NXD-S3002
+
+```text
+Type mismatch
+```
+
+Generated when an operation receives incompatible types.
+
+### NXD-S3003
+
+```text
+Trait not implemented
+```
+
+Diagnostic infrastructure exists, however generic constraint resolution and trait enforcement are not currently implemented.
+
+This diagnostic is reserved for future generic constraint validation.
+
+### NXD-S3004
+
+```text
+Invalid cast
+```
+
+Generated when a cast is semantically invalid.
+
+---
+
+## Compiler & LSP Diagnostics (NXD-LSP Series)
+
+The NXD VS Code extension communicates with the Rust semantic compiler through the Language Server Protocol (LSP).
+
+These diagnostics indicate compiler infrastructure, semantic validation, or integration failures rather than errors in user source code.
+
+### NXD-LSP0001
+
+```text
+Rust semantic compiler has not been built
+```
+
+Generated when the extension cannot locate the compiled Rust semantic compiler executable.
+
+Typical resolution:
+
+```bash
+cargo build
+```
+
+### NXD-LSP0002
+
+```text
+Rust semantic validation failed
+```
+
+Generated when the Rust semantic compiler encounters an internal validation failure while processing frontend IR.
+
+Typical causes include:
+
+- IR schema mismatches
+- Semantic loader failures
+- Deserialization failures
+- Internal semantic analysis failures
+
+### NXD-LSP0003
+
+```text
+Invalid semantic diagnostic response: {error}
+```
+
+Generated when the VS Code extension receives an unexpected or malformed semantic diagnostic response.
+
+This diagnostic indicates an integration issue between the frontend diagnostic pipeline and the Rust semantic compiler.
+
+---
+
+## Current Diagnostic Status
+
+| Category | Status |
+|----------|----------|
+| Parser Diagnostics (NXD-P) | ✅ Active |
+| Warning Diagnostics (NXD-W) | ✅ Active |
+| Semantic Diagnostics (NXD-S) | ✅ Active |
+| Compiler Diagnostics (NXD-LSP) | ✅ Active |
+| Source Span Propagation | ✅ Active |
+| Full-Range Highlighting | ✅ Active |
+| VS Code Integration | ✅ Active |
+| Generic Constraint Resolution (S3003) | 🚧 Planned |
+### Source Span Support
+
+NXD diagnostics now carry:
+
+```text
+line
+column
+end_line
+end_column
+```
+
+allowing editor integrations to provide full-range highlighting rather than line-only diagnostics.
+
+### VS Code Extension
+
+The NXD VS Code extension now provides:
+
+- Syntax Highlighting
+- Semantic Diagnostics
+- Warning Diagnostics
+- Full-Range Squiggle Support
+- Source Span Integration
+- Language Activation
+- File Associations
+
+Publisher:
+
+```text
+nxdlang
+```
+
+Extension Identifier:
+
+```text
+nxdlang.nxd
+```
+
+Current Extension Version:
+
+```text
+0.1.0
+```
+
+---
+
+# NXD File Types & Icons
+
+NXD distinguishes between source files, generated artifacts, and tooling/configuration files.
+
+## NXD Source Files
+
+Human-authored NXD source code.
+
+Examples:
+
+```text
+main.nxd
+api.nxd
+user.nxd
+```
+
+Used for:
+
+- Applications
+- Libraries
+- Services
+- Runtime source
+
+Features:
+
+- Syntax Highlighting
+- Diagnostics
+- Semantic Analysis
+- LSP Support
+
+---
+
+## Generated NXD Artifacts
+
+Machine-generated files produced by NXD tooling, runtime services, or compiler infrastructure.
+
+Examples:
+
+```text
+module.ir.nxd
+module.runtime.nxd
+module.generated.nxd
+```
+
+Used for:
+
+- IR inspection
+- Runtime generation
+- Build outputs
+- Compiler debugging
+
+These files are intended primarily for analysis and troubleshooting rather than direct modification.
+
+---
+
+## NXD Tooling & Configuration Files
+
+Project configuration, runtime metadata, dependency tracking, and ecosystem tooling support.
+
+Examples:
+
+```text
+nxd.toml
+runtime.nxd.toml
+security.nxd.toml
+nxd.lock
+```
+
+Comparable to:
+
+```text
+Cargo.toml
+Cargo.lock
+package.json
+package-lock.json
+pyproject.toml
+```
+
+Used for:
+
+- Build configuration
+- Runtime configuration
+- Security policies
+- Dependency management
+- Toolchain metadata
+
+---
+
+# Active Development Focus
+
+### Compiler
+
+- Parser refinement
+- Lexer refinement
+- Semantic conformance expansion
+- Validation framework growth
+- Diagnostic coverage expansion
+
+### Backends
+
+#### Active
+
+- Nim
 
 #### Planned
 
- D Backend
- Elixir Backend
- Public Playground
- Runtime Feasibility Study
- Standalone Runtime Prototype
- Target Validation Research
- Multi-Backend Conformance Matrix
- Release Candidate Program
- NXD v1.0 Launch
+- D
+- Elixir
 
-### Validation Framework
+### Runtime Research
 
-NXD follows a validation-first development methodology designed to verify behavior at multiple architectural layers.
+Current runtime exploration areas include:
 
-Rather than evaluating only final generated code, validation is performed at specific checkpoints throughout the compiler pipeline.
+```text
+runtime/
+├── async/
+├── channels/
+├── experimental/
+├── lowering/
+├── runtime_ir/
+├── scheduler/
+└── tasks/
+```
 
-#### Validation Pass 1 — Frontend Validation
-Scanner
-→ Parser
-→ AST
-→ Lowering
-→ IR JSON
+Current runtime work remains exploratory and research-oriented.
 
-##### Purpose
+---
 
-Validate:
+# Project Maturity
 
-Lexical analysis
-Token classification
-Parsing
-AST generation
-Lowering
-IR generation
-Output
-IR JSON
+## Completed
 
+- Core Language Specification
+- Scanner
+- Parser Framework
+- AST Generation
+- Lowering Framework
+- JSON Intermediate Representation
+- Python → Rust IR Handoff
+- Rust IR Loader
+- IR Root Construction
+- NXD Semantic Analysis Framework
+- Semantic Diagnostic Framework
+- Source Span Propagation
+- Full Diagnostic Range Support
+- Nim Backend
+- Validation Framework
+- Metadata Standards
+- Contributor Documentation
+- Public Repository
+- Public Website
 
-This pass verifies that NXD source code is successfully transformed into a valid intermediate representation.
+## In Progress
 
-#### Validation Pass 2 — Backend Validation
-IR JSON
-→ Rust Loader
-→ IR Root
-→ Backend
+- Parser Enhancement
+- Lexer Enhancement
+- Semantic Conformance Expansion
+- Nim Backend Validation
+- Validation Documentation Expansion
+- Runtime Architecture Research
 
-##### Purpose
+## Planned
 
-Validate:
+- D Backend
+- Elixir Backend
+- Generic Constraint Resolution
+- Trait Constraint Enforcement
+- Async Runtime Prototype
+- Runtime IR Expansion
+- Public Playground
+- Multi-Backend Conformance Matrix
+- Release Candidate Program
+- NXD v1.0
 
-IR serialization
-IR deserialization
-Rust backend infrastructure
-Backend generation
-Output
-Target Language Source
+---
 
+# Language Philosophy
 
-This pass validates backend processing independent of the frontend.
+NXD is developed around a simple principle:
 
-#### Validation Pass 3 — Full Pipeline Validation
-Scanner
-→ Parser
-→ AST
-→ Lowering
-→ IR JSON
-→ Rust Loader
-→ IR Root
-→ NXD Semantics
-→ Backend
+***Transpilation is an implementation strategy, not the definition of the language.***
 
-##### Purpose
+The language specification defines the observable behavior.
 
-Validate:
+Compilers, runtimes, generated support code, and backend strategies exist to realize that behavior.
 
-Complete compiler execution
-Semantic analysis
-Backend generation
-End-to-end pipeline correctness
-Output
-Final Generated Target Code
+By defining semantics first and implementation strategies second, NXD seeks to prevent any backend target from becoming the language's de facto definition.
 
+---
 
-This pass represents a full production-style compiler run.
+# Target Ecosystems
 
-### Validation Documentation
+NXD initially targets:
 
-Each validation case may include:
+### Nim
 
-NXD source input
-Generated IR JSON
-Generated target code
-Compiler validation status
-Semantic validation status
-Observations and notes
+Native systems development and broad backend support.
 
-This approach enables independent verification, reproducibility, auditing, and contributor review.
+### D
 
-Current validation documentation follows a status-based classification model:
+Native systems programming with high-performance execution.
 
-PT = Passed Test
-SP = Soft Pass
-SF = Soft Fail
-FT = Failed Test
+### Elixir
 
+Distributed and fault-tolerant execution through the Erlang VM.
 
-These categories allow known limitations and non-critical implementation issues to be tracked separately from functional failures.
+Each ecosystem was selected to explore how a single semantic model can be realized across dramatically different execution environments while preserving observable behavior.
 
-### Project Goals
+---
 
-NXD is being designed around several core principles:
+# Why Follow NXD?
 
-Predictable behavior
-Strong static typing
-Semantic consistency across targets
-Deterministic compilation
-Backend portability
-Security-oriented software development
-Machine and human readability
-Machine and Human Readability
+NXD may be interesting to developers interested in:
 
-NXD favors explicit, structurally regular syntax and semantically descriptive constructs intended to remain readable to both human developers and automated analysis systems, including AI-assisted development and static analysis tooling.
+- Programming Language Design
+- Compiler Construction
+- Intermediate Representations
+- Runtime Architecture
+- Static Type Systems
+- Systems Programming
+- Distributed Systems
+- Multi-Target Compilation
+- Security-Oriented Development
+- AI-Assisted Software Engineering
 
-### Security-Oriented Design
+---
 
-NXD is being designed with security-oriented software development in mind, including explicit error handling, controlled authority, ownership semantics, predictable behavior, and analyzable program structure.
+# Vision
 
-### Philosophy
+The long-term vision of NXD is a language whose meaning is defined by its specification rather than any specific compiler, runtime, backend, or implementation strategy.
 
-Multi-target language projects can become constrained by the semantics of their primary implementation strategy.
+Whether executed through transpilation, generated runtime support, native compilation, or a future standalone execution model, NXD remains defined by its semantics.
 
-NXD takes a different approach.
+---
 
-***Transpilation becomes an implementation strategy, not the definition of what NXD is.***
-
-The language specification defines required observable behavior. Compiler backends, runtimes, generated support code, and target-language features are simply mechanisms used to achieve that behavior.
-
-By defining semantics first and implementation strategies second, NXD seeks to prevent any individual backend from becoming the language's de facto definition.
-
-### Target Ecosystems
-
-NXD initially targets Nim, D, and Elixir because each provides a distinct execution ecosystem and systems profile.
-
-Nim provides access to native systems development through generated C, C++, and other backend targets.
-D provides a high-performance native systems language with its own runtime and tooling ecosystem.
-Elixir provides access to the Erlang VM and its distributed, fault-tolerant execution model.
-
-NXD is intended to provide a common developer-facing semantic model while retaining access to the strengths of each underlying ecosystem.
-
-These targets were selected to explore how a single language specification can be realized across multiple execution environments while preserving consistent observable behavior.
-
-### Backend Independence
-
-NXD is not defined as a transpiler to Nim, D, or Elixir.
-
-Nim, D, and Elixir are the project's initial implementation targets.
-
-*A backend is not required to reproduce NXD's implementation strategy. It is required to reproduce NXD's specified observable behavior, either through native target constructs, generated support code, or the NXD runtime.*
-
-This distinction allows future implementations to support entirely different platforms, architectures, or execution environments while remaining compliant with the language specification.
-
-NXD may also be implemented as a standalone language and runtime where direct execution provides semantics that cannot be faithfully represented by a particular backend.
-
-The language definition remains independent of any specific compiler, runtime, transpiler, or target ecosystem.
-
-### Architecture Direction
-
-NXD is being developed around a layered architecture that includes:
-
-Language Specification
-Semantic Model
-Intermediate Representation (IR)
-Compiler Frontend
-Backend Mapping Layers
-Runtime Services
-Tooling and Documentation
-
-The long-term goal is to establish a clear separation between:
-
-What the language guarantees
-How a compiler implements those guarantees
-How a backend realizes those guarantees on a specific platform
-Current Status
-
-NXD is currently focused on foundational language development, including:
-
-Language specification development
-Semantic rule definition
-Intermediate representation design
-Backend mapping research
-Runtime architecture planning
-Documentation and reference materials
-Prototype compiler experimentation
-
-The majority of project effort is currently directed toward defining language behavior and semantic correctness before implementation details become fixed.
-
-### Why Follow NXD?
-
-*NXD may be interesting to developers interested in:*
-
-Programming language design
-Compiler construction
-Intermediate representations
-Runtime architecture
-Static type systems
-Systems programming
-Distributed systems
-Multi-target compilation
-Security-focused development
-AI-assisted software engineering workflows
-
-The project welcomes discussion and feedback from language designers, compiler engineers, runtime developers, researchers, backend specialists, and curious developers.
-
-### Repository Structure
-
-The repository contains a growing collection of specifications, architecture documents, backend mappings, examples, runtime concepts, implementation notes, and supporting design materials.
-
-Because NXD follows a specification-first development model, documentation is considered a core project artifact rather than supplemental material.
-
-### Vision
-
-The long-term vision of NXD is a language whose meaning is defined by its specification rather than by any individual compiler, runtime, backend, or implementation.
-
-By separating language semantics from implementation strategy, NXD aims to create an ecosystem where multiple implementations can evolve independently while preserving the same observable behavior.
-
-Whether executed through transpilation, generated runtime support, native compilation, or a future standalone runtime, NXD's identity remains rooted in the behavior described by its specification.
-
-### Development Philoshophy
-
-NXD continues to follow a specification-first development model.
-
-Language behavior is defined by the specification and semantic model rather than by any specific backend implementation.
-
-Transpilation is an implementation strategy, not the definition of what NXD is.
-
-Backend targets provide access to existing ecosystems and tooling, while future runtime exploration may allow NXD to provide capabilities beyond those offered by any individual target ecosystem.
-
-NXD's long-term goal remains unchanged:
-
-A language whose meaning is defined by its specification rather than by any compiler, backend, runtime, or implementation strategy.
-
-
-### Status
+# Status
 
 ##### Compiler: Active Validation
 
@@ -375,4 +545,4 @@ A language whose meaning is defined by its specification rather than by any comp
 
 ##### License: MIT License
 
-##### Current Focus: Conformance Validation, Backend Verification, and Compiler Maturation
+##### Current Focus: Compiler Maturation, Semantic Validation, Runtime Research, and Backend Conformance
