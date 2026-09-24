@@ -65,6 +65,8 @@ pub fn semantic_diagnostics_from_ir_json(
                         message: error.message(),
                         line: error.line() as usize,
                         column: error.column() as usize,
+                        end_line: error.end_line() as usize,
+                        end_column: error.end_column() as usize,
                         severity: "error".to_string(),
                     }
                 ],

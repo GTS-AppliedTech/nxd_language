@@ -9,6 +9,8 @@ pub enum SemanticError {
         name: String,
         line: u32,
         column: u32,
+        end_line: u32,
+        end_column: u32,
     },
 
     TraitNotImplemented {
@@ -61,6 +63,28 @@ impl SemanticError {
                 column,
                 ..
             } => *column,
+
+            _ => 1,
+        }
+    }
+
+    pub fn end_line(&self) -> u32 {
+        match self {
+            SemanticError::UndefinedSymbol {
+                end_line,
+                ..
+            } => *end_line,
+
+            _ => 1,
+        }
+    }
+
+    pub fn end_column(&self) -> u32 {
+        match self {
+            SemanticError::UndefinedSymbol {
+                end_column,
+                ..
+            } => *end_column,
 
             _ => 1,
         }

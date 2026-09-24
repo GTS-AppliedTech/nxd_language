@@ -214,11 +214,15 @@ def serialize_expr(e):
         return {
             "Var": {
                 "name": e.name,
-                "line": e.line,
-                "column": e.col
+                "span": {
+                    "line": e.line,
+                    "column": e.col,
+                    "end_line": e.end_line,
+                    "end_column": e.end_col,
+                }
             }
         }
-
+    
     if isinstance(e, IRExpr.Pipeline):
         return {
             "Pipeline": {

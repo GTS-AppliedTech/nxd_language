@@ -61,10 +61,12 @@ def find_unused_variables(module):
 
             warnings.append(
                 {
-                    "code": "01",
+                    "code": "NXD-W2001",
                     "message": (f"NXD-W2001: Variable '{name}' declared but never used."),
                     "line": node.line,
                     "col": node.col,
+                    "end_line": node.line,
+                    "end_col": node.col + len(name),
                     "severity": "warning"
                     
                 }
@@ -94,6 +96,8 @@ def find_unreachable_code(module):
                         "message": (f"NXD-W2002: Unreachable code."),
                         "line": stmt.line,
                         "col": stmt.col,
+                        "end_line": stmt.line,
+                        "end_col": stmt.col + 1,
                         "severity": "warning"
                     }
                 )
@@ -123,6 +127,8 @@ def find_shadowed_bindings(module):
                             "message": (f"NXD-W2003: Binding '{name}' shadows a previous binding."),
                             "line": stmt.line,
                             "col": stmt.col,
+                            "end_line": stmt.line,
+                            "end_col": stmt.col + len(name),
                         }
                     )
 

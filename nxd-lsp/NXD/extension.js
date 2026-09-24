@@ -83,8 +83,10 @@ function validateDocument(document, diagnostics) {
                 document,
                 1,
                 1,
+                null,
+                null,
                 `NXD parser could not start: ${result.error.message}`,
-                vscode.DiagnosticSeverity.Error
+                vscode.DiagnosticSeverity.Error, 'NXD'
             )
         );
 
@@ -98,8 +100,10 @@ function validateDocument(document, diagnostics) {
                 document,
                 1,
                 1,
+                null,
+                null,
                 `NXD parser error: ${result.stderr.trim()}`,
-                vscode.DiagnosticSeverity.Error
+                vscode.DiagnosticSeverity.Error, 'NXD'
             )
         );
 
@@ -121,8 +125,11 @@ function validateDocument(document, diagnostics) {
                     document,
                     item.line,
                     item.column,
+                    item.end_line,
+                    item.end_column,
                     item.message,
-                    severity
+                    severity,
+                    item.code
                 )
             );
         }
@@ -132,8 +139,10 @@ function validateDocument(document, diagnostics) {
                 document,
                 1,
                 1,
+                null,
+                null,
                 `Invalid response from NXD parser: ${error.message}`,
-                vscode.DiagnosticSeverity.Error
+                vscode.DiagnosticSeverity.Error, 'NXD'
             )
         );
     }
@@ -145,8 +154,12 @@ function createDiagnostic(
     document,
     sourceLine,
     sourceColumn,
+    sourceEndLine = null,
+    sourceEndColumn = null,
     message,
-    severity
+    severity,
+    diagnosticCode
+
 ) {
     // NXD positions are one-based.
     // VS Code positions are zero-based.
@@ -165,24 +178,45 @@ function createDiagnostic(
         lineLength
     );
 
+    const requestedEndLine =
+        Number.isInteger(sourceEndLine)
+            ? Math.max(
+                0,
+                sourceEndLine - 1
+            )
+            : line;
+        const endLine = Math.min(
+            requestedEndLine, Math.max(0, document.lineCount - 1)
+        );
+
+    const endLineLength = document.lineAt(endLine).text.length;
+
+    const requestedEndColumn =
+        Number.isInteger(sourceEndColumn)
+            ? Math.max(
+                0,
+                sourceEndColumn - 1
+            )
+            : startColumn + 1;
+
     const endColumn = Math.min(
-        startColumn + 1,
-        lineLength
+        requestedEndColumn,
+        endLineLength
     );
         
     const diagnostic = new vscode.Diagnostic(
         new vscode.Range(
             line,
             startColumn,
-            line,
+            endLine,
             endColumn
         ),
         message,
         severity
     );
 
-    diagnostic.source = 'NXD Parser';
-    diagnostic.code = 'parser-error';
+    diagnostic.source = 'NXD';
+    diagnostic.code = diagnosticCode ?? 'NXD';
 
     return diagnostic;
 }

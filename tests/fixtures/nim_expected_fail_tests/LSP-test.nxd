@@ -40,9 +40,8 @@ MODULE TEST_MODULE
 
 FUNC TEST()
     LET X SET 1
-    LET Y SET 2
+    LET XYZ SET 2
     LET X SET 3
-
     TRY:
         PRINTLN("TRY")
 

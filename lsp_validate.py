@@ -138,6 +138,14 @@ try:
                 "message": warning["message"],
                 "line": warning["line"],
                 "column": warning["col"],
+                "end_line": warning.get(
+                    "end_line",
+                    warning["line"],
+                ),
+                "end_column": warning.get(
+                    "end_col",
+                    warning["col"] +1,
+                ),
                 "severity": "warning"
             }
         )
@@ -149,6 +157,14 @@ try:
                 "message": warning["message"],
                 "line": warning["line"],
                 "column": warning["col"],
+                "end_line": warning.get(
+                    "end_line",
+                    warning["line"],
+                ),
+                "end_column": warning.get(
+                    "end_col",
+                    warning["col"] +1,
+                ),
                 "severity": "warning"
             }
         )
@@ -160,6 +176,14 @@ try:
                 "message": warning["message"],
                 "line": warning["line"],
                 "column": warning["col"],
+                "end_line": warning.get(
+                    "end_line",
+                    warning["line"],
+                ),
+                "end_column": warning.get(
+                    "end_col",
+                    warning["col"] +1,
+                ),
                 "severity": "warning"
             }
         )

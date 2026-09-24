@@ -190,6 +190,8 @@ class IRExpr:
             self.name = name
             self.line = line
             self.col = col
+            self.end_line = line
+            self.end_col = col + len(self.name)
 
     class Pipeline:
         def __init__(self, value, func):

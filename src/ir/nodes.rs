@@ -182,8 +182,7 @@ pub struct IRTry {
 #[derive(Clone, Debug, Deserialize)]
 pub struct IRVar {
     pub name: String,
-    pub line: u32,
-    pub column: u32,
+    pub span: SourceSpan,
 }
 
 #[derive(Clone, Debug, Deserialize)]

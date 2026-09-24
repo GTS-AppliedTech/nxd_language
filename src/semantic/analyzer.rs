@@ -146,6 +146,8 @@ impl Analyzer {
                             name: "MOVE target must be an identifier".to_string(),
                             line: 1,
                             column: 1,
+                            end_line: 1,
+                            end_column: 2,
                         });
                     }
                 };
@@ -170,6 +172,8 @@ impl Analyzer {
                             name: "CLONE target must be an identifier".to_string(),
                             line: 1,
                             column: 1,
+                            end_line: 1,
+                            end_column: 2,
                         });
                     }
                 };
@@ -225,8 +229,10 @@ impl Analyzer {
                             Err(
                                 SemanticError::UndefinedSymbol {
                                     name: var.name.clone(),
-                                    line: var.line,
-                                    column: var.column,
+                                    line: var.span.line,
+                                    column: var.span.column,
+                                    end_line: var.span.end_line,
+                                    end_column: var.span.end_column,
                                 }
                             )
                         }
@@ -235,8 +241,11 @@ impl Analyzer {
                     Err(
                         SemanticError::UndefinedSymbol {
                             name: var.name.clone(),
-                            line: var.line,
-                            column: var.column,
+                            line: var.span.line,
+                            column: var.span.column,
+                            end_line: var.span.end_line,
+                            end_column: var.span.end_column,
+
                         }
                     )
                 }
@@ -262,6 +271,8 @@ impl Analyzer {
                                             ).to_string(),
                                             line: 1,
                                             column: 1,
+                                            end_line: 1,
+                                            end_column: 2,
                                         }
                                     );
                                 }
@@ -290,6 +301,8 @@ impl Analyzer {
                                             ).to_string(),
                                             line: 1,
                                             column: 1,
+                                            end_line: 1,
+                                            end_column: 2,
                                         }
                                     );
                                 }
@@ -364,6 +377,8 @@ impl Analyzer {
                                 name: func.clone(),
                                 line: 1,
                                 column: 1,
+                                end_line: 1,
+                                end_column: 2,
                             }
                         })?;
 
@@ -383,6 +398,8 @@ impl Analyzer {
                                 name: func.clone(),
                                 line: 1,
                                 column: 1,
+                                end_line: 1,
+                                end_column: 2,
                             }
                         );
                     }
@@ -400,6 +417,8 @@ impl Analyzer {
                                 name: func.clone(),
                                 line: 1,
                                 column: 1,
+                                end_line: 1,
+                                end_column: 2,
                             }
                         );
                     }
@@ -429,6 +448,8 @@ impl Analyzer {
                                 name: func.clone(),
                                 line: 1,
                                 column: 1,
+                                end_line: 1,
+                                end_column: 2,
                             }
                         })?;
 
@@ -448,6 +469,8 @@ impl Analyzer {
                                 name: func.clone(),
                                 line: 1,
                                 column: 1,
+                                end_line: 1,
+                                end_column: 2,
                             }
                         );
                     }
@@ -459,6 +482,8 @@ impl Analyzer {
                             name: func.clone(),
                             line: 1,
                             column: 1,
+                            end_line: 1,
+                            end_column: 2,
                         }
                     );
                 }
