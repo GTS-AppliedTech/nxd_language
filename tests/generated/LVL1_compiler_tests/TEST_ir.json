@@ -8,27 +8,15 @@
   "impls": [],
   "functions": [
     {
-      "name": "MAIN",
+      "name": "FETCH",
       "params": [],
       "return_type": null,
+      "is_async": true,
       "body": [
         {
-          "Expr": {
-            "Call": {
-              "func": "PRINTLN",
-              "args": [
-                {
-                  "Var": {
-                    "name": "UNKNOWN_SYMBOL",
-                    "span": {
-                      "line": 2,
-                      "column": 13,
-                      "end_line": 2,
-                      "end_column": 27
-                    }
-                  }
-                }
-              ]
+          "Return": {
+            "Literal": {
+              "Int": 42
             }
           }
         }

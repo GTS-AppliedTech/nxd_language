@@ -1,6 +1,2 @@
-FUNC MAIN():
-    LET X SET "hello"
-    LET Y SET X AS int
-
-
-
+ASYNC FUNC FETCH()
+    RETURN 42

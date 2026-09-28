@@ -84,12 +84,12 @@ class IRParam:
 # ---------- Functions ----------
 
 class IRFunction:
-    def __init__(self, name, params, return_type, body):
+    def __init__(self, name, params, return_type, body, is_async: bool = False):
         self.name = name
         self.params = params
         self.return_type = return_type
         self.body = body
-
+        self.is_async = is_async
 
 # ---------- Statements ----------
 

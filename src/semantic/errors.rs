@@ -23,8 +23,67 @@ pub enum SemanticError {
         to: String,
         reason: String,
     },
+    InvalidAsyncUsage {
+        violation: AsyncViolation,
+    }
 }
 
+#[derive(Debug)]
+pub enum AsyncViolation {
+    AwaitOutsideAsync,      // S3005-01
+    AwaitNonAsyncExpr,      // S3005-02
+    InvalidSpawnTarget,     // S3005-03
+    InvalidSendTarget,      // S3005-04
+    InvalidRecvSource,      // S3005-05
+    AsyncContextViolation,  // S3005-06
+}
+
+impl AsyncViolation {
+
+    pub fn code(&self) -> &'static str {
+        match self {
+            AsyncViolation::AwaitOutsideAsync =>
+                "NXD-S3005-01",
+
+            AsyncViolation::AwaitNonAsyncExpr =>
+                "NXD-S3005-02",
+
+            AsyncViolation::InvalidSpawnTarget =>
+                "NXD-S3005-03",
+
+            AsyncViolation::InvalidSendTarget =>
+                "NXD-S3005-04",
+
+            AsyncViolation::InvalidRecvSource =>
+                "NXD-S3005-05",
+
+            AsyncViolation::AsyncContextViolation =>
+                "NXD-S3005-06",
+        }
+    }
+
+    pub fn message(&self) -> &'static str {
+        match self {
+            AsyncViolation::AwaitOutsideAsync =>
+                "AWAIT may only be used inside an ASYNC FUNC",
+
+            AsyncViolation::AwaitNonAsyncExpr =>
+                "Cannot AWAIT non-async expression",
+
+            AsyncViolation::InvalidSpawnTarget =>
+                "SPAWN requires callable async target",
+
+            AsyncViolation::InvalidSendTarget =>
+                "SEND target is not a channel",
+
+            AsyncViolation::InvalidRecvSource =>
+                "RECV source is not a channel",
+
+            AsyncViolation::AsyncContextViolation =>
+                "Async operation is not permitted in the current execution context",
+        }
+    }
+}
 impl SemanticError {
     pub fn code(&self) -> &'static str {
         match self {
@@ -47,6 +106,10 @@ impl SemanticError {
 
             SemanticError::CastFailure { .. } => {
                 "NXD-S3004"
+            }
+
+            SemanticError::InvalidAsyncUsage { .. } => {
+                "NXD-S3005-01"
             }
         }
     }
@@ -123,7 +186,7 @@ impl SemanticError {
                 ty,
             } => {
                 format!(
-                    "NXD-: Trait '{}' not implemented for '{}'",
+                    "NXD-S3003: Trait '{}' not implemented for '{}'",
                     trait_name,
                     ty
                 )
@@ -139,6 +202,15 @@ impl SemanticError {
                     from,
                     to,
                     reason
+                )
+            }
+            SemanticError::InvalidAsyncUsage {
+                violation,
+            } => {
+                format!(
+                    "{}: {}",
+                    violation.code(),
+                    violation.message(),
                 )
             }
         }

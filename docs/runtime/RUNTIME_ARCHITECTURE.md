@@ -157,4 +157,4 @@ NXD’s runtime is:
 
 • a semantic layer defining processes, tasks, channels, scheduling, and core services,
 • implemented per‑backend via runtime shims in Nim, Elixir, and D,
-• and tightly integrated with your type, concurrency, error, memory, and security specs.
+• and tightly integrated with type, concurrency, error, memory, and security specs.

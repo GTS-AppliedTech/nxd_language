@@ -5,7 +5,7 @@ Official Visual Studio Code language support for the NXD programming language.
 ## Features
 
 - .nxd file recognition
-- .nxd source code file icons
+- .nxd source file icons
 - Syntax highlighting
 - Keywords
 - Types
@@ -21,5 +21,5 @@ Official Visual Studio Code language support for the NXD programming language.
 - Go To Definition
 - Generic Constraints (NXD-S3003)
 - Async Runtime
-- .nxd tooling/configuration file icon
+- .nxd tooling & configuration file icon
 - .nxd generated artifacts file icon

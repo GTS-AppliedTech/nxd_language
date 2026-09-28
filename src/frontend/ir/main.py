@@ -82,7 +82,8 @@ def serialize_function(f):
     return {
         "name": f.name,
         "params": [{"name": p.name, "ty": p.ty} for p in f.params],
-        "return_type": f.return_type,
+        "return_type": f.return_type, 
+        "is_async": f.is_async, 
         "body": serialize_statements(f.body),
     }
 

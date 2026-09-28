@@ -116,6 +116,7 @@ pub struct IRFunction {
     pub name: String,
     pub params: Vec<IRParam>,
     pub return_type: Option<String>,
+    pub is_async: bool,
     pub body: Vec<IRStatement>,
 }
 

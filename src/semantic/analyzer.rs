@@ -5,7 +5,7 @@ use crate::semantic::{
     casts::{check_as_cast, check_is},
     ownership::{check_ownership, OwnershipOp},
     patterns::validate_match_arms,
-    errors::SemanticError,
+    errors::{SemanticError, AsyncViolation},
 };
 use crate::ir::nodes::*;
 use crate::ir::parse_ir::IRRoot;
@@ -84,7 +84,7 @@ impl Analyzer {
             }
 
             for stmt in &f.body {
-                self.analyze_statement(stmt)?;
+                self.analyze_statement(stmt, f.is_async,)?;
             }
 
             self.symbols.exit_scope();
@@ -92,52 +92,52 @@ impl Analyzer {
         Ok(())
     }
 
-    fn analyze_statement(&mut self, stmt: &IRStatement) -> Result<(), SemanticError> {
+    fn analyze_statement(&mut self, stmt: &IRStatement, is_async: bool,) -> Result<(), SemanticError> {
         match stmt {
             IRStatement::Let { name, value } => {
-                let ty = self.analyze_expr(value)?;
+                let ty = self.analyze_expr(value, is_async)?;
                 self.symbols.define(name, Symbol::Var { name: name.clone(), ty });
             }
             IRStatement::Const { name, value } => {
-                let ty = self.analyze_expr(value)?;
+                let ty = self.analyze_expr(value, is_async)?;
                 self.symbols.define(name, Symbol::Const { name: name.clone(), ty });
             }
             IRStatement::Return(expr) => {
-                self.analyze_expr(expr)?;
+                self.analyze_expr(expr, is_async)?;
             }
             IRStatement::Loop(body) => {
                 for s in body {
-                    self.analyze_statement(s)?;
+                    self.analyze_statement(s, is_async)?;
                 }
             }
             IRStatement::If(if_node) => {
-                self.analyze_expr(&if_node.condition)?;
+                self.analyze_expr(&if_node.condition, is_async)?;
                 for s in &if_node.then_branch {
-                    self.analyze_statement(s)?;
+                    self.analyze_statement(s, is_async)?;
                 }
                 for s in &if_node.else_branch {
-                    self.analyze_statement(s)?;
+                    self.analyze_statement(s, is_async)?;
                 }
             }
             IRStatement::Match(m) => {
-                self.analyze_expr(&m.scrutinee)?;
+                self.analyze_expr(&m.scrutinee, is_async)?;
                 validate_match_arms(&m.arms)?;
             }
             IRStatement::Try(t) => {
                 for s in &t.try_body {
-                    self.analyze_statement(s)?;
+                    self.analyze_statement(s, is_async)?;
                 }
 
                 for s in &t.catch_body {
-                    self.analyze_statement(s)?;
+                    self.analyze_statement(s, is_async)?;
                 }
 
                 for s in &t.finally_body {
-                    self.analyze_statement(s)?;
+                    self.analyze_statement(s, is_async)?;
                 }
             }
             IRStatement::Move(move_node) => {
-                let source_type = self.analyze_expr(&move_node.source)?;
+                let source_type = self.analyze_expr(&move_node.source, is_async)?;
 
                 let target_name = match &move_node.target {
                     IRExpr::Var(var) => var.name.clone(),
@@ -163,7 +163,7 @@ impl Analyzer {
                 );
             }
             IRStatement::Clone(clone_node) => {
-                let source_type = self.analyze_expr(&clone_node.source)?;
+                let source_type = self.analyze_expr(&clone_node.source, is_async)?;
 
                 let target_name = match &clone_node.target {
                     IRExpr::Var(var) => var.name.clone(),
@@ -189,7 +189,7 @@ impl Analyzer {
                 );
             }
             IRStatement::Expr(expr) => {
-                self.analyze_expr(expr)?;
+                self.analyze_expr(expr, is_async)?;
             }
         }
         Ok(())
@@ -198,6 +198,7 @@ impl Analyzer {
     fn analyze_expr(
         &mut self,
         expr: &IRExpr,
+        is_async: bool,
     ) -> Result<String, SemanticError> {
         match expr {
             IRExpr::Literal(literal) => {
@@ -206,7 +207,7 @@ impl Analyzer {
 
             IRExpr::ObjectInit(init) => {
                 for value in init.fields.values() {
-                    self.analyze_expr(value)?;
+                    self.analyze_expr(value, is_async)?;
                 }
 
                 Ok(init.type_name.clone())
@@ -253,7 +254,7 @@ impl Analyzer {
 
             IRExpr::Binary(binary) => {
                 let left =
-                    self.analyze_expr(&binary.left)?;
+                    self.analyze_expr(&binary.left, is_async)?;
 
                 match binary.kind.as_str() {
                     "AS" => {
@@ -319,7 +320,7 @@ impl Analyzer {
                     _ => {
                         let right =
                             self.analyze_expr(
-                                &binary.right
+                                &binary.right, is_async,
                             )?;
 
                         check_type(
@@ -334,7 +335,7 @@ impl Analyzer {
 
             IRExpr::Unary(unary) => {
                 let inner =
-                    self.analyze_expr(&unary.expr)?;
+                    self.analyze_expr(&unary.expr, is_async)?;
 
                 match unary.kind.as_str() {
                     "MOVE" => {
@@ -369,18 +370,26 @@ impl Analyzer {
             }
 
             IRExpr::Call { func, args } => {
+
+                if func == "AWAIT" && !is_async {
+                    return Err(
+                        SemanticError::InvalidAsyncUsage {
+                            violation: AsyncViolation::AwaitOutsideAsync,
+                        }
+                    );
+                }    
                 let (params, ret) = {
-                    let symbol = self.symbols
-                        .resolve(func)
-                        .ok_or_else(|| {
-                            SemanticError::UndefinedSymbol {
-                                name: func.clone(),
-                                line: 1,
-                                column: 1,
-                                end_line: 1,
-                                end_column: 2,
-                            }
-                        })?;
+                        let symbol = self.symbols
+                            .resolve(func)
+                            .ok_or_else(|| {
+                                SemanticError::UndefinedSymbol {
+                                    name: func.clone(),
+                                    line: 1,
+                                    column: 1,
+                                    end_line: 1,
+                                    end_column: 2,
+                                }
+                            })?;
 
                     if let Symbol::Func {
                         params,
@@ -409,7 +418,7 @@ impl Analyzer {
                     in args.iter().enumerate()
                 {
                     let argument_type =
-                        self.analyze_expr(argument)?;
+                        self.analyze_expr(argument, is_async)?;
 
                     if index >= params.len() {
                         return Err(
@@ -438,7 +447,7 @@ impl Analyzer {
 
             IRExpr::Pipeline { value, func } => {
                 let value_type =
-                    self.analyze_expr(value)?;
+                    self.analyze_expr(value, is_async)?;
 
                 let (params, ret) = {
                     let symbol = self.symbols

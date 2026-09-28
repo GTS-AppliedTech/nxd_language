@@ -193,6 +193,9 @@ class Parser:
             return self.parse_impl_decl()
         if tok[0] == "KEYWORD" and tok[1] == "IMPORT":
             return self.parse_import()
+        if tok[0] == "KEYWORD" and tok[1] == "ASYNC":
+            self.eat("KEYWORD", "ASYNC")
+            return self.parse_func_decl(is_async=True) 
         if tok[0] == "KEYWORD" and tok[1] == "FUNC":
             return self.parse_func_decl()
         # allow top-level statements
@@ -436,8 +439,8 @@ class Parser:
 
     # ---------- functions ----------
 
-    def parse_func_decl(self):
-        self.eat("KEYWORD", "FUNC")
+    def parse_func_decl(self, is_async=False):
+        self.eat('KEYWORD', "FUNC")
         name = self.eat("IDENT")[1]
         self.eat("LPAREN")
         params = []
@@ -455,7 +458,7 @@ class Parser:
                 ret = self.parse_type_ref()
         self.expect_block_colon()
         body = self.parse_block()
-        return ASTFunction(name=name, params=[p[0] for p in params], return_type=ret, body=body)
+        return ASTFunction(name=name, params=[p[0] for p in params], return_type=ret, body=body, is_async=is_async)
 
     def parse_param(self):
         name = self.eat("IDENT")[1]
@@ -485,6 +488,7 @@ class Parser:
             and not self.at("KEYWORD", "CATCH")
             and not self.at("KEYWORD", "FINALLY")
 
+            and not self.at("KEYWORD", "ASYNC")
             and not self.at("KEYWORD", "FUNC")
             and not self.at("KEYWORD", "IMPORT")
             and not self.at("KEYWORD", "TYPE")

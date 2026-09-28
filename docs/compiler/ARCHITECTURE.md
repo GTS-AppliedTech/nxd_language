@@ -97,5 +97,5 @@ Each backend is a pure IR→code generator.
 5. Lowering → IR
 6. Optimization → optimized IR
 7. Backend → Nim/Elixir/D code
-8. Call target compiler (nim/elixir/dmd)
+8. (optional)Call target compiler (nim/elixir/dmd)
 

@@ -61,7 +61,7 @@ def lower_function(ast):
         name=ast.name,
         params=[IRParam(p, "any") for p in ast.params],
         return_type=ast.return_type,
-        body=[lower_statement(s) for s in ast.body]
+        body=[lower_statement(s) for s in ast.body], is_async=ast.is_async
     )
 
 def lower_statement(ast):

@@ -86,7 +86,7 @@ class ASTFunction:
     params: List[str]
     return_type: Optional[str]
     body: List["ASTStatement"]
-
+    is_async: bool = False
 
 # ============================
 # AST STATEMENTS
