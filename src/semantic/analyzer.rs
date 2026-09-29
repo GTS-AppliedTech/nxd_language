@@ -27,6 +27,7 @@ impl Analyzer {
                 name: "PRINTLN".to_string(),
                 params: vec!["any".to_string()],
                 ret: Some("none".to_string()),
+                is_async: false,
             },
         );
 
@@ -75,6 +76,7 @@ impl Analyzer {
                     name: f.name.clone(),
                     params: f.params.iter().map(|p| p.ty.clone()).collect(),
                     ret: f.return_type.clone(),
+                    is_async: f.is_async
                 },
             );
 
@@ -370,26 +372,83 @@ impl Analyzer {
             }
 
             IRExpr::Call { func, args } => {
+                if func.eq_ignore_ascii_case("AWAIT") {
+                    // S3005-01:
+                    // AWAIT may only be used inside an ASYNC FUNC.
+                    if !is_async {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AwaitOutsideAsync,
+                            }
+                        );
+                    }
 
-                if func == "AWAIT" && !is_async {
-                    return Err(
-                        SemanticError::InvalidAsyncUsage {
-                            violation: AsyncViolation::AwaitOutsideAsync,
+                    // AWAIT currently accepts exactly one operand.
+                    if args.len() != 1 {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AwaitNonAwaitable,
+                            }
+                        );
+                    }
+
+                    let arg = &args[0];
+
+                    // Initial awaitability rule:
+                    // a direct function call is awaitable only when the
+                    // referenced function was declared ASYNC.
+                    let target_is_async = match arg {
+                        IRExpr::Call {
+                            func: awaited_func,
+                            ..
+                        } => {
+                            match self.symbols.resolve(awaited_func) {
+                                Some(
+                                    Symbol::Func {
+                                        is_async,
+                                        ..
+                                    }
+                                ) => *is_async,
+
+                                _ => false,
+                            }
                         }
-                    );
-                }    
+
+                        // Literals, variables, binary expressions, object
+                        // initializers, and other expressions are not yet
+                        // recognized as awaitable.
+                        _ => false,
+                    };
+
+                    if !target_is_async {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AwaitNonAwaitable,
+                            }
+                        );
+                    }
+
+                    // Validate the underlying async function call and use its
+                    // declared result type as the temporary AWAIT result type.
+                    //
+                    // Later this becomes explicit Task[T] -> T unwrapping.
+                    let awaited_type = self.analyze_expr(arg, is_async)?;
+
+                    return Ok(awaited_type);
+                }
+                // Ordinary function-call handling starts here.
                 let (params, ret) = {
-                        let symbol = self.symbols
-                            .resolve(func)
-                            .ok_or_else(|| {
-                                SemanticError::UndefinedSymbol {
-                                    name: func.clone(),
-                                    line: 1,
-                                    column: 1,
-                                    end_line: 1,
-                                    end_column: 2,
-                                }
-                            })?;
+                    let symbol = self.symbols
+                        .resolve(func)
+                        .ok_or_else(|| {
+                            SemanticError::UndefinedSymbol {
+                                name: func.clone(),
+                                line: 1,
+                                column: 1,
+                                end_line: 1,
+                                end_column: 2,
+                            }
+                        })?;
 
                     if let Symbol::Func {
                         params,
@@ -414,9 +473,7 @@ impl Analyzer {
                     }
                 };
 
-                for (index, argument)
-                    in args.iter().enumerate()
-                {
+                for (index, argument) in args.iter().enumerate() {
                     let argument_type =
                         self.analyze_expr(argument, is_async)?;
 
@@ -444,7 +501,6 @@ impl Analyzer {
                     )
                 )
             }
-
             IRExpr::Pipeline { value, func } => {
                 let value_type =
                     self.analyze_expr(value, is_async)?;

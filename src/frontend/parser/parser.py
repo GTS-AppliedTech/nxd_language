@@ -711,23 +711,38 @@ class Parser:
         return ASTExpr(call)  # or dedicated ASTSpawn
 
     def parse_send(self):
-        self.eat("KEYWORD", "SEND")
+        send_tok=self.eat("KEYWORD", "SEND")
         msg = self.parse_expr()
         self.eat("KEYWORD", "TO")
         target = self.parse_expr()
         # TODO: dedicated AST node
-        return ASTExpr(ASTCall(func="SEND", args=[msg, target]))
+        return ASTCall(
+                func="SEND",
+                args=[msg, target],
+                line=send_tok[2],
+                col=send_tok[3]
+                )
 
     def parse_recv(self):
-        self.eat("KEYWORD", "RECV")
+        recv_tok=self.eat("KEYWORD", "RECV")
         ch = self.eat("IDENT")[1]
         # LET V SET RECV CH handled at statement level
-        return ASTCall(func="RECV", args=[ASTVar(name=ch)])
+        return ASTCall(
+            func="RECV",
+            args=[ASTVar(name=ch)],
+            line=recv_tok[2],
+            col=recv_tok[3]
+                )
 
     def parse_await_stmt(self):
-        self.eat("KEYWORD", "AWAIT")
+        await_tok = self.eat("KEYWORD", "AWAIT")
         expr = self.parse_expr()
-        return ASTExpr(ASTCall(func="AWAIT", args=[expr]))
+        return ASTCall(
+            func="AWAIT", 
+            args=[expr],
+            line=await_tok[2],
+            col=await_tok[3] 
+                )
 
     # ---------- expressions ----------
 

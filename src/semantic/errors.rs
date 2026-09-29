@@ -31,7 +31,7 @@ pub enum SemanticError {
 #[derive(Debug)]
 pub enum AsyncViolation {
     AwaitOutsideAsync,      // S3005-01
-    AwaitNonAsyncExpr,      // S3005-02
+    AwaitNonAwaitable,      // S3005-02
     InvalidSpawnTarget,     // S3005-03
     InvalidSendTarget,      // S3005-04
     InvalidRecvSource,      // S3005-05
@@ -45,7 +45,7 @@ impl AsyncViolation {
             AsyncViolation::AwaitOutsideAsync =>
                 "NXD-S3005-01",
 
-            AsyncViolation::AwaitNonAsyncExpr =>
+            AsyncViolation::AwaitNonAwaitable =>
                 "NXD-S3005-02",
 
             AsyncViolation::InvalidSpawnTarget =>
@@ -67,8 +67,8 @@ impl AsyncViolation {
             AsyncViolation::AwaitOutsideAsync =>
                 "AWAIT may only be used inside an ASYNC FUNC",
 
-            AsyncViolation::AwaitNonAsyncExpr =>
-                "Cannot AWAIT non-async expression",
+            AsyncViolation::AwaitNonAwaitable =>
+                "Cannot AWAIT non-awaitable expression",
 
             AsyncViolation::InvalidSpawnTarget =>
                 "SPAWN requires callable async target",
@@ -109,7 +109,7 @@ impl SemanticError {
             }
 
             SemanticError::InvalidAsyncUsage { .. } => {
-                "NXD-S3005-01"
+                "NXD-S3005"
             }
         }
     }

@@ -1,2 +1,6 @@
-ASYNC FUNC FETCH()
-    RETURN 42
+ASYNC FUNC MAIN()
+    AWAIT 42
+        
+    
+
+

@@ -4,7 +4,7 @@ use std::collections::HashMap;
 pub enum Symbol {
     Var { name: String, ty: String },
     Const { name: String, ty: String },
-    Func { name: String, params: Vec<String>, ret: Option<String> },
+    Func { name: String, params: Vec<String>, ret: Option<String>, is_async: bool,},
     Type { name: String },
     Trait { name: String },
 }
