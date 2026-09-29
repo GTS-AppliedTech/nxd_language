@@ -26,6 +26,16 @@ pub fn check_type(expected: &str, actual: &str) -> Result<(), SemanticError> {
     })
 }
 
+pub fn task_type(inner: &str) -> String {
+    format!("Task[{}]", inner)
+}
+
+pub fn unwrap_task_type(ty: &str) -> Option<String> {
+    ty.strip_prefix("Task[")
+        .and_then(|inner| inner.strip_suffix(']'))
+        .map(|inner| inner.to_string())
+}
+
 fn is_primitive(t: &str) -> bool {
     matches!(t, "int" | "float" | "string" | "bool" | "none")
 }

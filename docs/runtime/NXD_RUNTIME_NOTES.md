@@ -39,13 +39,24 @@ An awaitable expression represents an operation whose terminal state may be obse
 - Success value or outcome
 - Failure information where applicable
 
+##### Awaitable Invariant
+
+Every awaitable has an identity, progresses toward a terminal state,
+and may be observed through AWAIT.
+
+AWAIT observes the terminal state of an awaitable without changing
+the identity of the observed operation.
+
+Completion order, cancellation, timeout, failure, and success do not
+alter awaitable identity.
+
 ##### Initial Awaitable Types
 
-Task[T]
-ProcessHandle[T]
-ReceiveOperation[T]
-TimeoutOperation[T]
-AwaitGroup[T]
+- Task[T]
+- ProcessHandle[T]
+- ReceiveOperation[T]
+- TimeoutOperation[T]
+- AwaitGroup[T]
 
 ##### Initial Non-Awaitable Types
 
@@ -59,3 +70,18 @@ The following are not awaitable by default:
 - Process definitions
 
 AWAIT may only observe awaitable operations.
+
+### Task[T]
+
+Task[T] represents a managed asynchronous operation that will
+eventually resolve to a value of type T.
+
+A Task[T\]:
+
+- Has an identity.
+- Progresses toward a terminal state.
+- Is awaitable.
+- Preserves identity through observation.
+- Resolves to T on successful completion.
+
+AWAIT Task[T] -> T

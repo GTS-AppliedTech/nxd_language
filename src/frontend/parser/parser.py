@@ -746,6 +746,16 @@ class Parser:
 
     # ---------- expressions ----------
 
+    def parse_await_expr(self):
+        await_tok = self.eat("KEYWORD", "AWAIT")
+        expr = self.parse_expr()
+        return ASTCall(
+            func="AWAIT",
+            args=[expr],
+            line=await_tok[2],
+            col=await_tok[3]
+        )
+
     def parse_expr(self):
         return self.parse_logic()
 
@@ -828,6 +838,8 @@ class Parser:
             return self.parse_map_literal()
         if tok[0] == "FN":
             return self.parse_lambda()
+        if tok[0] == "KEYWORD" and tok[1] == "AWAIT":
+            return self.parse_await_expr()
         if tok[0] == "IDENT":
             # Could be a call, typed object initializer, or variable.
             if self._next_is("LPAREN"):

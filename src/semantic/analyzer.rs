@@ -1,6 +1,6 @@
 use crate::semantic::{
     symbols::{SymbolTable, Symbol},
-    types::check_type,
+    types::{check_type, task_type, unwrap_task_type},
     traits::TraitRegistry,
     casts::{check_as_cast, check_is},
     ownership::{check_ownership, OwnershipOp},
@@ -75,7 +75,12 @@ impl Analyzer {
                 Symbol::Func {
                     name: f.name.clone(),
                     params: f.params.iter().map(|p| p.ty.clone()).collect(),
-                    ret: f.return_type.clone(),
+                    ret: match &f.return_type {
+                        Some(ret) if f.is_async => Some(task_type(ret)),
+                        Some(ret) => Some(ret.clone()),
+                        None if f.is_async => Some(task_type("none")),
+                        None => None,
+                    },
                     is_async: f.is_async
                 },
             );
@@ -392,50 +397,15 @@ impl Analyzer {
                         );
                     }
 
-                    let arg = &args[0];
+                    let awaited_type = self.analyze_expr(&args[0], is_async)?;
 
-                    // Initial awaitability rule:
-                    // a direct function call is awaitable only when the
-                    // referenced function was declared ASYNC.
-                    let target_is_async = match arg {
-                        IRExpr::Call {
-                            func: awaited_func,
-                            ..
-                        } => {
-                            match self.symbols.resolve(awaited_func) {
-                                Some(
-                                    Symbol::Func {
-                                        is_async,
-                                        ..
-                                    }
-                                ) => *is_async,
-
-                                _ => false,
-                            }
+                    return unwrap_task_type(&awaited_type).ok_or(
+                        SemanticError::InvalidAsyncUsage {
+                            violation: AsyncViolation::AwaitNonAwaitable,
                         }
-
-                        // Literals, variables, binary expressions, object
-                        // initializers, and other expressions are not yet
-                        // recognized as awaitable.
-                        _ => false,
-                    };
-
-                    if !target_is_async {
-                        return Err(
-                            SemanticError::InvalidAsyncUsage {
-                                violation: AsyncViolation::AwaitNonAwaitable,
-                            }
-                        );
-                    }
-
-                    // Validate the underlying async function call and use its
-                    // declared result type as the temporary AWAIT result type.
-                    //
-                    // Later this becomes explicit Task[T] -> T unwrapping.
-                    let awaited_type = self.analyze_expr(arg, is_async)?;
-
-                    return Ok(awaited_type);
+                    );
                 }
+
                 // Ordinary function-call handling starts here.
                 let (params, ret) = {
                     let symbol = self.symbols
