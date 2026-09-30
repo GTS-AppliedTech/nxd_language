@@ -85,3 +85,18 @@ A Task[T\]:
 - Resolves to T on successful completion.
 
 AWAIT Task[T] -> T
+
+##### Validated Awaitable Semantics
+
+Task[T]
+---------
+AWAIT Task[T] -> T
+
+ProcessHandle[T]
+----------------
+AWAIT ProcessHandle[T] -> T
+
+Awaitables may be:
+- assigned to variables
+- referenced by name
+- awaited through identity-preserving handles

@@ -1,6 +1,6 @@
 use crate::semantic::{
     symbols::{SymbolTable, Symbol},
-    types::{check_type, task_type, unwrap_task_type},
+    types::{check_type, task_type, unwrap_task_type, unwrap_awaitable_type, process_handle_type},
     traits::TraitRegistry,
     casts::{check_as_cast, check_is},
     ownership::{check_ownership, OwnershipOp},
@@ -399,13 +399,71 @@ impl Analyzer {
 
                     let awaited_type = self.analyze_expr(&args[0], is_async)?;
 
-                    return unwrap_task_type(&awaited_type).ok_or(
+                    return unwrap_awaitable_type(&awaited_type).ok_or(
                         SemanticError::InvalidAsyncUsage {
                             violation: AsyncViolation::AwaitNonAwaitable,
                         }
                     );
                 }
+                if func.eq_ignore_ascii_case("SPAWN") {
+                    if args.len() != 1 {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::InvalidSpawnTarget,
+                            }
+                        );
+                    }
 
+                    let target = &args[0];
+
+                    let target_type = match target {
+                        IRExpr::Call {
+                            func: target_func,
+                            ..
+                        } => {
+                            let symbol = self.symbols
+                                .resolve(target_func)
+                                .ok_or_else(|| {
+                                    SemanticError::InvalidAsyncUsage {
+                                        violation: AsyncViolation::InvalidSpawnTarget,
+                                    }
+                                })?;
+
+                            match symbol {
+                                Symbol::Func {
+                                    ret,
+                                    is_async: true,
+                                    ..
+                                } => {
+                                    let return_type = ret
+                                        .clone()
+                                        .unwrap_or_else(|| task_type("none"));
+
+                                    unwrap_task_type(&return_type)
+                                        .unwrap_or_else(|| "none".to_string())
+                                }
+
+                                _ => {
+                                    return Err(
+                                        SemanticError::InvalidAsyncUsage {
+                                            violation: AsyncViolation::InvalidSpawnTarget,
+                                        }
+                                    );
+                                }
+                            }
+                        }
+
+                        _ => {
+                            return Err(
+                                SemanticError::InvalidAsyncUsage {
+                                    violation: AsyncViolation::InvalidSpawnTarget,
+                                }
+                            );
+                        }
+                    };
+
+                    return Ok(process_handle_type(&target_type));
+                }
                 // Ordinary function-call handling starts here.
                 let (params, ret) = {
                     let symbol = self.symbols

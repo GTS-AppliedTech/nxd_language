@@ -1,4 +1,4 @@
-use std::any;
+
 
 use crate::semantic::errors::SemanticError;
 
@@ -32,6 +32,21 @@ pub fn task_type(inner: &str) -> String {
 
 pub fn unwrap_task_type(ty: &str) -> Option<String> {
     ty.strip_prefix("Task[")
+        .and_then(|inner| inner.strip_suffix(']'))
+        .map(|inner| inner.to_string())
+}
+
+pub fn unwrap_awaitable_type(ty: &str) -> Option<String> {
+    unwrap_task_type(ty)
+        .or_else(|| unwrap_process_handle_type(ty))
+}
+
+pub fn process_handle_type(inner: &str) -> String {
+    format!("ProcessHandle[{}]", inner)
+}
+
+pub fn unwrap_process_handle_type(ty: &str) -> Option<String> {
+    ty.strip_prefix("ProcessHandle[")
         .and_then(|inner| inner.strip_suffix(']'))
         .map(|inner| inner.to_string())
 }

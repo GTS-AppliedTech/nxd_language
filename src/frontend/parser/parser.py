@@ -756,6 +756,17 @@ class Parser:
             col=await_tok[3]
         )
 
+    def parse_spawn_expr(self):
+        spawn_tok = self.eat("KEYWORD", "SPAWN")
+        target = self.parse_expr()
+
+        return ASTCall(
+            func="SPAWN",
+            args=[target],
+            line=spawn_tok[2],
+            col=spawn_tok[3]
+        )
+
     def parse_expr(self):
         return self.parse_logic()
 
@@ -840,6 +851,8 @@ class Parser:
             return self.parse_lambda()
         if tok[0] == "KEYWORD" and tok[1] == "AWAIT":
             return self.parse_await_expr()
+        if tok[0] == "KEYWORD" and tok[1] == "SPAWN":
+            return self.parse_spawn_expr()
         if tok[0] == "IDENT":
             # Could be a call, typed object initializer, or variable.
             if self._next_is("LPAREN"):

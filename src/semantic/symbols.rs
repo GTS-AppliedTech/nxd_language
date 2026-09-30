@@ -7,6 +7,7 @@ pub enum Symbol {
     Func { name: String, params: Vec<String>, ret: Option<String>, is_async: bool,},
     Type { name: String },
     Trait { name: String },
+    Process {name: String, params: Vec<String>, ret: Option<String>,},
 }
 
 #[derive(Default)]
