@@ -767,6 +767,18 @@ class Parser:
             col=spawn_tok[3]
         )
 
+    def parse_recv_expr(self):
+        recv_tok = self.eat("KEYWORD", "RECV")
+
+        source = self.parse_expr()
+
+        return ASTCall(
+            func="RECV",
+            args=[source],
+            line=recv_tok[2],
+            col=recv_tok[3]
+        )
+
     def parse_expr(self):
         return self.parse_logic()
 
@@ -853,6 +865,8 @@ class Parser:
             return self.parse_await_expr()
         if tok[0] == "KEYWORD" and tok[1] == "SPAWN":
             return self.parse_spawn_expr()
+        if tok[0] == "KEYWORD" and tok[1] == "RECV":
+            return self.parse_recv_expr()
         if tok[0] == "IDENT":
             # Could be a call, typed object initializer, or variable.
             if self._next_is("LPAREN"):

@@ -1,6 +1,8 @@
 use crate::semantic::{
     symbols::{SymbolTable, Symbol},
-    types::{check_type, task_type, unwrap_task_type, unwrap_awaitable_type, process_handle_type},
+    types::{check_type, task_type, unwrap_task_type,
+        unwrap_awaitable_type, process_handle_type,
+        receive_operation_type,},
     traits::TraitRegistry,
     casts::{check_as_cast, check_is},
     ownership::{check_ownership, OwnershipOp},
@@ -464,6 +466,33 @@ impl Analyzer {
 
                     return Ok(process_handle_type(&target_type));
                 }
+
+                if func.eq_ignore_ascii_case("RECV") {
+        if args.len() != 1 {
+            return Err(
+                SemanticError::InvalidAsyncUsage {
+                    violation: AsyncViolation::InvalidRecvSource,
+                }
+            );
+        }
+
+        match &args[0] {
+            IRExpr::Var(_) => {
+                return Ok(
+                    receive_operation_type("any")
+                );
+            }
+
+            _ => {
+                return Err(
+                    SemanticError::InvalidAsyncUsage {
+                        violation: AsyncViolation::InvalidRecvSource,
+                    }
+                );
+            }
+        }
+    }
+
                 // Ordinary function-call handling starts here.
                 let (params, ret) = {
                     let symbol = self.symbols
@@ -625,4 +654,4 @@ impl Analyzer {
             }
         }
     }
-    }
+}   
