@@ -1,6 +1,13 @@
 from dataclasses import dataclass
 from typing import List, Optional, Union
 
+@dataclass
+class SourceSpan:
+    line: int
+    column: int
+    end_line: int
+    end_column: int
+
 # ============================
 # AST MODULE
 # ============================
@@ -61,6 +68,7 @@ class ASTTrait:
 @dataclass
 class ASTFunctionSignature:
     name: str
+    span: SourceSpan
     params: List[str]
     return_type: str
 
@@ -83,6 +91,7 @@ class ASTImpl:
 @dataclass
 class ASTFunction:
     name: str
+    span: SourceSpan
     params: List[str]
     return_type: Optional[str]
     body: List["ASTStatement"]

@@ -59,6 +59,7 @@ def lower_trait(ast):
 def lower_function(ast):
     return IRFunction(
         name=ast.name,
+        span=ast.span,
         params=[IRParam(p, "any") for p in ast.params],
         return_type=ast.return_type,
         body=[lower_statement(s) for s in ast.body], is_async=ast.is_async

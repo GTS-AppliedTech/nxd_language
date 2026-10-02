@@ -30,6 +30,7 @@ impl Analyzer {
                 params: vec!["any".to_string()],
                 ret: Some("none".to_string()),
                 is_async: false,
+                span: None,
             },
         );
 
@@ -83,13 +84,18 @@ impl Analyzer {
                         None if f.is_async => Some(task_type("none")),
                         None => None,
                     },
-                    is_async: f.is_async
+                    is_async: f.is_async,
+                    span: Some(f.span.clone()),
                 },
             );
 
             self.symbols.enter_scope();
             for p in &f.params {
-                self.symbols.define(&p.name, Symbol::Var { name: p.name.clone(), ty: p.ty.clone() });
+                self.symbols.define(
+                    &p.name, Symbol::Var {
+                    name: p.name.clone(),
+                    ty: p.ty.clone(),}
+                );
             }
 
             for stmt in &f.body {

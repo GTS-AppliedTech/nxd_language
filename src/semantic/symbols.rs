@@ -1,16 +1,17 @@
 use std::collections::HashMap;
+use crate::ir::nodes::SourceSpan;
 
 #[derive(Clone, Debug)]
 pub enum Symbol {
-    Var { name: String, ty: String },
-    Const { name: String, ty: String },
-    Func { name: String, params: Vec<String>, ret: Option<String>, is_async: bool,},
-    Type { name: String },
-    Trait { name: String },
+    Var { name: String, ty: String,},
+    Const { name: String, ty: String,},
+    Func { name: String, params: Vec<String>, ret: Option<String>, is_async: bool, span: Option<SourceSpan>,},
+    Type { name: String,},
+    Trait { name: String,},
     Process {name: String, params: Vec<String>, ret: Option<String>,},
 }
 
-#[derive(Default)]
+#[derive(Default)] 
 pub struct Scope {
     pub symbols: HashMap<String, Symbol>,
 }

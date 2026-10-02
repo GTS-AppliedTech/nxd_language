@@ -252,7 +252,8 @@ class Parser:
             method_column = self.peek()[3]
 
             self.eat("KEYWORD", "FUNC")
-            method_name = self.eat("IDENT")[1]
+            method_name_tok = self.eat("IDENT")
+            method_name = method_name_tok[1]
             self.eat("LPAREN")
 
             params = []
@@ -297,6 +298,7 @@ class Parser:
                     params=params,
                     return_type=return_type,
                     body=body,
+                    span=method_span,
                 )
             )
 
@@ -405,7 +407,8 @@ class Parser:
         methods = []
         while self.at("KEYWORD", "FUNC"):
             self.eat("KEYWORD", "FUNC")
-            mname = self.eat("IDENT")[1]
+            mname_tok = self.eat("IDENT")
+            mname = mname_tok[1]
             self.eat("LPAREN")
             params = []
             if not self.at("RPAREN"):
@@ -441,7 +444,14 @@ class Parser:
 
     def parse_func_decl(self, is_async=False):
         self.eat('KEYWORD', "FUNC")
-        name = self.eat("IDENT")[1]
+        name_tok = self.eat("IDENT")
+        name = name_tok[1]
+        span = SourceSpan(
+            line=name_tok[2],
+            column=name_tok[3],
+            end_line=name_tok[2],
+            end_column=name_tok[3] + len(name_tok[1]),
+        )
         self.eat("LPAREN")
         params = []
         if not self.at("RPAREN"):
@@ -458,7 +468,13 @@ class Parser:
                 ret = self.parse_type_ref()
         self.expect_block_colon()
         body = self.parse_block()
-        return ASTFunction(name=name, params=[p[0] for p in params], return_type=ret, body=body, is_async=is_async)
+        return ASTFunction(
+            name=name,
+            span=span,
+            params=[p[0] for p in params],
+            return_type=ret,
+            body=body,
+            is_async=is_async)
 
     def parse_param(self):
         name = self.eat("IDENT")[1]
