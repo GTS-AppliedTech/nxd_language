@@ -18,11 +18,11 @@ function activate(context) {
         vscode.workspace.onDidOpenTextDocument(validate)
     );
 
-    //context.subscriptions.push(
-    //    vscode.workspace.onDidChangeTextDocument(event => {
-    //        validate(event.document);
-    //    })
-    //);
+    context.subscriptions.push(
+        vscode.workspace.onDidChangeTextDocument(event => {
+            validate(event.document);
+        })
+    );
 
     context.subscriptions.push(
         vscode.workspace.onDidSaveTextDocument(validate)
@@ -34,9 +34,107 @@ function activate(context) {
         })
     );
 
+
     for (const document of vscode.workspace.textDocuments) {
         validate(document);
     }
+
+    context.subscriptions.push(
+        vscode.languages.registerInlineCompletionItemProvider(
+            { language: 'nxd' },
+            {
+                provideInlineCompletionItems(
+                    document,
+                    position,
+                    completionContext,
+                    token
+                ) {
+
+                    const line =
+                        document.lineAt(position.line)
+                            .text
+                            .substring(0, position.character);
+
+                    const words = [
+                        "MODULE",
+                        "IMPORT",
+                        "TYPE",
+                        "ENUM",
+                        "STRUCT",
+                        "UNION",
+                        "TRAIT",
+                        "IMPL",
+                        "FUNC",
+                        "LET",
+                        "CONST",
+                        "RETURN",
+                        "IF",
+                        "ELSE",
+                        "MATCH",
+                        "CASE",
+                        "OTHERWISE",
+                        "LOOP",
+                        "ASYNC",
+                        "SPAWN",
+                        "SEND",
+                        "RECV",
+                        "AWAIT",
+                        "TRY",
+                        "CATCH",
+                        "FINALLY",
+                        "SET",
+                        "FOR",
+                        "ADD",
+                        "SUB",
+                        "MUL",
+                        "DIV",
+                        "MOD",
+                        "EQ",
+                        "NEQ",
+                        "GT",
+                        "LT",
+                        "GTE",
+                        "LT",
+                        "AND",
+                        "OR",
+                        "NOT",
+                        "AS",
+                        "IS",
+                        "PIPE",
+                        "MOVE",
+                        "CLONE",
+                        "BORROW",
+                        "PRINTLN"
+                    ];
+
+                    const prefix =
+                        line.split(/\s+/).pop().toUpperCase();
+
+                    if (!prefix.length < 2) {
+                        return [];
+                    }
+
+                    const match =
+                        words.find(
+                            word =>
+                                word.startsWith(prefix)
+                                &&
+                                word !== prefix
+                        );
+
+                    if (!match) {
+                        return [];
+                    }
+
+                    return [
+                        new vscode.InlineCompletionItem(
+                            match.substring(prefix.length)
+                        )
+                    ];
+                }
+            }
+        )
+    );
 }
 
 function validateDocument(document, diagnostics) {

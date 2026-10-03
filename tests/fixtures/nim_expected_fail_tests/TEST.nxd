@@ -1,5 +1,0 @@
-FUNC FETCH()
-    RETURN 42
-
-FUNC MAIN()
-    FETCH()
