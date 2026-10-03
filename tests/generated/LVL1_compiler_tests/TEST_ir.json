@@ -9,14 +9,42 @@
   "functions": [
     {
       "name": "FETCH",
+      "span": {
+        "line": 1,
+        "column": 6,
+        "end_line": 1,
+        "end_column": 11
+      },
       "params": [],
       "return_type": null,
-      "is_async": true,
+      "is_async": false,
       "body": [
         {
           "Return": {
             "Literal": {
               "Int": 42
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 4,
+        "column": 6,
+        "end_line": 4,
+        "end_column": 10
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Expr": {
+            "Call": {
+              "func": "FETCH",
+              "args": []
             }
           }
         }

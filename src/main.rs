@@ -35,7 +35,28 @@ fn main() {
 
     return;
 }
+    if args.len() == 4
+    && args[1] == "--definition"
+{
+    let definition =
+        orchestrator::definition_from_ir_json(
+            &args[2],
+            &args[3]
+        );
 
+    match definition {
+        Ok(result) => {
+            println!("{}", result);
+        }
+
+        Err(error) => {
+            eprintln!("{}", error);
+            std::process::exit(1);
+        }
+    }
+
+    return;
+}
     if args.len() != 3 && args.len() != 4 {
         eprintln!("Usage:");
         eprintln!("  cargo run <input_json> <output_nim>");

@@ -18,11 +18,11 @@ function activate(context) {
         vscode.workspace.onDidOpenTextDocument(validate)
     );
 
-    context.subscriptions.push(
-        vscode.workspace.onDidChangeTextDocument(event => {
-            validate(event.document);
-        })
-    );
+    //context.subscriptions.push(
+    //    vscode.workspace.onDidChangeTextDocument(event => {
+    //        validate(event.document);
+    //    })
+    //);
 
     context.subscriptions.push(
         vscode.workspace.onDidSaveTextDocument(validate)

@@ -3,3 +3,4 @@ pub mod pipeline;
 pub use pipeline::compile_from_ir_json;
 pub use pipeline::compile_from_ir_json_with_semantics;
 pub use pipeline::semantic_diagnostics_from_ir_json;
+pub use pipeline::definition_from_ir_json;

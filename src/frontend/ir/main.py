@@ -81,6 +81,12 @@ def serialize_type(t):
 def serialize_function(f):
     return {
         "name": f.name,
+        "span": {
+            "line": f.span.line,
+            "column": f.span.column,
+            "end_line": f.span.end_line,
+            "end_column": f.span.end_column,
+        },
         "params": [{"name": p.name, "ty": p.ty} for p in f.params],
         "return_type": f.return_type, 
         "is_async": f.is_async, 
