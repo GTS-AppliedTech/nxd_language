@@ -2,7 +2,7 @@ use crate::semantic::{
     symbols::{SymbolTable, Symbol},
     types::{check_type, task_type, unwrap_task_type,
         unwrap_awaitable_type, process_handle_type,
-        receive_operation_type,},
+        unwrap_process_handle_type, receive_operation_type,},
     traits::TraitRegistry,
     casts::{check_as_cast, check_is},
     ownership::{check_ownership, OwnershipOp},
@@ -71,24 +71,74 @@ impl Analyzer {
         Ok(())
     }
 
-    fn analyze_functions(&mut self, funcs: &Vec<IRFunction>) -> Result<(), SemanticError> {
+    fn infer_function_return_type(
+        &mut self,
+        function: &IRFunction,
+    ) -> Result<String, SemanticError> {
+        let mut inferred_type: Option<String> = None;
+
+        for statement in &function.body {
+            if let IRStatement::Return(expr) = statement {
+                let return_type =
+                    self.analyze_expr(expr, function.is_async)?;
+
+                if let Some(existing_type) = &inferred_type {
+                    check_type(existing_type, &return_type)?;
+                } else {
+                    inferred_type = Some(return_type);
+                }
+            }
+        }
+
+        Ok(
+            inferred_type
+                .unwrap_or_else(|| "none".to_string())
+        )
+    }
+
+    fn analyze_functions(
+        &mut self,
+        funcs: &Vec<IRFunction>,
+    ) -> Result<(), SemanticError> {
         for f in funcs {
+            let resolved_return_type =
+                match &f.return_type {
+                    Some(return_type) => {
+                        return_type.clone()
+                    }
+
+                    None => {
+                        self.infer_function_return_type(f)?
+                    }
+                };
+
             self.symbols.define(
                 &f.name,
                 Symbol::Func {
                     name: f.name.clone(),
-                    params: f.params.iter().map(|p| p.ty.clone()).collect(),
-                    ret: match &f.return_type {
-                        Some(ret) if f.is_async => Some(task_type(ret)),
-                        Some(ret) => Some(ret.clone()),
-                        None if f.is_async => Some(task_type("none")),
-                        None => None,
+
+                    params: f
+                        .params
+                        .iter()
+                        .map(|p| p.ty.clone())
+                        .collect(),
+
+                    ret: if f.is_async {
+                        Some(
+                            task_type(
+                                &resolved_return_type
+                            )
+                        )
+                    } else {
+                        Some(resolved_return_type)
                     },
+
                     is_async: f.is_async,
                     span: Some(f.span.clone()),
                 },
             );
 
+        // Existing body analysis follows.
             self.symbols.enter_scope();
             for p in &f.params {
                 self.symbols.define(
@@ -473,32 +523,96 @@ impl Analyzer {
                     return Ok(process_handle_type(&target_type));
                 }
 
-                if func.eq_ignore_ascii_case("RECV") {
-        if args.len() != 1 {
-            return Err(
-                SemanticError::InvalidAsyncUsage {
-                    violation: AsyncViolation::InvalidRecvSource,
-                }
-            );
-        }
+                if func.eq_ignore_ascii_case("SEND") {
 
-        match &args[0] {
-            IRExpr::Var(_) => {
-                return Ok(
-                    receive_operation_type("any")
-                );
-            }
-
-            _ => {
-                return Err(
-                    SemanticError::InvalidAsyncUsage {
-                        violation: AsyncViolation::InvalidRecvSource,
+                    if args.len() != 2 {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage{
+                                violation: AsyncViolation::InvalidSendTarget
+                            }
+                        )?;
                     }
-                );
-            }
-        }
-    }
 
+                    let value_type =
+                        self.analyze_expr(&args[0], is_async)?;
+
+                    let handle_type =
+                        self.analyze_expr(&args[1], is_async)?;
+
+                    let expected_type =
+                        unwrap_process_handle_type(&handle_type)
+                            .ok_or(
+                                SemanticError::InvalidAsyncUsage{
+                                    violation: AsyncViolation::InvalidSendTarget
+                                }
+                            )?;
+
+                    check_type(
+                        &expected_type,
+                        &value_type
+                    )?;
+
+                    return Ok("none".to_string());
+                }
+
+                if func.eq_ignore_ascii_case("RECV") {
+                    // RECV currently accepts exactly one source.
+                    if args.len() != 1 {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::InvalidRecvSource,
+                            }
+                        );
+                    }
+
+                    // The source must be a named variable or constant.
+                    let source_type = match &args[0] {
+                        IRExpr::Var(var) => {
+                            match self.symbols.resolve(&var.name) {
+                                Some(Symbol::Var { ty, .. }) => {
+                                    ty.clone()
+                                }
+
+                                Some(Symbol::Const { ty, .. }) => {
+                                    ty.clone()
+                                }
+
+                                _ => {
+                                    return Err(
+                                        SemanticError::InvalidAsyncUsage {
+                                            violation:
+                                                AsyncViolation::InvalidRecvSource,
+                                        }
+                                    );
+                                }
+                            }
+                        }
+
+                        _ => {
+                            return Err(
+                                SemanticError::InvalidAsyncUsage {
+                                    violation:
+                                        AsyncViolation::InvalidRecvSource,
+                                }
+                            );
+                        }
+                    };
+
+                    // The source must carry ProcessHandle[T].
+                    let received_type =
+                        unwrap_process_handle_type(&source_type)
+                            .ok_or(
+                                SemanticError::InvalidAsyncUsage {
+                                    violation:
+                                        AsyncViolation::InvalidRecvSource,
+                                }
+                            )?;
+
+                    // RECV ProcessHandle[T] produces ReceiveOperation[T].
+                    return Ok(
+                        receive_operation_type(&received_type)
+                    );
+                }
                 // Ordinary function-call handling starts here.
                 let (params, ret) = {
                     let symbol = self.symbols

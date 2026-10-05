@@ -56,6 +56,7 @@
 - NXD-S3005-04 Invalid 'SEND' target
 - NXD-S3005-05 Invalid 'RECV' source
 - NXD-S3005-06 'ASYNC' Context violation
+- NXD-S3005-07 Invalid 'PING' target
 
 ##### *WARNING CODES:*
  

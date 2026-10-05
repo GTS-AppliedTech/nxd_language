@@ -36,6 +36,7 @@ pub enum AsyncViolation {
     InvalidSendTarget,      // S3005-04
     InvalidRecvSource,      // S3005-05
     AsyncContextViolation,  // S3005-06
+    InvalidPingTarget,      // S3005-07
 }
 
 impl AsyncViolation {
@@ -59,6 +60,9 @@ impl AsyncViolation {
 
             AsyncViolation::AsyncContextViolation =>
                 "NXD-S3005-06",
+
+            AsyncViolation::InvalidPingTarget =>
+                "NXD-S3005-07",
         }
     }
 
@@ -81,6 +85,9 @@ impl AsyncViolation {
 
             AsyncViolation::AsyncContextViolation =>
                 "Async operation is not permitted in the current execution context",
+
+            AsyncViolation::InvalidPingTarget =>
+                "PING target is not a ProcessHandle",
         }
     }
 }

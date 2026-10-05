@@ -8,16 +8,16 @@
   "impls": [],
   "functions": [
     {
-      "name": "FETCH",
+      "name": "WORKER",
       "span": {
         "line": 1,
-        "column": 6,
+        "column": 12,
         "end_line": 1,
-        "end_column": 11
+        "end_column": 18
       },
       "params": [],
       "return_type": null,
-      "is_async": false,
+      "is_async": true,
       "body": [
         {
           "Return": {
@@ -32,19 +32,54 @@
       "name": "MAIN",
       "span": {
         "line": 4,
-        "column": 6,
+        "column": 12,
         "end_line": 4,
-        "end_column": 10
+        "end_column": 16
       },
       "params": [],
       "return_type": null,
-      "is_async": false,
+      "is_async": true,
       "body": [
+        {
+          "Let": {
+            "name": "HANDLE",
+            "value": {
+              "Call": {
+                "func": "SPAWN",
+                "args": [
+                  {
+                    "Call": {
+                      "func": "WORKER",
+                      "args": []
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
         {
           "Expr": {
             "Call": {
-              "func": "FETCH",
-              "args": []
+              "func": "SEND",
+              "args": [
+                {
+                  "Literal": {
+                    "Int": 42
+                  }
+                },
+                {
+                  "Var": {
+                    "name": "HANDLE",
+                    "span": {
+                      "line": 7,
+                      "column": 16,
+                      "end_line": 7,
+                      "end_column": 22
+                    }
+                  }
+                }
+              ]
             }
           }
         }

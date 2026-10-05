@@ -1,0 +1,4 @@
+ASYNC FUNC MAIN()
+    LET X SET 42
+
+    SEND 42 TO X
