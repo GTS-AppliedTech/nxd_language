@@ -1,0 +1,6 @@
+IF X GT 10
+    PRINTLN("Greater")
+ELSE
+    PRINTLN("Smaller")
+    RETURN Y
+PRINTLN(Y)

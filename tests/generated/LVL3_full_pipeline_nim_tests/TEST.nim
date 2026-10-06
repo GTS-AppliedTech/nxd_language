@@ -1,9 +1,9 @@
 # anonymous
 
 
-proc fetch() =
-  return 42
-
-proc main() =
-  fetch()
-
+if x > 10:
+    echo("Greater")
+else:
+    echo("Smaller")
+    return y
+echo(y)

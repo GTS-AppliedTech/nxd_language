@@ -496,29 +496,44 @@ class Parser:
     def parse_block(self):
         stmts = []
 
-        while (
-            not self.at("EOF")
-            and not self.at("KEYWORD", "ELSE")
-            and not self.at("KEYWORD", "CASE")
-            and not self.at("KEYWORD", "OTHERWISE")
-            and not self.at("KEYWORD", "CATCH")
-            and not self.at("KEYWORD", "FINALLY")
+        # Ignore blank lines before the blocks 1st statement
+        while self.at("NEWLINE"):
+            self.eat("NEWLINE")
 
-            and not self.at("KEYWORD", "ASYNC")
-            and not self.at("KEYWORD", "FUNC")
-            and not self.at("KEYWORD", "IMPORT")
-            and not self.at("KEYWORD", "TYPE")
-            and not self.at("KEYWORD", "ENUM")
-            and not self.at("KEYWORD", "STRUCT")
-            and not self.at("KEYWORD", "UNION")
-            and not self.at("KEYWORD", "TRAIT")
-            and not self.at("KEYWORD", "IMPL")
-        ):
-            if self.at("NEWLINE"):
-                self.eat("NEWLINE")
-                continue
+        if self.at ("EOF"):
+            return stmts
 
-            stmts.append(self.parse_statement())
+        # Thhe 1st statement defines this blocks indentation
+        block_column = self.peek()[3]
+        self.indent_stack.append(block_column)
+
+        try:
+            while not self.at("EOF"):
+                # Blank lines are allowed inside blocks
+                if self.at("NEWLINE"):
+                    self.eat("NEWLINE")
+                    continue
+
+                current_column = self.peek()[3]
+
+                # Dedent closes the current block
+                if current_column < block_column:
+                    break
+
+                # These tokens are handled by the enclosing parser
+                if (
+                    self.at("KEYWORD", "ELSE")
+                    or self.at("KEYWORD", "CASE")
+                    or self.at("KEYWORD", "OTHERWISE")
+                    or self.at("KEYWORD", "CATCH")
+                    or self.at("KEYWORD", "FINALLY")
+                ):
+                    break
+
+                stmts.append(self.parse_statement())
+
+        finally:
+            self.indent_stack.pop()
 
         return stmts
      # ---------- statements ----------

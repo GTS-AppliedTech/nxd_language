@@ -16,13 +16,13 @@ pub fn emit_statements(stmts: &Vec<IRStatement>) -> String {
 pub fn emit_statement(stmt: &IRStatement) -> String {
     match stmt {
         IRStatement::Let { name, value } => {
-            format!("  var {} = {}\n", name.to_lowercase(), emit_expr(value))
+            format!("var {} = {}\n", name.to_lowercase(), emit_expr(value))
         }
         IRStatement::Const { name, value } => {
             format!("  let {} = {}\n", name.to_lowercase(), emit_expr(value))
         }
         IRStatement::Return(expr) => {
-            format!("  return {}\n", emit_expr(expr))
+            format!("return {}\n", emit_expr(expr))
         }
         IRStatement::Loop(body) => {
             let mut out = String::new();
@@ -72,13 +72,13 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
             )
         }
         IRStatement::Expr(expr) => {
-            format!("  {}\n", emit_expr(expr))
+            format!("{}\n", emit_expr(expr))
         }
     }
 }
 
 
-fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
+pub fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
     use crate::ir::nodes::IRExpr::*;
 
     match expr {
@@ -89,11 +89,14 @@ fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
         Unary(u) => emit_unary_op(u),
 
         Call { func, args } => {
+            println!("NIM CALL EMIT: {}", func);
+
             let args_str: Vec<String> = args.iter().map(emit_expr).collect();
 
-            let nim_func = match func.as_str() {
-                "PRINTLN" => "echo".to_string(),
-                _ => func.to_lowercase(),
+            let nim_func = if func.eq_ignore_ascii_case("PRINTLN") {
+                "echo".to_string()
+            } else {
+                func.to_lowercase()
             };
 
             format!("{}({})", nim_func, args_str.join(", "))

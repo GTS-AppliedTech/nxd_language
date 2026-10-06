@@ -49,6 +49,6 @@ fn emit_statement(stmt: &IRStatement) -> String {
 
 fn indent(s: &str) -> String {
     s.lines()
-        .map(|line| format!("  {}\n", line.trim_end()))
+        .map(|line| format!("    {}\n", line.trim_end()))
         .collect()
 }

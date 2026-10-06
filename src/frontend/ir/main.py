@@ -1,7 +1,7 @@
 from src.frontend.warnings import find_unused_variables
 from src.frontend.parser.parser import parse
 from src.frontend.ast.nodes import ASTLiteral
-from src.frontend.ir.lowering import lower_module, lower_types, lower_function
+from src.frontend.ir.lowering import (lower_module, lower_types, lower_function, lower_statement,)
 from src.frontend.ir.validate import validate_ir
 from src.frontend.ir.nodes import * # plus others
 import json
@@ -24,6 +24,10 @@ def compile_to_ir_json(src: str, out_path: str):
     ir_module = lower_module(ast_module)
     ir_types = lower_types(ast_types)
     ir_functions = [lower_function(f) for f in ast_functions]
+    ir_statements = [
+        lower_statement(statement)
+        for statement in ast_module.body
+]
 
     ir_root = {
         "module": serialize_module(ir_module),
@@ -31,7 +35,7 @@ def compile_to_ir_json(src: str, out_path: str):
         "traits": [],
         "impls": [],
         "functions": [serialize_function(f) for f in ir_functions],
-        "statements": [],
+        "statements": serialize_statements(ir_statements),
     }
 
     # optional: validate IR structure before writing

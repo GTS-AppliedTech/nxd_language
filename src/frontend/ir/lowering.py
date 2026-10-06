@@ -121,6 +121,9 @@ def lower_statement(ast):
         ))
     if isinstance(ast, ASTExpr):
         return IRStatement.Expr(lower_expr(ast))
+    
+    if isinstance(ast, ASTCall):
+        return IRStatement.Expr(lower_expr(ast))
 
     raise Exception(
             f"Unknown AST statement: {type(ast).__name__}"

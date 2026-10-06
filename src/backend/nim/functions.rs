@@ -1,4 +1,5 @@
 use crate::ir::nodes::{IRFunction, IRStatement};
+use crate::backend::nim::statements::emit_expr;
 
 pub fn emit_functions(funcs: &Vec<IRFunction>) -> String {
     let mut out = String::new();
@@ -45,7 +46,7 @@ pub fn emit_function(f: &IRFunction) -> String {
 pub fn emit_statement(stmt: &IRStatement) -> String {
     match stmt {
         IRStatement::Let { name, value } => {
-            format!("  var {} = {}\n", name.to_lowercase(), value)
+            format!("var {} = {}\n", name.to_lowercase(), value)
         }
 
         IRStatement::Const { name, value } => {
@@ -69,7 +70,7 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
         }
 
         IRStatement::Return(expr) => {
-            format!("  return {}\n", expr)
+            format!("return {}\n", emit_expr(expr))
         }
 
         IRStatement::Loop(body) => {
@@ -108,7 +109,7 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
             out
         }
         IRStatement::Expr(expr) => {
-            format!("  {}\n", expr)
+            format!("{}\n", emit_expr(expr))
         }
     }
 }

@@ -6,85 +6,97 @@
   "types": [],
   "traits": [],
   "impls": [],
-  "functions": [
+  "functions": [],
+  "statements": [
     {
-      "name": "WORKER",
-      "span": {
-        "line": 1,
-        "column": 12,
-        "end_line": 1,
-        "end_column": 18
-      },
-      "params": [],
-      "return_type": null,
-      "is_async": true,
-      "body": [
-        {
-          "Return": {
-            "Literal": {
-              "Int": 42
+      "If": {
+        "condition": {
+          "Binary": {
+            "kind": "GT",
+            "left": {
+              "Var": {
+                "name": "X",
+                "span": {
+                  "line": 1,
+                  "column": 4,
+                  "end_line": 1,
+                  "end_column": 5
+                }
+              }
+            },
+            "right": {
+              "Literal": {
+                "Int": 10
+              }
             }
           }
-        }
-      ]
-    },
-    {
-      "name": "MAIN",
-      "span": {
-        "line": 4,
-        "column": 12,
-        "end_line": 4,
-        "end_column": 16
-      },
-      "params": [],
-      "return_type": null,
-      "is_async": true,
-      "body": [
-        {
-          "Let": {
-            "name": "HANDLE",
-            "value": {
+        },
+        "then_branch": [
+          {
+            "Expr": {
               "Call": {
-                "func": "SPAWN",
+                "func": "PRINTLN",
                 "args": [
                   {
-                    "Call": {
-                      "func": "WORKER",
-                      "args": []
+                    "Literal": {
+                      "String": "Greater"
                     }
                   }
                 ]
               }
             }
           }
-        },
-        {
-          "Expr": {
-            "Call": {
-              "func": "SEND",
-              "args": [
-                {
-                  "Literal": {
-                    "Int": 42
-                  }
-                },
-                {
-                  "Var": {
-                    "name": "HANDLE",
-                    "span": {
-                      "line": 7,
-                      "column": 16,
-                      "end_line": 7,
-                      "end_column": 22
+        ],
+        "else_branch": [
+          {
+            "Expr": {
+              "Call": {
+                "func": "PRINTLN",
+                "args": [
+                  {
+                    "Literal": {
+                      "String": "Smaller"
                     }
                   }
+                ]
+              }
+            }
+          },
+          {
+            "Return": {
+              "Var": {
+                "name": "Y",
+                "span": {
+                  "line": 5,
+                  "column": 12,
+                  "end_line": 5,
+                  "end_column": 13
                 }
-              ]
+              }
             }
           }
+        ]
+      }
+    },
+    {
+      "Expr": {
+        "Call": {
+          "func": "PRINTLN",
+          "args": [
+            {
+              "Var": {
+                "name": "Y",
+                "span": {
+                  "line": 6,
+                  "column": 9,
+                  "end_line": 6,
+                  "end_column": 10
+                }
+              }
+            }
+          ]
         }
-      ]
+      }
     }
-  ],
-  "statements": []
+  ]
 }
