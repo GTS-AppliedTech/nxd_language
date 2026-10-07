@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 5,
+        "column": 6,
+        "end_line": 5,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Let": {
@@ -38,7 +45,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "VALUES"
+                  "Var": {
+                    "name": "VALUES",
+                    "span": {
+                      "line": 8,
+                      "column": 13,
+                      "end_line": 8,
+                      "end_column": 19
+                    }
+                  }
                 }
               ]
             }

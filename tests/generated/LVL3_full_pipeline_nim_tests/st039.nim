@@ -3,9 +3,9 @@
 
 proc main() =
   # TRY
-  println("TRY")
+echo("TRY")
   # CATCH
-  println("CATCH")
+echo("CATCH")
   # FINALLY
-  println("FINALLY")
+echo("FINALLY")
 

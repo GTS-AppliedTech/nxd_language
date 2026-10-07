@@ -3,5 +3,5 @@
 
 proc main() =
   let result = 40 + 2
-  println(result)
+echo(result)
 

@@ -2,5 +2,5 @@
 
 
 proc main() =
-  println("TEST")
+echo("TEST")
 

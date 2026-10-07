@@ -2,6 +2,6 @@
 
 
 proc main() =
-  var values = [1, 2, "3"]
-  println(values)
+var values = [1, 2, "3"]
+echo(values)
 

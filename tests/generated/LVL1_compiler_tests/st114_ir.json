@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Const": {
@@ -53,7 +60,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "LIMITS"
+                  "Var": {
+                    "name": "LIMITS",
+                    "span": {
+                      "line": 8,
+                      "column": 13,
+                      "end_line": 8,
+                      "end_column": 19
+                    }
+                  }
                 }
               ]
             }
@@ -65,7 +80,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "X"
+                  "Var": {
+                    "name": "X",
+                    "span": {
+                      "line": 9,
+                      "column": 13,
+                      "end_line": 9,
+                      "end_column": 14
+                    }
+                  }
                 }
               ]
             }
@@ -77,7 +100,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "Y"
+                  "Var": {
+                    "name": "Y",
+                    "span": {
+                      "line": 10,
+                      "column": 13,
+                      "end_line": 10,
+                      "end_column": 14
+                    }
+                  }
                 }
               ]
             }

@@ -3,7 +3,7 @@
 
 proc main() =
   let limit = 10
-  var x = 5
-  println(limit)
-  println(x)
+var x = 5
+echo(limit)
+echo(x)
 

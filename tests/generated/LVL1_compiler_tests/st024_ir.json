@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Const": {
@@ -41,10 +48,26 @@
                   "Binary": {
                     "kind": "MUL",
                     "left": {
-                      "Var": "PI"
+                      "Var": {
+                        "name": "PI",
+                        "span": {
+                          "line": 7,
+                          "column": 13,
+                          "end_line": 7,
+                          "end_column": 15
+                        }
+                      }
                     },
                     "right": {
-                      "Var": "RATE"
+                      "Var": {
+                        "name": "RATE",
+                        "span": {
+                          "line": 7,
+                          "column": 20,
+                          "end_line": 7,
+                          "end_column": 24
+                        }
+                      }
                     }
                   }
                 }
@@ -61,10 +84,26 @@
                   "Binary": {
                     "kind": "DIV",
                     "left": {
-                      "Var": "PI"
+                      "Var": {
+                        "name": "PI",
+                        "span": {
+                          "line": 8,
+                          "column": 13,
+                          "end_line": 8,
+                          "end_column": 15
+                        }
+                      }
                     },
                     "right": {
-                      "Var": "RATE"
+                      "Var": {
+                        "name": "RATE",
+                        "span": {
+                          "line": 8,
+                          "column": 20,
+                          "end_line": 8,
+                          "end_column": 24
+                        }
+                      }
                     }
                   }
                 }

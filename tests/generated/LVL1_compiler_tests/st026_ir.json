@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Const": {
@@ -41,10 +48,26 @@
                   "Binary": {
                     "kind": "GT",
                     "left": {
-                      "Var": "HIGH"
+                      "Var": {
+                        "name": "HIGH",
+                        "span": {
+                          "line": 7,
+                          "column": 8,
+                          "end_line": 7,
+                          "end_column": 12
+                        }
+                      }
                     },
                     "right": {
-                      "Var": "LOW"
+                      "Var": {
+                        "name": "LOW",
+                        "span": {
+                          "line": 7,
+                          "column": 16,
+                          "end_line": 7,
+                          "end_column": 19
+                        }
+                      }
                     }
                   }
                 },
@@ -52,10 +75,26 @@
                   "Binary": {
                     "kind": "LT",
                     "left": {
-                      "Var": "LOW"
+                      "Var": {
+                        "name": "LOW",
+                        "span": {
+                          "line": 7,
+                          "column": 24,
+                          "end_line": 7,
+                          "end_column": 27
+                        }
+                      }
                     },
                     "right": {
-                      "Var": "HIGH"
+                      "Var": {
+                        "name": "HIGH",
+                        "span": {
+                          "line": 7,
+                          "column": 31,
+                          "end_line": 7,
+                          "end_column": 35
+                        }
+                      }
                     }
                   }
                 }

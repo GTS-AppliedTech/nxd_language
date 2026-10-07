@@ -2,10 +2,10 @@
 
 
 proc main() =
-  var x = 5
-  var y = 10
+var x = 5
+var y = 10
 if y >= x:
-    println("GTE")
-  if x <= y:
-      println("LTE")
+    echo("GTE")
+if x <= y:
+    echo("LTE")
 

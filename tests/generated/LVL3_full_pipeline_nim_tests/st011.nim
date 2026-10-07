@@ -2,9 +2,9 @@
 
 
 proc main() =
-  var valid = false
+var valid = false
 if valid:
-    println("PASS")
+    echo("PASS")
 else:
-    println("FAIL")
+    echo("FAIL")
 

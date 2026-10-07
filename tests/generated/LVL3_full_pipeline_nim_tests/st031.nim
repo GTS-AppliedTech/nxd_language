@@ -5,9 +5,9 @@ proc main() =
   let state = "READY"
 case state:
   of "READY":
-    println("GO")
+    echo("GO")
   of "WAIT":
-    println("HOLD")
+    echo("HOLD")
   else:
-    println("UNKNOWN")
+    echo("UNKNOWN")
 

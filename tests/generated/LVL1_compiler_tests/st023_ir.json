@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Const": {
@@ -58,7 +65,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "NAME"
+                  "Var": {
+                    "name": "NAME",
+                    "span": {
+                      "line": 9,
+                      "column": 13,
+                      "end_line": 9,
+                      "end_column": 17
+                    }
+                  }
                 }
               ]
             }
@@ -70,7 +85,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "AGE"
+                  "Var": {
+                    "name": "AGE",
+                    "span": {
+                      "line": 10,
+                      "column": 13,
+                      "end_line": 10,
+                      "end_column": 16
+                    }
+                  }
                 }
               ]
             }
@@ -82,7 +105,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "SCORE"
+                  "Var": {
+                    "name": "SCORE",
+                    "span": {
+                      "line": 11,
+                      "column": 13,
+                      "end_line": 11,
+                      "end_column": 18
+                    }
+                  }
                 }
               ]
             }
@@ -94,7 +125,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "ACTIVE"
+                  "Var": {
+                    "name": "ACTIVE",
+                    "span": {
+                      "line": 12,
+                      "column": 13,
+                      "end_line": 12,
+                      "end_column": 19
+                    }
+                  }
                 }
               ]
             }

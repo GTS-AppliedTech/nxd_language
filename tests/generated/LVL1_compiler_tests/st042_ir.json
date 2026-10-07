@@ -1,0 +1,25 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "FETCH",
+      "span": {
+        "line": 1,
+        "column": 12,
+        "end_line": 1,
+        "end_column": 17
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": []
+    }
+  ],
+  "statements": []
+}

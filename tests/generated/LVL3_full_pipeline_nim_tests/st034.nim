@@ -8,5 +8,5 @@ type
     FAILED,
 
 proc main() =
-  println("ENUM_DECLARED")
+echo("ENUM_DECLARED")
 

@@ -2,12 +2,12 @@
 
 
 proc main() =
-  var x = 2
+var x = 2
 case x:
   of 1:
-    println("ONE")
+    echo("ONE")
   of 2:
-    println("TWO")
+    echo("TWO")
   else:
-    println("OTHER")
+    echo("OTHER")
 

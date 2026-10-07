@@ -3,5 +3,5 @@
 
 proc main() =
   let msg = "NXD TEST"
-  println(msg)
+echo(msg)
 

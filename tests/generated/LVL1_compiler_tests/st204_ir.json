@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "CREATE_VALUE",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 18
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Let": {
@@ -21,19 +28,60 @@
               }
             }
           }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "VALUE",
+                    "span": {
+                      "line": 5,
+                      "column": 13,
+                      "end_line": 5,
+                      "end_column": 18
+                    }
+                  }
+                }
+              ]
+            }
+          }
         }
       ]
     },
     {
       "name": "MAIN",
+      "span": {
+        "line": 9,
+        "column": 6,
+        "end_line": 9,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Expr": {
             "Call": {
               "func": "CREATE_VALUE",
               "args": []
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Literal": {
+                    "String": "complete"
+                  }
+                }
+              ]
             }
           }
         }

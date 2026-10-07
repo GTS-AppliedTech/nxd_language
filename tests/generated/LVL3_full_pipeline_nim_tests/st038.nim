@@ -3,9 +3,9 @@
 
 proc main() =
   # TRY
-  println("True")
+echo("True")
   # CATCH
-  println("FALSE")
+echo("FALSE")
   # FINALLY
-  println("NONE")
+echo("NONE")
 

@@ -10,5 +10,5 @@ type
       message: string
 
 proc main() =
-  println("UNION_DECLARED")
+echo("UNION_DECLARED")
 

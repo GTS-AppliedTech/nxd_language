@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Let": {
@@ -41,10 +48,26 @@
                   "Binary": {
                     "kind": "ADD",
                     "left": {
-                      "Var": "X"
+                      "Var": {
+                        "name": "X",
+                        "span": {
+                          "line": 7,
+                          "column": 13,
+                          "end_line": 7,
+                          "end_column": 14
+                        }
+                      }
                     },
                     "right": {
-                      "Var": "Y"
+                      "Var": {
+                        "name": "Y",
+                        "span": {
+                          "line": 7,
+                          "column": 19,
+                          "end_line": 7,
+                          "end_column": 20
+                        }
+                      }
                     }
                   }
                 }

@@ -2,12 +2,12 @@
 
 
 proc main() =
-  var x = 1
-  var x = 2
+var x = 1
+var y = 2
   # TRY
-  println("TRY")
+echo("TRY")
   # CATCH
-  println("CATCH")
+echo("CATCH")
   # FINALLY
-  println("FINALLY")
+echo("FINALLY")
 

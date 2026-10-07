@@ -19,8 +19,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 8,
+        "column": 6,
+        "end_line": 8,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Expr": {

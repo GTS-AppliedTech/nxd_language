@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Const": {
@@ -54,15 +61,39 @@
                       "Binary": {
                         "kind": "MOD",
                         "left": {
-                          "Var": "A"
+                          "Var": {
+                            "name": "A",
+                            "span": {
+                              "line": 8,
+                              "column": 8,
+                              "end_line": 8,
+                              "end_column": 9
+                            }
+                          }
                         },
                         "right": {
-                          "Var": "B"
+                          "Var": {
+                            "name": "B",
+                            "span": {
+                              "line": 8,
+                              "column": 14,
+                              "end_line": 8,
+                              "end_column": 15
+                            }
+                          }
                         }
                       }
                     },
                     "right": {
-                      "Var": "C"
+                      "Var": {
+                        "name": "C",
+                        "span": {
+                          "line": 8,
+                          "column": 20,
+                          "end_line": 8,
+                          "end_column": 21
+                        }
+                      }
                     }
                   }
                 },
@@ -70,7 +101,15 @@
                   "Binary": {
                     "kind": "EQ",
                     "left": {
-                      "Var": "C"
+                      "Var": {
+                        "name": "C",
+                        "span": {
+                          "line": 8,
+                          "column": 25,
+                          "end_line": 8,
+                          "end_column": 26
+                        }
+                      }
                     },
                     "right": {
                       "Literal": {

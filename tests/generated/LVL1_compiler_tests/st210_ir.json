@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Const": {
@@ -38,7 +45,15 @@
               "func": "PRINTLN",
               "args": [
                 {
-                  "Var": "RESULT"
+                  "Var": {
+                    "name": "RESULT",
+                    "span": {
+                      "line": 5,
+                      "column": 13,
+                      "end_line": 5,
+                      "end_column": 19
+                    }
+                  }
                 }
               ]
             }

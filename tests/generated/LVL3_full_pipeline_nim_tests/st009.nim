@@ -2,7 +2,7 @@
 
 
 proc main() =
-  var valid = true
+var valid = true
 if valid:
-    println("PASS")
+    echo("PASS")
 

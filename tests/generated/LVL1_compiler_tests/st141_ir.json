@@ -1,12 +1,7 @@
 {
   "module": {
-    "name": "TEST",
-    "imports": [
-      {
-        "path": "STD",
-        "alias": null
-      }
-    ]
+    "name": "ANONYMOUS",
+    "imports": []
   },
   "types": [],
   "traits": [],
@@ -14,17 +9,24 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 1,
+        "column": 12,
+        "end_line": 1,
+        "end_column": 16
+      },
       "params": [],
       "return_type": null,
+      "is_async": true,
       "body": [
         {
           "Expr": {
             "Call": {
-              "func": "PRINTLN",
+              "func": "AWAIT",
               "args": [
                 {
                   "Literal": {
-                    "String": "IMPORT_TEST"
+                    "Int": 42
                   }
                 }
               ]

@@ -9,8 +9,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 5,
+        "column": 6,
+        "end_line": 5,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Let": {
@@ -38,10 +45,26 @@
               "Binary": {
                 "kind": "GTE",
                 "left": {
-                  "Var": "Y"
+                  "Var": {
+                    "name": "Y",
+                    "span": {
+                      "line": 9,
+                      "column": 8,
+                      "end_line": 9,
+                      "end_column": 9
+                    }
+                  }
                 },
                 "right": {
-                  "Var": "X"
+                  "Var": {
+                    "name": "X",
+                    "span": {
+                      "line": 9,
+                      "column": 14,
+                      "end_line": 9,
+                      "end_column": 15
+                    }
+                  }
                 }
               }
             },
@@ -59,37 +82,53 @@
                     ]
                   }
                 }
-              },
-              {
-                "If": {
-                  "condition": {
-                    "Binary": {
-                      "kind": "LTE",
-                      "left": {
-                        "Var": "X"
-                      },
-                      "right": {
-                        "Var": "Y"
-                      }
+              }
+            ],
+            "else_branch": []
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Binary": {
+                "kind": "LTE",
+                "left": {
+                  "Var": {
+                    "name": "X",
+                    "span": {
+                      "line": 12,
+                      "column": 8,
+                      "end_line": 12,
+                      "end_column": 9
                     }
-                  },
-                  "then_branch": [
-                    {
-                      "Expr": {
-                        "Call": {
-                          "func": "PRINTLN",
-                          "args": [
-                            {
-                              "Literal": {
-                                "String": "LTE"
-                              }
-                            }
-                          ]
+                  }
+                },
+                "right": {
+                  "Var": {
+                    "name": "Y",
+                    "span": {
+                      "line": 12,
+                      "column": 14,
+                      "end_line": 12,
+                      "end_column": 15
+                    }
+                  }
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "LTE"
                         }
                       }
-                    }
-                  ],
-                  "else_branch": []
+                    ]
+                  }
                 }
               }
             ],

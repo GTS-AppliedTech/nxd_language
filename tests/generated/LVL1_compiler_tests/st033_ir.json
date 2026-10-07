@@ -24,8 +24,15 @@
   "functions": [
     {
       "name": "MAIN",
+      "span": {
+        "line": 7,
+        "column": 6,
+        "end_line": 7,
+        "end_column": 10
+      },
       "params": [],
       "return_type": null,
+      "is_async": false,
       "body": [
         {
           "Expr": {

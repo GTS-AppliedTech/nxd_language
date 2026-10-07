@@ -7,5 +7,5 @@ type
     age: int
 
 proc main() =
-  println("STRUCT_DECLARED")
+echo("STRUCT_DECLARED")
 
