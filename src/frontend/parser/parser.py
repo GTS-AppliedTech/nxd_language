@@ -810,6 +810,18 @@ class Parser:
             col=recv_tok[3]
         )
 
+    def parse_ping_expr(self):
+        ping_tok = self.eat("KEYWORD", "PING")
+
+        target = self.parse_expr()
+
+        return ASTCall(
+            func="PING",
+            args=[target],
+            line=ping_tok[2],
+            col=ping_tok[3]
+        )
+
     def parse_expr(self):
         return self.parse_logic()
 
@@ -898,6 +910,8 @@ class Parser:
             return self.parse_spawn_expr()
         if tok[0] == "KEYWORD" and tok[1] == "RECV":
             return self.parse_recv_expr()
+        if tok[0] == "KEYWORD" and tok[1] == "PING":
+            return self.parse_ping_expr()
         if tok[0] == "IDENT":
             # Could be a call, typed object initializer, or variable.
             if self._next_is("LPAREN"):

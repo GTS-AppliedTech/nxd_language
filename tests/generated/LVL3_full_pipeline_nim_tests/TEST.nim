@@ -1,9 +1,10 @@
 # anonymous
 
 
-if x > 10:
-    echo("Greater")
-else:
-    echo("Smaller")
-    return y
-echo(y)
+proc worker() =
+return 42
+
+proc main() =
+var task = worker()
+var result = await(task)
+

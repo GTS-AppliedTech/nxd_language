@@ -613,6 +613,29 @@ impl Analyzer {
                         receive_operation_type(&received_type)
                     );
                 }
+                if func.eq_ignore_ascii_case("PING") {
+
+                    if args.len() != 1 {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::InvalidPingTarget,
+                            }
+                        );
+                    }
+
+                    let target_type =
+                        self.analyze_expr(&args[0], is_async)?;
+
+                    unwrap_process_handle_type(&target_type)
+                        .ok_or(
+                            SemanticError::InvalidAsyncUsage {
+                                violation:
+                                    AsyncViolation::InvalidPingTarget,
+                            }
+                        )?;
+
+                    return Ok("bool".to_string());
+                }
                 // Ordinary function-call handling starts here.
                 let (params, ret) = {
                     let symbol = self.symbols

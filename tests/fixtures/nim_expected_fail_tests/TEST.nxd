@@ -1,6 +1,2 @@
-IF X GT 10
-    PRINTLN("Greater")
-ELSE
-    PRINTLN("Smaller")
-    RETURN Y
-PRINTLN(Y)
+ASYNC FUNC MAIN()
+    LET OK SET PING 42

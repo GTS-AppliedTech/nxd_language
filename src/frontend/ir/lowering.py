@@ -4,10 +4,10 @@ from src.frontend.ir.nodes import *
 from src.frontend.ast.nodes import *
 
 def lower_module(ast):
-    return IRModule(
-        name=ast.name,
-        imports=[lower_import(i) for i in ast.imports]
-    )
+        return IRModule(
+            name=ast.name,
+            imports=[lower_import(i) for i in ast.imports]
+        )
 
 def lower_import(ast):
     return IRImport(path=ast.path, alias=ast.alias)
@@ -128,6 +128,7 @@ def lower_statement(ast):
     raise Exception(
             f"Unknown AST statement: {type(ast).__name__}"
 )
+
 def lower_expr(ast):
     if isinstance(ast, ASTLiteral):
         return IRExpr.Literal(lower_literal(ast))

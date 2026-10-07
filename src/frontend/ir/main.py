@@ -24,10 +24,11 @@ def compile_to_ir_json(src: str, out_path: str):
     ir_module = lower_module(ast_module)
     ir_types = lower_types(ast_types)
     ir_functions = [lower_function(f) for f in ast_functions]
-    ir_statements = [
-        lower_statement(statement)
-        for statement in ast_module.body
-]
+    print("MODULE BODY:")
+    for x in ast_module.body:
+        print(type(x).__name__)
+    ir_statements = []
+
 
     ir_root = {
         "module": serialize_module(ir_module),
