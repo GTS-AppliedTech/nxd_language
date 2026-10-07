@@ -3,7 +3,7 @@
   "displayName": "NXD Language",
   "description": "Official VS Code language support for the NXD programming language.",
   "publisher": "nxdlang",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",

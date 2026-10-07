@@ -57,6 +57,8 @@
 - NXD-S3005-05 Invalid 'RECV' source
 - NXD-S3005-06 'ASYNC' Context violation
 - NXD-S3005-07 Invalid 'PING' target
+- NXD-S3005-08 Invalid 'ESC' target
+- NXD-S3005-09 Invalid 'TIMEOUT' target
 
 ##### *WARNING CODES:*
  

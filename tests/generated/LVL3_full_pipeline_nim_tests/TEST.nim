@@ -5,6 +5,6 @@ proc worker() =
 return 42
 
 proc main() =
-var task = worker()
-var result = await(task)
+var handle = spawn(worker())
+timeout(handle, 5000)
 

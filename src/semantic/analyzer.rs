@@ -2,7 +2,8 @@ use crate::semantic::{
     symbols::{SymbolTable, Symbol},
     types::{check_type, task_type, unwrap_task_type,
         unwrap_awaitable_type, process_handle_type,
-        unwrap_process_handle_type, receive_operation_type,},
+        unwrap_process_handle_type, receive_operation_type,
+        unwrap_receive_operation_type,},
     traits::TraitRegistry,
     casts::{check_as_cast, check_is},
     ownership::{check_ownership, OwnershipOp},
@@ -636,6 +637,78 @@ impl Analyzer {
 
                     return Ok("bool".to_string());
                 }
+
+                if func.eq_ignore_ascii_case("ESC") {
+
+                    if args.len() != 1 {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::InvalidEscTarget,
+                            }
+                        );
+                    }
+
+                    let target_type =
+                        self.analyze_expr(&args[0], is_async)?;
+
+                    let valid =
+                        unwrap_process_handle_type(&target_type).is_some()
+                        ||
+                        unwrap_receive_operation_type(&target_type).is_some();
+
+                    if !valid {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::InvalidEscTarget,
+                            }
+                        );
+                    }
+
+                    return Ok("bool".to_string());
+                }
+
+                if func.eq_ignore_ascii_case("TIMEOUT") {
+
+                    if args.len() != 2 {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::InvalidTimeoutTarget,
+                            }
+                        );
+                    }
+
+                    let target_type =
+                        self.analyze_expr(&args[0], is_async)?;
+
+                    let duration_type =
+                        self.analyze_expr(&args[1], is_async)?;
+
+                    let valid_target =
+                        unwrap_process_handle_type(&target_type).is_some()
+                        ||
+                        unwrap_receive_operation_type(&target_type).is_some();
+
+                    if !valid_target {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation:
+                                    AsyncViolation::InvalidTimeoutTarget,
+                            }
+                        );
+                    }
+
+                    if duration_type != "int" {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation:
+                                    AsyncViolation::InvalidTimeoutTarget,
+                            }
+                        );
+                    }
+
+                    return Ok("bool".to_string());
+                }
+
                 // Ordinary function-call handling starts here.
                 let (params, ret) = {
                     let symbol = self.symbols

@@ -42,35 +42,44 @@
       "body": [
         {
           "Let": {
-            "name": "TASK",
+            "name": "HANDLE",
             "value": {
               "Call": {
-                "func": "WORKER",
-                "args": []
+                "func": "SPAWN",
+                "args": [
+                  {
+                    "Call": {
+                      "func": "WORKER",
+                      "args": []
+                    }
+                  }
+                ]
               }
             }
           }
         },
         {
-          "Let": {
-            "name": "RESULT",
-            "value": {
-              "Call": {
-                "func": "AWAIT",
-                "args": [
-                  {
-                    "Var": {
-                      "name": "TASK",
-                      "span": {
-                        "line": 7,
-                        "column": 26,
-                        "end_line": 7,
-                        "end_column": 30
-                      }
+          "Expr": {
+            "Call": {
+              "func": "TIMEOUT",
+              "args": [
+                {
+                  "Var": {
+                    "name": "HANDLE",
+                    "span": {
+                      "line": 7,
+                      "column": 13,
+                      "end_line": 7,
+                      "end_column": 19
                     }
                   }
-                ]
-              }
+                },
+                {
+                  "Literal": {
+                    "Int": 5000
+                  }
+                }
+              ]
             }
           }
         }

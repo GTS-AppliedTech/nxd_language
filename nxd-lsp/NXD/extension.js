@@ -80,6 +80,8 @@ function activate(context) {
                         "RECV",
                         "AWAIT",
                         "PING",
+                        "ESC",
+                        "TIMEOUT",
                         "TRY",
                         "CATCH",
                         "FINALLY",

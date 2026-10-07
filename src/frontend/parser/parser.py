@@ -822,6 +822,31 @@ class Parser:
             col=ping_tok[3]
         )
 
+    def parse_esc_expr(self):
+        esc_tok = self.eat("KEYWORD", "ESC")
+
+        target = self.parse_expr()
+
+        return ASTCall(
+            func="ESC",
+            args=[target],
+            line=esc_tok[2],
+            col=esc_tok[3]
+        )
+
+    def parse_timeout_expr(self):
+        timeout_tok = self.eat("KEYWORD", "TIMEOUT")
+
+        target = self.parse_expr()
+        duration = self.parse_expr()
+
+        return ASTCall(
+            func="TIMEOUT",
+            args=[target, duration],
+            line=timeout_tok[2],
+            col=timeout_tok[3]
+        )
+    
     def parse_expr(self):
         return self.parse_logic()
 
@@ -912,6 +937,10 @@ class Parser:
             return self.parse_recv_expr()
         if tok[0] == "KEYWORD" and tok[1] == "PING":
             return self.parse_ping_expr()
+        if tok[0] == "KEYWORD" and tok[1] == "ESC":
+            return self.parse_esc_expr()
+        if tok[0] == "KEYWORD" and tok[1] == "TIMEOUT":
+            return self.parse_timeout_expr()
         if tok[0] == "IDENT":
             # Could be a call, typed object initializer, or variable.
             if self._next_is("LPAREN"):

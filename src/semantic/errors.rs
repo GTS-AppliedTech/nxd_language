@@ -37,6 +37,8 @@ pub enum AsyncViolation {
     InvalidRecvSource,      // S3005-05
     AsyncContextViolation,  // S3005-06
     InvalidPingTarget,      // S3005-07
+    InvalidEscTarget,       // S3005-08
+    InvalidTimeoutTarget,   // S3005-09
 }
 
 impl AsyncViolation {
@@ -63,6 +65,12 @@ impl AsyncViolation {
 
             AsyncViolation::InvalidPingTarget =>
                 "NXD-S3005-07",
+
+            AsyncViolation::InvalidEscTarget =>
+                "NXD-S3005-08",
+
+            AsyncViolation::InvalidTimeoutTarget =>
+                "NXD-S3005-09",
         }
     }
 
@@ -88,6 +96,12 @@ impl AsyncViolation {
 
             AsyncViolation::InvalidPingTarget =>
                 "PING target is not a ProcessHandle",
+
+            AsyncViolation::InvalidEscTarget =>
+                "Invalid ESC target",
+
+            AsyncViolation::InvalidTimeoutTarget =>
+                "Invalid TIMEOUT target",
         }
     }
 }
@@ -102,10 +116,10 @@ impl SemanticError {
                 "NXD-S3002"
             }
 
-//==================================================
-//========== S3003 exists but generic constraints ==
-//========== are not implemented yet. ==============
-//==================================================
+        // ==================================================
+        // ========== S3003 exists but generic constraints ==
+        // ========== are not implemented yet. ==============
+        // ==================================================
 
             SemanticError::TraitNotImplemented { .. } => {
                 "NXD-S3003"
