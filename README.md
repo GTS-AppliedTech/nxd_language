@@ -125,6 +125,8 @@ Parser diagnostics are emitted when a valid token stream cannot be transformed i
 | NXD-P1008 | Expected token in primary |
 | NXD-P1009 | Literal expected, got `"..."` |
 | NXD-P1010 | Expected map key, got `"..."` |
+| NXD-P1011 | Expected `TO` after `MOVE` source|
+| NXD-P1012 | Expected type after `AS/IS`, got `"..."`
 
 ---
 
@@ -195,6 +197,61 @@ Invalid cast
 ```
 
 Generated when a cast is semantically invalid.
+
+## NXD-S3005 (ASYNC)
+### NXD-S3005-01
+
+```text
+'AWAIT'  Outside 'ASYNC' function
+```
+
+### NXD-S3005-02
+
+```text
+'AWAIT' non awaitable function
+```
+
+### NXD-S3005-03
+
+```text
+Invalid 'SPAWN' target
+```
+
+### NXD-S3005-04
+
+```text
+Invalid 'SEND' target
+```
+
+### NXD-S3005-05
+
+```text
+Invalid 'RECV' source
+```
+
+### NXD-S3005-06
+
+```text
+'ASYNC' Context violation
+```
+
+### NXD-S3005-07
+
+```text
+Invalid 'PING' target
+```
+
+### NXD-S3005-08
+
+```text
+Invalid 'ESC' target
+```
+
+### NXD-S3005-09
+
+```text
+Invalid 'TIMEOUT' target
+```
 
 ---
 

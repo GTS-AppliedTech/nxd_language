@@ -35,6 +35,8 @@
 - NXD-P1008 Expected token in primary
 - NXD-P1009 Literal expected, got {}
 - NXD-P1010 Expected map key, got {}
+- NXD-P1011 Expected 'TO' after 'MOVE' source, got {}
+- NXD-P1012 Expected type after 'AS/IS', got {}
 
 ##### *WARNING CODES:*
 

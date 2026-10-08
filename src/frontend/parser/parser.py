@@ -635,8 +635,16 @@ class Parser:
 
         source = self.parse_primary()
 
+        tok = self.peek()
+
         if not (self.at("IDENT") and self.peek()[1] == "TO"):
-            raise SyntaxError("Expected TO")
+            raise ParserError(
+                "NXD-P1011",
+                f'NXD-P1011: Expected TO after Move source, got "{tok[1]}"',
+                tok[2],
+                tok[3],
+                tok[3] + max(1, len(str(tok[1])))
+                )
 
         self.eat("IDENT")   # TO
 
@@ -876,8 +884,14 @@ class Parser:
                         col=type_tok[3]
                     )
                 else:
-                    raise SyntaxError(
-                        f"Expected type after {op}, got {self.peek()[0]} {self.peek()[1]}"
+                    tok = self.peek()
+
+                    raise ParserError(
+                        "NXD-P1012"
+                        f"NXD-P1012: Expected type after {op}, got {tok[0]} {tok[1]}",
+                        tok[2],
+                        tok[3],
+                        tok[3] + max(1, len(str(tok[1])))
                     )
             else:
                 right = self.parse_add()
