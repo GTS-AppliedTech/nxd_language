@@ -40,26 +40,26 @@ Compiler Maturation, Semantic Validation, Runtime Research, and Conformance Test
 
 ### Validation Suite
 
-- 40 Base Positive Validation Tests
-- 38 Base Negative Validation Tests
+- 47 Base Positive Validation Tests
+- 49 Base Negative Validation Tests
 - 10 Nim Specialty Backend Tests
 
 ### Current Results
 
 #### Positive Tests
 
-- 38 Passing
-- 2 Failing
+- 42 Passing
+- 5 Failing
 
 #### Negative Tests
 
-- 25 Passing
-- 13 Failing
+- 31 Passing
+- XX Failing (18 potential. needs verification)
 
 #### Nim Specialty Tests
 
-- 8 Passing
-- 2 Failing
+- 6 Passing
+- 4 Failing
 
 Validation numbers are expected to change as parser coverage expands and current failure groups are resolved.
 
