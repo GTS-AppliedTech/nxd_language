@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash/env bash
 set -e
 
 echo "================================="

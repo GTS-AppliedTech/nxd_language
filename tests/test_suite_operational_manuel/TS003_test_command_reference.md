@@ -5,8 +5,8 @@
   "description": "Test pipeline commands",
   "layer": "Test Suite",
   "category": "",
-  "keywords": [],
-  "doc_version": "1.0",
+  "keywords": ["scripts", "commands", "tests", "reference", "Bash", "PowerShell"],
+  "doc_version": "2.0",
   "status": "active"
 }
 
@@ -21,7 +21,7 @@ This document focuses exclusively on test execution.
 For testing methodology see TS002.
 
 **Linux Note:**
-***When running test commands, some Linux Distributions may not provide a python alias by default. If you recieve: 'python: command not found' substitute:***
+***When running test commands, some Linux Distributions may not provide a python alias by default. If you receive: 'python: command not found' substitute:***
 
 ```shell
 python3 <test_script_name>.py
@@ -36,28 +36,30 @@ python <test_script_name>.py
 ##### Frontend Validation
 **Bash**
 ```Shell
-python run_LVL1_compiler_test.py
+./scripts/compiler1.sh
 ```
 
 **PowerShell**
 ```Shell
-python run_LVL1_compiler_test.py
+.\scripts\compiler1.ps1
 ```
 
 Produces:
 
 serialized_ast.json
 
+---
+
 #### Level 2 Commands
 ##### Python → Rust Handoff Validation
 **Bash**
 ```Shell
-python run_LVL2_handoff_test.py
+./scripts/compiler2.sh
 ```
 
 **PowerShell**
 ```Shell
-python run_LVL2_handoff_test.py
+.\scripts\compiler2.ps1
 ```
 
 Produces:
@@ -66,18 +68,40 @@ serialized_ast.json
 
 backend_output.*
 
+---
+
 #### Level 3 Commands
-##### **Nim**
-*Positive*
-```Shell
-python run_LVL3_full_positive_nim_test.py
+##### **Nim**-*Positive Tests:*
+
+*Bash*
+```bash
+./scripts/nim3+.sh
+```
+*PowerShell*
+```pwsh
+.\scripts\nim3+.ps1
+```
+##### **Nim**-*Negative Tests:*
+
+*Bash*
+```bash
+./scripts/nim3-.sh
+```
+*PowerShell*
+```pwsh
+.\scripts\nim3-.ps1
+```
+##### **Nim**-*Specialty Tests:*
+
+*Bash*
+```shell
+./scripts/nim3s.sh
 ```
 
-*Negative*
-```Shell
-python run_LVL3_full_negative_nim_test.py
+*PowerShell*
+```shell
+.\scripts\nim3s.ps1
 ```
- 
 
 ##### **D**
 *Positive*
@@ -102,17 +126,42 @@ python run_LVL3_full_positive_ex_test.py
 ```Shell
 python run_LVL3_full_negative_ex_test.py
 ```
+---
 
 #### Level 4 Commands
-##### **Nim**
-*Positive Batch*
+##### **Nim**-*Positive Batch Tests:*
+
+*Bash*
 ```Shell
-python run_LVL4_pos_nim_batch_tests.py
+./scripts/nim4+.sh
+```
+*PowerShell*
+```shell
+.\scripts\nim4+.ps1
 ```
 
-*Negative Batch*
+##### **Nim**-*Negative Batch Tests:*
+
+*Bash*
 ```Shell
-python run_LVL4_neg_nim_batch_tests.py
+./scripts/nim4-.sh
+```
+
+*PowerShell*
+```shell
+.\scripts\nim4-.ps1
+```
+
+##### **Nim**-*Specialty Batch Tests:*
+
+*Bash*
+```shell
+./scripts/nim4s.sh
+```
+
+*PowerShell*
+```shell
+.\scripts\nim4s.ps1
 ```
 
 ##### **D**
@@ -160,9 +209,9 @@ Level 3 Negative
 Debug Failures
 
 
-### Test Inventory
+## Underlying test runners
 
-Current test scripts:
+The wrapper scripts execute the following Python runners in both 'Python' and 'Python3':
 
 
 **Level 1**
@@ -189,6 +238,8 @@ python run_LVL3_full_positive_nim_test.py
 
 python run_LVL3_full_negative_nim_test.py
 
+python run_LVL3_nim_specialty.py
+
 python run_LVL3_full_positive_d_test.py
 
 python run_LVL3_full_negative_d_test.py
@@ -206,6 +257,8 @@ python run_LVL3_full_negative_ex_test.py
 python run_LVL4_pos_nim_batch_tests.py
 
 python run_LVL4_neg_nim_batch_tests.py
+
+python run_LVL4_nim_btch_spcl.py
 
 python run_LVL4_pos_d_batch_tests.py
 
