@@ -1,4 +1,4 @@
-#!/usr/bin/bash/env bash
+#!/usr/bin/env bash
 
 echo "==== Running a .nxd -> .nim specialty test ===="
 if command -v python >/dev/null 2>&1; then

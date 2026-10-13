@@ -465,6 +465,15 @@ impl Analyzer {
                     );
                 }
                 if func.eq_ignore_ascii_case("SPAWN") {
+                    
+                    if !is_async {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AsyncContextViolation,
+                            }
+                        );
+                    }
+
                     if args.len() != 1 {
                         return Err(
                             SemanticError::InvalidAsyncUsage {
@@ -526,12 +535,21 @@ impl Analyzer {
 
                 if func.eq_ignore_ascii_case("SEND") {
 
+                    if !is_async {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AsyncContextViolation,
+                            }
+                        );
+                    }
+
+
                     if args.len() != 2 {
                         return Err(
                             SemanticError::InvalidAsyncUsage{
                                 violation: AsyncViolation::InvalidSendTarget
                             }
-                        )?;
+                        );
                     }
 
                     let value_type =
@@ -557,6 +575,15 @@ impl Analyzer {
                 }
 
                 if func.eq_ignore_ascii_case("RECV") {
+
+                    if !is_async {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AsyncContextViolation,
+                            }
+                        );
+                    }
+
                     // RECV currently accepts exactly one source.
                     if args.len() != 1 {
                         return Err(
@@ -616,6 +643,14 @@ impl Analyzer {
                 }
                 if func.eq_ignore_ascii_case("PING") {
 
+                    if !is_async {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AsyncContextViolation,
+                            }
+                        );
+                    }
+
                     if args.len() != 1 {
                         return Err(
                             SemanticError::InvalidAsyncUsage {
@@ -639,6 +674,14 @@ impl Analyzer {
                 }
 
                 if func.eq_ignore_ascii_case("ESC") {
+
+                    if !is_async {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AsyncContextViolation,
+                            }
+                        );
+                    }
 
                     if args.len() != 1 {
                         return Err(
@@ -668,6 +711,14 @@ impl Analyzer {
                 }
 
                 if func.eq_ignore_ascii_case("TIMEOUT") {
+
+                    if !is_async {
+                        return Err(
+                            SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::AsyncContextViolation,
+                            }
+                        );
+                    }
 
                     if args.len() != 2 {
                         return Err(

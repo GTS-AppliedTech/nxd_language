@@ -746,8 +746,7 @@ class Parser:
 
     def parse_spawn(self):
         self.eat("KEYWORD", "SPAWN")
-        call = self.parse_call_expr()
-        return ASTExpr(call)  # or dedicated ASTSpawn
+        return self.parse_call_expr()  # or dedicated ASTSpawn
 
     def parse_send(self):
         send_tok=self.eat("KEYWORD", "SEND")
@@ -764,11 +763,17 @@ class Parser:
 
     def parse_recv(self):
         recv_tok=self.eat("KEYWORD", "RECV")
-        ch = self.eat("IDENT")[1]
+        ident_tok = self.eat("IDENT")
         # LET V SET RECV CH handled at statement level
         return ASTCall(
             func="RECV",
-            args=[ASTVar(name=ch)],
+            args=[
+                ASTVar(
+                    name=ident_tok[1],
+                    line=ident_tok[2],
+                    col=ident_tok[3]
+                )
+           ],
             line=recv_tok[2],
             col=recv_tok[3]
                 )

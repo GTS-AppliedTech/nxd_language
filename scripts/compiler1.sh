@@ -1,4 +1,4 @@
-#!/usr/bin/bash/env bash
+#!/usr/bin/env bash
 
 echo "==== Running .nxd compiler frontend .json creation test ===="
 

@@ -92,7 +92,7 @@ impl AsyncViolation {
                 "RECV source is not a channel",
 
             AsyncViolation::AsyncContextViolation =>
-                "Async operation is not permitted in the current execution context",
+                "An async operation may only be used inside an ASYNC FUNC",
 
             AsyncViolation::InvalidPingTarget =>
                 "PING target is not a ProcessHandle",

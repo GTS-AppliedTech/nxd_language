@@ -1,4 +1,4 @@
-#!/usr/bin/bash/env bash
+#!/usr/bin/env bash
 
 echo "==== Running .nxd -> .nim positive batch tests ===="
 

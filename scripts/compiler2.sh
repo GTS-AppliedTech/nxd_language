@@ -1,4 +1,4 @@
-#!/usr/bin/bash/env bash
+#!/usr/bin/env bash
 
 echo "==== Running .nxd compiler IR handoff validation ===="
 echo "==== frontend serialization / backend deserialization ===="
