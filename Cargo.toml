@@ -1,11 +1,11 @@
 [package]
 name = "nxd-compiler"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 authors = ["Gabriel Ty Spencer"]
 license = "MIT"
 description = "NXD language compiler core (IR, semantic, backend emitters)"
-repository = "https://github.com/YOUR_REPO/nxd"
+repository = "https://github.com/GTS-AppliedTech/nxd_language"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
