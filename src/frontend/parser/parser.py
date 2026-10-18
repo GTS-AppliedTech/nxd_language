@@ -892,7 +892,7 @@ class Parser:
                     tok = self.peek()
 
                     raise ParserError(
-                        "NXD-P1012"
+                        "NXD-P1012",
                         f"NXD-P1012: Expected type after {op}, got {tok[0]} {tok[1]}",
                         tok[2],
                         tok[3],
@@ -980,7 +980,8 @@ class Parser:
             tok[2],
             tok[3],
             tok[3] + max(1, len(tok[1]))
-)
+        )
+    
     def parse_literal(self):
         tok = self.peek()
         if tok[0] == "NUMBER":
