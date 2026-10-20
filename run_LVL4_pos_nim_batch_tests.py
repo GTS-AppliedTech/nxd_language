@@ -12,7 +12,7 @@ TESTS = [
     "st007",
     "st008",
     "st009",
-    "st010"
+    "st050"
 ]
 
 for test_id in TESTS:
