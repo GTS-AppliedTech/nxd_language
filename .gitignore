@@ -1,17 +1,18 @@
 # =========================
-# Environment Variables
+# Environment
 # =========================
 .env
 .env.*
 !.env.example
 
 # =========================
-# Secrets / Credentials
+# Secrets
 # =========================
 *.pem
 *.key
 *.p12
 *.pfx
+
 secrets/
 credentials/
 
@@ -20,49 +21,19 @@ credentials/
 # =========================
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
 .venv/
 venv/
-env/
 
 # =========================
 # Rust
 # =========================
 target/
-Cargo.lock
-
-# Uncomment if this is an application rather than a library
-# !Cargo.lock
 
 # =========================
 # Nim
 # =========================
 nimcache/
 nimblecache/
-*.exe
-*.dll
-*.so
-*.dylib
-
-# =========================
-# Editors / IDEs
-# =========================
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# =========================
-# Operating Systems
-# =========================
-.DS_Store
-Thumbs.db
-
-# =========================
-# Logs
-# =========================
-*.log
 
 # =========================
 # Build Artifacts
@@ -70,17 +41,32 @@ Thumbs.db
 build/
 dist/
 out/
-bin/
 
 # =========================
-# Coverage / Testing
+# Generated Compiler Outputs
 # =========================
-.coverage
-htmlcov/
-.pytest_cache/
+*.ast
+*.ir
+*.ir.json
+
+/output/
+/generated/
 
 # =========================
-# Temporary Files
+# Editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Temporary
 # =========================
 tmp/
 temp/
@@ -95,7 +81,13 @@ temp/
 *.7z
 
 # =========================
-# Local Project Notes
+# Operating Systems
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Internal Notes
 # =========================
 .private/
 internal/
