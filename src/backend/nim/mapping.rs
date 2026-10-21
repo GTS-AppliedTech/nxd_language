@@ -1,16 +1,8 @@
+use crate::backend::nim::{
+    control_flow, functions, impls, literals, module, operators, statements, traits, types,
+};
 use crate::ir::nodes::*;
 use crate::ir::parse_ir::IRRoot;
-use crate::backend::nim::{
-    module,
-    types,
-    traits,
-    impls,
-    functions,
-    statements,
-    control_flow,
-    operators,
-    literals,
-};
 
 pub fn emit_ir(ir: &IRRoot) -> String {
     let mut out = String::new();

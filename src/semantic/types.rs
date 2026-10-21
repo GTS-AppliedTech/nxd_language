@@ -1,5 +1,3 @@
-
-
 use crate::semantic::errors::SemanticError;
 
 pub fn check_type(expected: &str, actual: &str) -> Result<(), SemanticError> {
@@ -46,9 +44,7 @@ pub fn receive_operation_type(inner: &str) -> String {
     format!("ReceiveOperation[{}]", inner)
 }
 
-pub fn unwrap_receive_operation_type(
-    ty: &str,
-) -> Option<String> {
+pub fn unwrap_receive_operation_type(ty: &str) -> Option<String> {
     ty.strip_prefix("ReceiveOperation[")
         .and_then(|inner| inner.strip_suffix(']'))
         .map(|inner| inner.to_string())

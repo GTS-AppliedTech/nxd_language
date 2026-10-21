@@ -1,8 +1,7 @@
-mod orchestrator;
-mod ir;
 mod backend;
+mod ir;
+mod orchestrator;
 mod semantic;
-
 
 use std::env;
 use std::fs;
@@ -10,53 +9,38 @@ use std::fs;
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() == 3
-    && args[1] == "--semantic-diagnostics"
-{
-    let response =
-        orchestrator::semantic_diagnostics_from_ir_json(
-            &args[2]
-        );
+    if args.len() == 3 && args[1] == "--semantic-diagnostics" {
+        let response = orchestrator::semantic_diagnostics_from_ir_json(&args[2]);
 
-    match response {
-        Ok(result) => {
-            println!(
-                "{}",
-                serde_json::to_string(&result)
-                    .unwrap()
-            );
+        match response {
+            Ok(result) => {
+                println!("{}", serde_json::to_string(&result).unwrap());
+            }
+
+            Err(error) => {
+                eprintln!("{}", error);
+                std::process::exit(1);
+            }
         }
 
-        Err(error) => {
-            eprintln!("{}", error);
-            std::process::exit(1);
-        }
+        return;
     }
+    if args.len() == 4 && args[1] == "--definition" {
+        let definition = orchestrator::definition_from_ir_json(&args[2], &args[3]);
 
-    return;
-}
-    if args.len() == 4
-    && args[1] == "--definition"
-{
-    let definition =
-        orchestrator::definition_from_ir_json(
-            &args[2],
-            &args[3]
-        );
+        match definition {
+            Ok(result) => {
+                println!("{}", result);
+            }
 
-    match definition {
-        Ok(result) => {
-            println!("{}", result);
+            Err(error) => {
+                eprintln!("{}", error);
+                std::process::exit(1);
+            }
         }
 
-        Err(error) => {
-            eprintln!("{}", error);
-            std::process::exit(1);
-        }
+        return;
     }
-
-    return;
-}
     if args.len() != 3 && args.len() != 4 {
         eprintln!("Usage:");
         eprintln!("  cargo run <input_json> <output_nim>");
@@ -85,8 +69,7 @@ fn main() {
 
     match result {
         Ok(nim_code) => {
-            fs::write(output_nim, nim_code)
-                .expect("Failed to write output file");
+            fs::write(output_nim, nim_code).expect("Failed to write output file");
 
             if use_semantics {
                 println!("Semantic validation successful");

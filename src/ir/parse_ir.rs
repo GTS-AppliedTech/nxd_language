@@ -1,5 +1,5 @@
-use serde::Deserialize;
 use crate::ir::nodes::*;
+use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct IRRoot {
@@ -22,6 +22,5 @@ pub struct IRRoot {
 }
 
 pub fn parse_ir(json: &str) -> IRRoot {
-    serde_json::from_str(json)
-        .expect("Failed to parse IR JSON")
+    serde_json::from_str(json).expect("Failed to parse IR JSON")
 }

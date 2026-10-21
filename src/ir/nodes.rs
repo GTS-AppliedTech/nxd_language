@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
-use std::fmt;
 use std::collections::HashMap;
+use std::fmt;
 // ===============================
 // IR MODULE
 // ===============================
@@ -94,7 +94,6 @@ pub struct IRFunctionSignature {
     pub return_type: Option<String>,
 }
 
-
 // ===============================
 // IR IMPLEMENTATIONS (IMPL)
 // ===============================
@@ -105,7 +104,6 @@ pub struct IRImpl {
     pub target_type: String,
     pub methods: Vec<IRFunction>,
 }
-
 
 // ===============================
 // IR FUNCTIONS
@@ -126,7 +124,6 @@ pub struct IRParam {
     pub name: String,
     pub ty: String,
 }
-
 
 // ===============================
 // IR STATEMENTS
@@ -204,7 +201,7 @@ pub enum IRExpr {
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct IRBinaryOp {
-    pub kind: String,     // ADD, SUB, MUL, DIV, EQ, GT, etc.
+    pub kind: String, // ADD, SUB, MUL, DIV, EQ, GT, etc.
     pub left: Box<IRExpr>,
     pub right: Box<IRExpr>,
 }
@@ -217,7 +214,7 @@ pub struct IRObjectInit {
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct IRUnaryOp {
-    pub kind: String,     // NOT
+    pub kind: String, // NOT
     pub expr: Box<IRExpr>,
 }
 // ===============================
@@ -242,10 +239,7 @@ impl fmt::Display for IRLiteral {
             IRLiteral::Bool(v) => write!(f, "{}", v),
             IRLiteral::None => write!(f, "nil"),
             IRLiteral::List(items) => {
-                let rendered: Vec<String> = items
-                    .iter()
-                    .map(|item| item.to_string())
-                    .collect();
+                let rendered: Vec<String> = items.iter().map(|item| item.to_string()).collect();
 
                 write!(f, "[{}]", rendered.join(", "))
             }
@@ -263,7 +257,7 @@ impl fmt::Display for IRExpr {
             IRExpr::Var(var) => {
                 write!(f, "{}", var.name.to_lowercase())
             }
-            
+
             IRExpr::Binary(op) => {
                 let op_str = match op.kind.as_str() {
                     "ADD" => "+",
@@ -285,7 +279,7 @@ impl fmt::Display for IRExpr {
                 write!(f, "{} {} {}", op.left, op_str, op.right)
             }
 
-            IRExpr::Unary (op) => {
+            IRExpr::Unary(op) => {
                 let op_str = match op.kind.as_str() {
                     "NOT" => "not",
                     other => other,
@@ -295,17 +289,9 @@ impl fmt::Display for IRExpr {
             }
 
             IRExpr::Call { func, args } => {
-                let rendered_args: Vec<String> = args
-                    .iter()
-                    .map(|arg| arg.to_string())
-                    .collect();
+                let rendered_args: Vec<String> = args.iter().map(|arg| arg.to_string()).collect();
 
-                write!(
-                    f,
-                    "{}({})",
-                    func.to_lowercase(),
-                    rendered_args.join(", ")
-                )
+                write!(f, "{}({})", func.to_lowercase(), rendered_args.join(", "))
             }
 
             IRExpr::Pipeline { value, func } => {

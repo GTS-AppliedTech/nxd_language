@@ -1,4 +1,4 @@
-use crate::ir::nodes::{IRLiteral};
+use crate::ir::nodes::IRLiteral;
 
 pub fn emit_literal(lit: &IRLiteral) -> String {
     match lit {
@@ -6,7 +6,11 @@ pub fn emit_literal(lit: &IRLiteral) -> String {
         IRLiteral::Float(v) => v.to_string(),
         IRLiteral::String(s) => format!("\"{}\"", s),
         IRLiteral::Bool(b) => {
-            if *b { "true".to_string() } else { "false".to_string() }
+            if *b {
+                "true".to_string()
+            } else {
+                "false".to_string()
+            }
         }
         IRLiteral::None => "nil".to_string(),
         IRLiteral::List(items) => emit_list(items),

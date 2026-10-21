@@ -1,7 +1,7 @@
-use crate::ir::nodes::IRStatement;
-use crate::backend::nim::operators::{emit_binary_op, emit_unary_op};
-use crate::backend::nim::literals::emit_literal;
 use crate::backend::nim::control_flow::{emit_if, emit_match};
+use crate::backend::nim::literals::emit_literal;
+use crate::backend::nim::operators::{emit_binary_op, emit_unary_op};
+use crate::ir::nodes::IRStatement;
 
 pub fn emit_statements(stmts: &Vec<IRStatement>) -> String {
     let mut out = String::new();
@@ -77,7 +77,6 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
     }
 }
 
-
 pub fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
     use crate::ir::nodes::IRExpr::*;
 
@@ -105,10 +104,7 @@ pub fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
         Var(var) => var.name.to_lowercase(),
 
         Pipeline { value, func } => {
-            crate::backend::nim::operators::emit_pipeline(
-                &emit_expr(value),
-                func,
-            )
+            crate::backend::nim::operators::emit_pipeline(&emit_expr(value), func)
         }
 
         ObjectInit(init) => {
@@ -117,9 +113,7 @@ pub fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
 
             let fields = fields
                 .into_iter()
-                .map(|(name, value)| {
-                    format!("{}: {}", name, emit_expr(value))
-                })
+                .map(|(name, value)| format!("{}: {}", name, emit_expr(value)))
                 .collect::<Vec<_>>()
                 .join(", ");
 

@@ -1,9 +1,9 @@
 pub mod analyzer;
-pub mod symbols;
-pub mod types;
-pub mod traits;
 pub mod casts;
+pub mod diagnostics;
+pub mod errors;
 pub mod ownership;
 pub mod patterns;
-pub mod errors;
-pub mod diagnostics;
+pub mod symbols;
+pub mod traits;
+pub mod types;

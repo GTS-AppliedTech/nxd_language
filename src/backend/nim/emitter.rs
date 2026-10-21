@@ -1,5 +1,5 @@
+use super::{functions, impls, module, statements, traits, types};
 use crate::ir::parse_ir::IRRoot;
-use super::{module, types, traits, impls,statements, functions};
 
 pub fn emit(ir: &IRRoot) -> String {
     let mut out = String::new();

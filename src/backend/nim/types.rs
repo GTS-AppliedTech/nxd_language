@@ -1,4 +1,4 @@
-use crate::ir::nodes::{IRTypeDecl, IRStruct, IREnum, IRUnion, IRTrait};
+use crate::ir::nodes::{IREnum, IRStruct, IRTrait, IRTypeDecl, IRUnion};
 
 pub fn emit_types(types: &Vec<IRTypeDecl>) -> String {
     let mut out = String::new();
@@ -27,7 +27,11 @@ fn emit_struct(s: &IRStruct) -> String {
 
     out.push_str(&format!("  {} = object\n", s.name));
     for field in &s.fields {
-        out.push_str(&format!("    {}: {}\n", field.name.to_lowercase(), field.ty));
+        out.push_str(&format!(
+            "    {}: {}\n",
+            field.name.to_lowercase(),
+            field.ty
+        ));
     }
 
     out
@@ -53,7 +57,11 @@ fn emit_union(u: &IRUnion) -> String {
     for variant in &u.variants {
         out.push_str(&format!("    of {}:\n", variant.kind));
         for field in &variant.fields {
-            out.push_str(&format!("      {}: {}\n", field.name.to_lowercase(), field.ty));
+            out.push_str(&format!(
+                "      {}: {}\n",
+                field.name.to_lowercase(),
+                field.ty
+            ));
         }
     }
 
@@ -66,10 +74,13 @@ fn emit_trait(tr: &IRTrait) -> String {
     out.push_str(&format!("  {} = concept x\n", tr.name));
 
     for func in &tr.methods {
-        out.push_str(&format!("    {}(x) is {}\n", func.name.to_lowercase(),
-        func.return_type
-            .clone()
-            .unwrap_or_else(|| "void".to_string()))) 
+        out.push_str(&format!(
+            "    {}(x) is {}\n",
+            func.name.to_lowercase(),
+            func.return_type
+                .clone()
+                .unwrap_or_else(|| "void".to_string())
+        ))
     }
 
     out

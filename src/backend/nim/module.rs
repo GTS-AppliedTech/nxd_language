@@ -1,4 +1,4 @@
-use crate::ir::nodes::{IRModule, IRImport};
+use crate::ir::nodes::{IRImport, IRModule};
 
 pub fn emit_module(module: &IRModule) -> String {
     let mut out = String::new();
@@ -17,7 +17,11 @@ pub fn emit_module(module: &IRModule) -> String {
 
 fn emit_import(imp: &IRImport) -> String {
     match &imp.alias {
-        Some(alias) => format!("import {} as {}\n", imp.path.to_lowercase(), alias.to_lowercase()),
+        Some(alias) => format!(
+            "import {} as {}\n",
+            imp.path.to_lowercase(),
+            alias.to_lowercase()
+        ),
         None => format!("import {}\n", imp.path.to_lowercase()),
     }
 }

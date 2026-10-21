@@ -1,5 +1,5 @@
-use crate::ir::nodes::{IRImpl, IRFunction};
 use crate::backend::nim::functions::emit_function;
+use crate::ir::nodes::{IRFunction, IRImpl};
 
 pub fn emit_impls(impls: &Vec<IRImpl>) -> String {
     let mut out = String::new();

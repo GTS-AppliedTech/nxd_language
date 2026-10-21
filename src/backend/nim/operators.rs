@@ -22,14 +22,14 @@ fn map_binary_op(kind: &str) -> &str {
         "MUL" => "*",
         "DIV" => "/",
         "MOD" => "mod",
-        "EQ"  => "==",
+        "EQ" => "==",
         "NEQ" => "!=",
-        "GT"  => ">",
-        "LT"  => "<",
+        "GT" => ">",
+        "LT" => "<",
         "GTE" => ">=",
         "LTE" => "<=",
         "AND" => "and",
-        "OR"  => "or",
+        "OR" => "or",
         _ => kind, // fallback
     }
 }

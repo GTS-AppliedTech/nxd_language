@@ -1,5 +1,5 @@
+use crate::ir::nodes::{IRImpl, IRTrait};
 use crate::semantic::errors::SemanticError;
-use crate::ir::nodes::{IRTrait, IRImpl};
 
 pub struct TraitRegistry {
     pub traits: Vec<IRTrait>,
@@ -15,16 +15,12 @@ impl TraitRegistry {
     }
 
     pub fn implements(&self, trait_name: &str, ty: &str) -> bool {
-        self.impls.iter().any(|im| {
-            im.trait_name == trait_name && im.target_type == ty
-        })
+        self.impls
+            .iter()
+            .any(|im| im.trait_name == trait_name && im.target_type == ty)
     }
 
-    pub fn check_trait_call(
-        &self,
-        trait_name: &str,
-        ty: &str,
-    ) -> Result<(), SemanticError> {
+    pub fn check_trait_call(&self, trait_name: &str, ty: &str) -> Result<(), SemanticError> {
         if self.implements(trait_name, ty) {
             Ok(())
         } else {

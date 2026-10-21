@@ -1,5 +1,5 @@
-use crate::ir::nodes::{IRFunction, IRStatement};
 use crate::backend::nim::statements::emit_expr;
+use crate::ir::nodes::{IRFunction, IRStatement};
 
 pub fn emit_functions(funcs: &Vec<IRFunction>) -> String {
     let mut out = String::new();
@@ -54,11 +54,7 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
         }
 
         IRStatement::Move(movenode) => {
-            format!(
-                "  var {} = move({})\n",
-                movenode.target,
-                movenode.source
-            )
+            format!("  var {} = move({})\n", movenode.target, movenode.source)
         }
 
         IRStatement::Clone(clone_node) => {
@@ -84,13 +80,9 @@ pub fn emit_statement(stmt: &IRStatement) -> String {
             out
         }
         // Keep your remaining existing arms here
-        IRStatement::If(if_node) => {
-    crate::backend::nim::control_flow::emit_if(if_node)
-}
+        IRStatement::If(if_node) => crate::backend::nim::control_flow::emit_if(if_node),
 
-        IRStatement::Match(m) => {
-    crate::backend::nim::control_flow::emit_match(m)
-}
+        IRStatement::Match(m) => crate::backend::nim::control_flow::emit_match(m),
         IRStatement::Try(t) => {
             let mut out = String::new();
             out.push_str("  # TRY\n");
