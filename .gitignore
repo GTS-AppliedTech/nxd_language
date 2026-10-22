@@ -28,6 +28,7 @@ venv/
 # Rust
 # =========================
 target/
+Cargo.lock
 
 # =========================
 # Nim
@@ -48,6 +49,7 @@ out/
 *.ast
 *.ir
 *.ir.json
+*.nim
 
 /output/
 /generated/
