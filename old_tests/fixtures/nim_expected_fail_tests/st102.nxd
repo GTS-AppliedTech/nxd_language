@@ -1,5 +1,0 @@
-MODULE TEST
-
-FUNC MAIN():
-    Return 1
-    

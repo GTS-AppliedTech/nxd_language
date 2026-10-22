@@ -1,4 +1,0 @@
-ASYNC FUNC MAIN()
-    LET X SET 42
-
-    LET OK SET PING X

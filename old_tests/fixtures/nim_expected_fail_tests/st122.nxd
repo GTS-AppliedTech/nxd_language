@@ -1,8 +1,0 @@
-// expected semantic failure - array contains incompatible element types
-
-MODULE TEST
-
-FUNC MAIN()
-    LET VALUES SET [1, 2, "3"]
-
-    PRINTLN(VALUES)

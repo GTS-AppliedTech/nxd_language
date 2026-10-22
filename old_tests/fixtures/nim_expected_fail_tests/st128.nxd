@@ -1,9 +1,0 @@
-// expected semantic failure - invalid operands for int and string
-
-MODULE TEST
-
-FUNC MAIN()
-    LET X SET 42
-    LET Y SET "hello"
-
-    LET Z SET X ADD Y

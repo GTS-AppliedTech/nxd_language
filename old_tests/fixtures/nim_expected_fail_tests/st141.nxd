@@ -1,4 +1,0 @@
-ASYNC FUNC MAIN()
-    AWAIT 42
-        
-    

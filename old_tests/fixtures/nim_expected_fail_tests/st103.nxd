@@ -1,5 +1,0 @@
-MODULE TEST
-
-FUNC MAIN ():
-    RETURN 1 ADD 2
-    

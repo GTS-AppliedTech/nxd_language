@@ -1,8 +1,0 @@
-MODULE TEST
-
-TYPE PERSON STRUCT:
-    NAME: string,
-    AGE: int
-
-FUNC MAIN()
-    PRINTLN("STRUCT_DECLARED")

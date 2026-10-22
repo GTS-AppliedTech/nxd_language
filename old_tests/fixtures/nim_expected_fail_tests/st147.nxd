@@ -1,4 +1,0 @@
-ASYNC FUNC MAIN()
-    LET OP SET RECV 42
-    PRINTLN(OP)
-    

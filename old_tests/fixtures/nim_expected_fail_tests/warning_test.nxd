@@ -1,8 +1,0 @@
-LET X SET 1
-
-IF true:
-    LET X SET 2
-
-CONST Y SET 3
-LET Y SET 4
-

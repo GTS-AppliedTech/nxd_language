@@ -1,7 +1,0 @@
-MODULE TEST
-
-FUNC MAIN()
-    CONST READY SET false
-
-    IF NOT READY:
-        RETURN none
