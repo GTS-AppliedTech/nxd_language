@@ -1,0 +1,83 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "VALID",
+            "value": {
+              "Literal": {
+                "Bool": false
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Var": {
+                "name": "VALID",
+                "span": {
+                  "line": 6,
+                  "column": 8,
+                  "end_line": 6,
+                  "end_column": 13
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "PASS"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "else_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "FAIL"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

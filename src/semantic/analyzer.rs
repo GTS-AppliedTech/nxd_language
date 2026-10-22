@@ -1,8 +1,8 @@
+use crate::diagnostics::errors::*;
+use crate::diagnostics::span::SourceSpan;
 use crate::ir::nodes::*;
-use crate::ir::parse_ir::IRRoot;
 use crate::semantic::{
     casts::{check_as_cast, check_is},
-    errors::{AsyncViolation, SemanticError},
     ownership::{OwnershipOp, check_ownership},
     patterns::validate_match_arms,
     symbols::{Symbol, SymbolTable},
@@ -737,6 +737,10 @@ impl Analyzer {
             IRLiteral::None => "none".to_string(),
 
             IRLiteral::List(_) => "list".to_string(),
+
+            IRLiteral::Map(_) => "map".to_string(),
+
+            IRLiteral::Lambda { .. } => "lambda".to_string(),
         }
     }
 }

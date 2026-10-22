@@ -1,0 +1,146 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Const": {
+            "name": "A",
+            "value": {
+              "Literal": {
+                "Int": 10
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "B",
+            "value": {
+              "Literal": {
+                "Int": 3
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "C",
+            "value": {
+              "Literal": {
+                "Int": 0
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Binary": {
+                "kind": "OR",
+                "left": {
+                  "Binary": {
+                    "kind": "NEQ",
+                    "left": {
+                      "Binary": {
+                        "kind": "MOD",
+                        "left": {
+                          "Var": {
+                            "name": "A",
+                            "span": {
+                              "line": 8,
+                              "column": 8,
+                              "end_line": 8,
+                              "end_column": 9
+                            }
+                          }
+                        },
+                        "right": {
+                          "Var": {
+                            "name": "B",
+                            "span": {
+                              "line": 8,
+                              "column": 14,
+                              "end_line": 8,
+                              "end_column": 15
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "Var": {
+                        "name": "C",
+                        "span": {
+                          "line": 8,
+                          "column": 20,
+                          "end_line": 8,
+                          "end_column": 21
+                        }
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "Binary": {
+                    "kind": "EQ",
+                    "left": {
+                      "Var": {
+                        "name": "C",
+                        "span": {
+                          "line": 8,
+                          "column": 25,
+                          "end_line": 8,
+                          "end_column": 26
+                        }
+                      }
+                    },
+                    "right": {
+                      "Literal": {
+                        "Int": 0
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "MOD_OR_PASS"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

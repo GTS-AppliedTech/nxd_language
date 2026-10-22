@@ -1,0 +1,9 @@
+// expected lexar and parser failure - unexpected charecter "+"
+
+MODULE TEST
+
+FUNC MAIN()
+    LET X SET 42
+    LET Y SET "hello"
+
+    LET Z SET X + Y

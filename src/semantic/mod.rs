@@ -1,7 +1,5 @@
 pub mod analyzer;
 pub mod casts;
-pub mod diagnostics;
-pub mod errors;
 pub mod ownership;
 pub mod patterns;
 pub mod symbols;

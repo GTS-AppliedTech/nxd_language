@@ -1,0 +1,152 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Const": {
+            "name": "NAME",
+            "value": {
+              "Literal": {
+                "String": "gabriel"
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "AGE",
+            "value": {
+              "Literal": {
+                "Int": 42
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "SCORE",
+            "value": {
+              "Literal": {
+                "Float": 99.5
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "ACTIVE",
+            "value": {
+              "Var": {
+                "name": "TRUE",
+                "span": {
+                  "line": 7,
+                  "column": 20,
+                  "end_line": 7,
+                  "end_column": 24
+                }
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "NAME",
+                    "span": {
+                      "line": 9,
+                      "column": 13,
+                      "end_line": 9,
+                      "end_column": 17
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "AGE",
+                    "span": {
+                      "line": 10,
+                      "column": 13,
+                      "end_line": 10,
+                      "end_column": 16
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "SCORE",
+                    "span": {
+                      "line": 11,
+                      "column": 13,
+                      "end_line": 11,
+                      "end_column": 18
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "ACTIVE",
+                    "span": {
+                      "line": 12,
+                      "column": 13,
+                      "end_line": 12,
+                      "end_column": 19
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

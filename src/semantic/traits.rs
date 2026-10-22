@@ -1,5 +1,5 @@
+use crate::diagnostics::errors::SemanticError;
 use crate::ir::nodes::{IRImpl, IRTrait};
-use crate::semantic::errors::SemanticError;
 
 pub struct TraitRegistry {
     pub traits: Vec<IRTrait>,

@@ -1,38 +1,46 @@
-use serde::Deserialize;
-use serde_json::Value;
+use crate::diagnostics::span::SourceSpan;
+use serde::Serialize;
 use std::collections::HashMap;
 use std::fmt;
+
 // ===============================
 // IR MODULE
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
-pub struct SourceSpan {
-    pub line: u32,
-    pub column: u32,
-    pub end_line: u32,
-    pub end_column: u32,
+#[derive(Clone, Debug, Serialize)]
+pub struct IRRoot {
+    pub module: IRModule,
+
+    pub types: Vec<IRTypeDecl>,
+
+    pub traits: Vec<IRTrait>,
+
+    pub impls: Vec<IRImpl>,
+
+    pub functions: Vec<IRFunction>,
+
+    pub statements: Vec<IRStatement>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRModule {
     pub name: String,
     pub imports: Vec<IRImport>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRImport {
     pub path: String,
     pub alias: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRMove {
     pub source: IRExpr,
     pub target: IRExpr,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRClone {
     pub source: IRExpr,
     pub target: IRExpr,
@@ -42,7 +50,7 @@ pub struct IRClone {
 // IR TYPES
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 #[serde(tag = "kind", rename_all = "lowercase")]
 pub enum IRTypeDecl {
     Struct(IRStruct),
@@ -51,43 +59,43 @@ pub enum IRTypeDecl {
     Trait(IRTrait),
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRStruct {
     pub name: String,
     pub fields: Vec<IRField>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRField {
     pub name: String,
     pub ty: String,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IREnum {
     pub name: String,
     pub variants: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRUnion {
     pub name: String,
     pub variants: Vec<IRUnionVariant>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRUnionVariant {
     pub kind: String,
     pub fields: Vec<IRField>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRTrait {
     pub name: String,
     pub methods: Vec<IRFunctionSignature>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRFunctionSignature {
     pub name: String,
     pub params: Vec<IRParam>,
@@ -98,7 +106,7 @@ pub struct IRFunctionSignature {
 // IR IMPLEMENTATIONS (IMPL)
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRImpl {
     pub trait_name: String,
     pub target_type: String,
@@ -109,7 +117,7 @@ pub struct IRImpl {
 // IR FUNCTIONS
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRFunction {
     pub name: String,
     pub span: SourceSpan,
@@ -119,7 +127,7 @@ pub struct IRFunction {
     pub body: Vec<IRStatement>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRParam {
     pub name: String,
     pub ty: String,
@@ -129,7 +137,7 @@ pub struct IRParam {
 // IR STATEMENTS
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub enum IRStatement {
     Let { name: String, value: IRExpr },
     Const { name: String, value: IRExpr },
@@ -147,27 +155,27 @@ pub enum IRStatement {
 // IR CONTROL FLOW
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRIf {
     pub condition: IRExpr,
     pub then_branch: Vec<IRStatement>,
     pub else_branch: Vec<IRStatement>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRMatch {
     pub scrutinee: IRExpr,
     pub arms: Vec<IRMatchArm>,
     pub otherwise: Option<Vec<IRStatement>>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRMatchArm {
-    pub pattern: Value,
+    pub pattern: String,
     pub body: Vec<IRStatement>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRTry {
     pub try_body: Vec<IRStatement>,
     pub catch_body: Vec<IRStatement>,
@@ -178,13 +186,13 @@ pub struct IRTry {
 // IR EXPRESSIONS
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRVar {
     pub name: String,
     pub span: SourceSpan,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub enum IRExpr {
     Literal(IRLiteral),
     Binary(Box<IRBinaryOp>),
@@ -199,20 +207,20 @@ pub enum IRExpr {
 // IR OPERATORS
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRBinaryOp {
     pub kind: String, // ADD, SUB, MUL, DIV, EQ, GT, etc.
     pub left: Box<IRExpr>,
     pub right: Box<IRExpr>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRObjectInit {
     pub type_name: String,
     pub fields: HashMap<String, IRExpr>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct IRUnaryOp {
     pub kind: String, // NOT
     pub expr: Box<IRExpr>,
@@ -221,27 +229,57 @@ pub struct IRUnaryOp {
 // IR LITERALS
 // ===============================
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
 pub enum IRLiteral {
     Int(i64),
     Float(f64),
     String(String),
     Bool(bool),
     None,
-    List(Vec<IRLiteral>),
+    List(Vec<IRExpr>),
+    Map(HashMap<String, IRExpr>),
+    Lambda {
+        params: Vec<String>,
+        body: Box<IRExpr>,
+    },
 }
 impl fmt::Display for IRLiteral {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             IRLiteral::Int(v) => write!(f, "{}", v),
+
             IRLiteral::Float(v) => write!(f, "{}", v),
+
             IRLiteral::String(v) => write!(f, "\"{}\"", v),
+
             IRLiteral::Bool(v) => write!(f, "{}", v),
+
             IRLiteral::None => write!(f, "nil"),
+
             IRLiteral::List(items) => {
-                let rendered: Vec<String> = items.iter().map(|item| item.to_string()).collect();
+                let rendered = items
+                    .iter()
+                    .map(|item| item.to_string())
+                    .collect::<Vec<_>>();
 
                 write!(f, "[{}]", rendered.join(", "))
+            }
+
+            IRLiteral::Map(entries) => {
+                let mut fields = entries.iter().collect::<Vec<_>>();
+
+                fields.sort_by(|left, right| left.0.cmp(right.0));
+
+                let rendered = fields
+                    .into_iter()
+                    .map(|(name, value)| format!("{}: {}", name, value))
+                    .collect::<Vec<_>>();
+
+                write!(f, "{{{}}}", rendered.join(", "))
+            }
+
+            IRLiteral::Lambda { params, body } => {
+                write!(f, "FN({}) -> {}", params.join(", "), body)
             }
         }
     }

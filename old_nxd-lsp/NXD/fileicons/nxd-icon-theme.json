@@ -1,0 +1,11 @@
+{
+  "iconDefinitions": {
+    "_nxd": {
+      "iconPath": "./nxd.svg"
+    }
+  },
+
+  "fileExtensions": {
+    "nxd": "_nxd"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Const": {
+            "name": "LOW",
+            "value": {
+              "Literal": {
+                "Int": 3
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "HIGH",
+            "value": {
+              "Literal": {
+                "Int": 9
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Binary": {
+                "kind": "AND",
+                "left": {
+                  "Binary": {
+                    "kind": "GT",
+                    "left": {
+                      "Var": {
+                        "name": "HIGH",
+                        "span": {
+                          "line": 7,
+                          "column": 9,
+                          "end_line": 7,
+                          "end_column": 13
+                        }
+                      }
+                    },
+                    "right": {
+                      "Var": {
+                        "name": "LOW",
+                        "span": {
+                          "line": 7,
+                          "column": 17,
+                          "end_line": 7,
+                          "end_column": 20
+                        }
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "Binary": {
+                    "kind": "LT",
+                    "left": {
+                      "Var": {
+                        "name": "LOW",
+                        "span": {
+                          "line": 7,
+                          "column": 25,
+                          "end_line": 7,
+                          "end_column": 28
+                        }
+                      }
+                    },
+                    "right": {
+                      "Var": {
+                        "name": "HIGH",
+                        "span": {
+                          "line": 7,
+                          "column": 32,
+                          "end_line": 7,
+                          "end_column": 36
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "RANGE_PASS"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

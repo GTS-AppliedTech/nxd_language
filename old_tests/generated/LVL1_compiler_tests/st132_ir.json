@@ -1,0 +1,104 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 5,
+        "column": 6,
+        "end_line": 5,
+        "end_column": 10
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Const": {
+            "name": "NAMES",
+            "value": {
+              "Literal": {
+                "List": [
+                  {
+                    "String": "ALPHA"
+                  },
+                  {
+                    "String": "BETA"
+                  },
+                  {
+                    "Int": 42
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Const": {
+            "name": "FLAGS",
+            "value": {
+              "Literal": {
+                "List": [
+                  {
+                    "Bool": true
+                  },
+                  {
+                    "Bool": false
+                  },
+                  "None"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "NAMES",
+                    "span": {
+                      "line": 9,
+                      "column": 13,
+                      "end_line": 9,
+                      "end_column": 18
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "FLAGS",
+                    "span": {
+                      "line": 10,
+                      "column": 13,
+                      "end_line": 10,
+                      "end_column": 18
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

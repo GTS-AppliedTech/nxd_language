@@ -1,0 +1,6 @@
+FUNC MAIN()
+    LET X SET "hello"
+
+    LET Y SET X AS INT
+
+    // expected P1012

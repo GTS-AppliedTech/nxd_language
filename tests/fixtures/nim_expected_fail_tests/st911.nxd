@@ -1,0 +1,5 @@
+FUNC MAIN()
+    LET X SET 1
+    LET X SET 2
+
+// expected W2003 & W2001

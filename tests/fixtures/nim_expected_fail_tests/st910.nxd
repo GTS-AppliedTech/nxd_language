@@ -1,0 +1,5 @@
+FUNC MAIN()
+    RETURN 42
+    LET X SET 1
+
+    // expected W2002 & W2001

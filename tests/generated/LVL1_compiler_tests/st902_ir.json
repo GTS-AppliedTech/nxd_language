@@ -1,0 +1,42 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 1,
+        "column": 1,
+        "end_line": 3,
+        "end_column": 2
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Var": {
+                "name": "Y",
+                "span": {
+                  "line": 2,
+                  "column": 15,
+                  "end_line": 2,
+                  "end_column": 16
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

@@ -1,0 +1,9 @@
+FUNC TEST()
+CONST X
+    LET X SET 1
+    LET XYZ SET 2
+    LET X SET 3
+    TRY:
+        PRINTLN(X)
+
+    // expected P1001

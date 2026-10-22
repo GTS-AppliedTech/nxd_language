@@ -1,4 +1,3 @@
-pub mod bridge;
-pub mod dispatcher;
-pub mod pipeline;
-pub mod config;
+pub mod ast;
+pub mod lexer;
+pub mod parser;

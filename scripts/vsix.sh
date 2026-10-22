@@ -14,7 +14,7 @@ cargo build
 echo "================================="
 echo "Moving to LSP root"
 echo "================================="
-cd ~/Projects/nxd_language/nxd-lsp/NXD
+cd ~/Projects/nxd-rust-frontend/nxd-lsp/NXD
 
 echo "================================="
 echo "Building LSP"

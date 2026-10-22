@@ -1,0 +1,3 @@
+ASYNC FUNC WORKER()
+    LET X SET 1
+        PRINTLN(X)

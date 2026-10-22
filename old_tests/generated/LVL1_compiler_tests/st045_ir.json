@@ -1,0 +1,108 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "WORKER",
+      "span": {
+        "line": 1,
+        "column": 12,
+        "end_line": 1,
+        "end_column": 18
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Return": {
+            "Literal": {
+              "Int": 42
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 4,
+        "column": 12,
+        "end_line": 4,
+        "end_column": 16
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Let": {
+            "name": "HANDLE",
+            "value": {
+              "Call": {
+                "func": "SPAWN",
+                "args": [
+                  {
+                    "Call": {
+                      "func": "WORKER",
+                      "args": []
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "RESULT",
+            "value": {
+              "Call": {
+                "func": "AWAIT",
+                "args": [
+                  {
+                    "Var": {
+                      "name": "HANDLE",
+                      "span": {
+                        "line": 6,
+                        "column": 26,
+                        "end_line": 6,
+                        "end_column": 32
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "RESULT",
+                    "span": {
+                      "line": 8,
+                      "column": 13,
+                      "end_line": 8,
+                      "end_column": 19
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

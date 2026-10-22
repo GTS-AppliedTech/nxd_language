@@ -1,0 +1,7 @@
+MODULE TEST
+
+FUNC MAIN():
+    LET X SET 1
+    LET Y SET 2
+
+    ECHO(X ADD Y)

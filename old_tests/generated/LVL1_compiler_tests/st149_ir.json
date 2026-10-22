@@ -1,0 +1,59 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 1,
+        "column": 12,
+        "end_line": 1,
+        "end_column": 16
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 42
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "OK",
+            "value": {
+              "Call": {
+                "func": "PING",
+                "args": [
+                  {
+                    "Var": {
+                      "name": "X",
+                      "span": {
+                        "line": 4,
+                        "column": 21,
+                        "end_line": 4,
+                        "end_column": 22
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

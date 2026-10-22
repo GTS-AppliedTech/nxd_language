@@ -1,13 +1,22 @@
 [package]
-name = "nxd-compiler"
-version = "0.1.0"
+name = "nxd-rust-frontend"
+version = "0.2.0"
 edition = "2024"
 authors = ["Gabriel Ty Spencer"]
 license = "MIT"
-description = "NXD language compiler core (IR, semantic, backend emitters)"
-repository = "https://github.com/GTS-AppliedTech/nxd_language"
+description = "Rust frontend migration project for NXD"
+repository = "https://github.com/GTS-AppliedTech/nxd-rust-frontend"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "1.0"
+regex = "1"
+
+[[bin]]
+name = "lsp_validate"
+path = "lsp_validate.rs"
+
+[[bin]]
+name = "lsp_parser"
+path = "nxd-lsp/NXD/lsp_parser.rs"

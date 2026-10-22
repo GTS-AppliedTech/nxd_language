@@ -1,4 +1,4 @@
-use crate::semantic::errors::SemanticError;
+use crate::diagnostics::errors::SemanticError;
 
 pub fn check_type(expected: &str, actual: &str) -> Result<(), SemanticError> {
     if expected == "any" || actual == "any" {

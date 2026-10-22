@@ -11,9 +11,9 @@
       "name": "WORKER",
       "span": {
         "line": 1,
-        "column": 12,
-        "end_line": 1,
-        "end_column": 18
+        "column": 7,
+        "end_line": 3,
+        "end_column": 19
       },
       "params": [],
       "return_type": null,

@@ -1,0 +1,8 @@
+MODULE TEST
+
+FUNC MAIN()
+    CONST NAMES SET ["ALPHA", "BETA", "GAMMA"]
+    CONST FLAGS SET [true, false, true]
+
+    PRINTLN(NAMES)
+    PRINTLN(FLAGS)

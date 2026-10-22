@@ -1,0 +1,104 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "WORKER",
+      "span": {
+        "line": 1,
+        "column": 12,
+        "end_line": 1,
+        "end_column": 18
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Return": {
+            "Literal": {
+              "Int": 42
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 4,
+        "column": 12,
+        "end_line": 4,
+        "end_column": 16
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Let": {
+            "name": "HANDLE",
+            "value": {
+              "Call": {
+                "func": "SPAWN",
+                "args": [
+                  {
+                    "Call": {
+                      "func": "WORKER",
+                      "args": []
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "If": {
+            "condition": {
+              "Call": {
+                "func": "PING",
+                "args": [
+                  {
+                    "Var": {
+                      "name": "HANDLE",
+                      "span": {
+                        "line": 7,
+                        "column": 13,
+                        "end_line": 7,
+                        "end_column": 19
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "then_branch": [
+              {
+                "Expr": {
+                  "Call": {
+                    "func": "PRINTLN",
+                    "args": [
+                      {
+                        "Literal": {
+                          "String": "alive"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "else_branch": []
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

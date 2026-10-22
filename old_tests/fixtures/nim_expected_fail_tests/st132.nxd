@@ -1,0 +1,10 @@
+// mixed constant array types - expected semantic failure
+
+MODULE TEST
+
+FUNC MAIN()
+    CONST NAMES SET ["ALPHA", "BETA", 42]
+    CONST FLAGS SET [true, false, none]
+
+    PRINTLN(NAMES)
+    PRINTLN(FLAGS)

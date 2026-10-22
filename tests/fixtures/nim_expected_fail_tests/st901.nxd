@@ -1,0 +1,8 @@
+FUNC MAIN()
+    LET X SET 42
+
+    LET Y SET "hello"
+
+    LET Z SET X ADD Y
+
+    // expected S3002 & W2001

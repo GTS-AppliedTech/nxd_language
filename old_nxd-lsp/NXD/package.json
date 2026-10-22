@@ -1,0 +1,51 @@
+{
+  "name": "NXD",
+  "displayName": "NXD Language",
+  "description": "Official VS Code language support for the NXD programming language.",
+  "publisher": "nxdlang",
+  "version": "0.1.13",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GTS-AppliedTech/nxd_language.git"
+  },
+  "engines": {
+    "vscode": "^1.134.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+     "onLanguage:nxd"
+  ],
+  "contributes": {
+  "commands": [
+    {
+      "command": "nxd.test",
+      "title": "NXD Test Command"
+    }
+  ],
+
+  "languages": [
+    {
+      "id": "nxd",
+      "aliases": ["NXD", "nxd"],
+      "extensions": [".nxd"],
+      "icon": {
+        "light": "./fileicons/nxd-light.svg",
+        "dusk": "./fileicons/nxd-dusk.svg",
+        "dark": "./fileicons/nxd-dark.svg"
+      },
+      "configuration": "./language-configuration.json"
+    }
+  ],
+
+  "grammars": [
+    {
+      "language": "nxd",
+      "scopeName": "source.nxd",
+      "path": "./syntaxes/nxd.tmLanguage.json"
+    }
+  ]
+  }}

@@ -1,0 +1,91 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 6,
+        "end_line": 3,
+        "end_column": 10
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "NEG",
+            "value": {
+              "Unary": {
+                "kind": "SUB",
+                "expr": {
+                  "Literal": {
+                    "Int": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "PI",
+            "value": {
+              "Literal": {
+                "Float": 3.14
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "NEG",
+                    "span": {
+                      "line": 7,
+                      "column": 13,
+                      "end_line": 7,
+                      "end_column": 16
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "PHI",
+                    "span": {
+                      "line": 8,
+                      "column": 13,
+                      "end_line": 8,
+                      "end_column": 16
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

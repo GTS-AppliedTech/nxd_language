@@ -1,0 +1,8 @@
+MODULE TEST
+
+FUNC MAIN()
+    CONST PI SET 3.14
+    CONST RATE SET 2.0
+
+    println(PI MUL RATE)
+    println(PI DIV RATE)

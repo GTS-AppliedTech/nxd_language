@@ -1,0 +1,5 @@
+FUNC MAIN()
+    MOVE MAIN TO CLONE
+    RETURN CLONE
+
+    //expected P1011

@@ -1,0 +1,65 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [
+    {
+      "kind": "trait",
+      "name": "PRINTABLE",
+      "methods": [
+        {
+          "name": "PRINT",
+          "params": [],
+          "return_type": null
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "USER",
+      "fields": [
+        {
+          "name": "NAME",
+          "ty": "STRING"
+        }
+      ]
+    }
+  ],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 11,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 2
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "ObjectInit": {
+                "type_name": "USER",
+                "fields": {
+                  "NAME": {
+                    "Literal": {
+                      "String": "gabby"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

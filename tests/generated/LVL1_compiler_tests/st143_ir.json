@@ -11,9 +11,9 @@
       "name": "MAIN",
       "span": {
         "line": 1,
-        "column": 12,
-        "end_line": 1,
-        "end_column": 16
+        "column": 7,
+        "end_line": 6,
+        "end_column": 20
       },
       "params": [],
       "return_type": null,

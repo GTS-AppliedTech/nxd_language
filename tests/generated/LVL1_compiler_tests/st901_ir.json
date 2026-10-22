@@ -1,0 +1,78 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 1,
+        "column": 1,
+        "end_line": 7,
+        "end_column": 2
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 42
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Literal": {
+                "String": "hello"
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Z",
+            "value": {
+              "Binary": {
+                "kind": "ADD",
+                "left": {
+                  "Var": {
+                    "name": "X",
+                    "span": {
+                      "line": 6,
+                      "column": 15,
+                      "end_line": 6,
+                      "end_column": 16
+                    }
+                  }
+                },
+                "right": {
+                  "Var": {
+                    "name": "Y",
+                    "span": {
+                      "line": 6,
+                      "column": 21,
+                      "end_line": 6,
+                      "end_column": 22
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

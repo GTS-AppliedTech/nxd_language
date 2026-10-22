@@ -1,0 +1,8 @@
+FUNC MAIN()
+    LET SOURCE SET "NXD"
+    CLONE SOURCE TO COPY
+    PRINTLN(SOURCE)
+    PRINTLN(COPY)
+
+
+    // expected P1006

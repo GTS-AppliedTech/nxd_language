@@ -1,0 +1,13 @@
+// expected semantic failure - can not compare string and int.
+
+MODULE TEST
+
+FUNC MAIN()
+    LET X SET "five"
+    LET Y SET 10
+
+    IF Y GTE X
+        PRINTLN("GTE")
+
+    IF X LTE Y
+        PRINTLN("LTE")

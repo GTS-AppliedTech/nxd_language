@@ -1,4 +1,5 @@
-use crate::ir::nodes::IRLiteral;
+use crate::backend::nim::statements::emit_expr;
+use crate::ir::nodes::*;
 
 pub fn emit_literal(lit: &IRLiteral) -> String {
     match lit {
@@ -14,10 +15,17 @@ pub fn emit_literal(lit: &IRLiteral) -> String {
         }
         IRLiteral::None => "nil".to_string(),
         IRLiteral::List(items) => emit_list(items),
+        IRLiteral::Map(_) => {
+            unimplemented!("Nim emission for map literals is not implemented")
+        }
+
+        IRLiteral::Lambda { .. } => {
+            unimplemented!("Nim emission for lambda literals is not implemented")
+        }
     }
 }
 
-fn emit_list(items: &Vec<IRLiteral>) -> String {
-    let inner: Vec<String> = items.iter().map(emit_literal).collect();
+fn emit_list(items: &Vec<IRExpr>) -> String {
+    let inner: Vec<String> = items.iter().map(emit_expr).collect();
     format!("@[{}]", inner.join(", "))
 }
