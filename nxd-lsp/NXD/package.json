@@ -3,7 +3,7 @@
   "displayName": "nxd language",
   "description": "Official VS Code language support for the NXD programming language.",
   "publisher": "nxdlang",
-  "version": "0.2.7",
+  "version": "0.2.9",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
@@ -17,35 +17,39 @@
   ],
   "main": "./extension.js",
   "activationEvents": [
-     "onLanguage:nxd"
+    "onLanguage:nxd"
   ],
   "contributes": {
-  "commands": [
-    {
-      "command": "nxd.test",
-      "title": "NXD Test Command"
-    }
-  ],
-
-  "languages": [
-    {
-      "id": "nxd",
-      "aliases": ["NXD", "nxd"],
-      "extensions": [".nxd"],
-      "icon": {
-        "light": "./fileicons/nxd-light.svg",
-        "dusk": "./fileicons/nxd-dusk.svg",
-        "dark": "./fileicons/nxd-dark.svg"
-      },
-      "configuration": "./language-configuration.json"
-    }
-  ],
-
-  "grammars": [
-    {
-      "language": "nxd",
-      "scopeName": "source.nxd",
-      "path": "./syntaxes/nxd.tmLanguage.json"
-    }
-  ]
-  }}
+    "commands": [
+      {
+        "command": "nxd.test",
+        "title": "NXD Test Command"
+      }
+    ],
+    "languages": [
+      {
+        "id": "nxd",
+        "aliases": [
+          "NXD",
+          "nxd"
+        ],
+        "extensions": [
+          ".nxd"
+        ],
+        "icon": {
+          "light": "./fileicons/nxd-light.svg",
+          "dusk": "./fileicons/nxd-dusk.svg",
+          "dark": "./fileicons/nxd-dark.svg"
+        },
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "nxd",
+        "scopeName": "source.nxd",
+        "path": "./syntaxes/nxd.tmLanguage.json"
+      }
+    ]
+  }
+}

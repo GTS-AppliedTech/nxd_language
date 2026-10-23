@@ -158,6 +158,9 @@ function validateDocument(document, diagnostics) {
         'lsp_validate'
     );
 
+    console.log("workspaceRoot =", workspaceRoot);
+    console.log("validatorPath =", validatorPath);
+
     const result = cp.spawnSync(
         validatorPath,
         [],
@@ -169,11 +172,6 @@ function validateDocument(document, diagnostics) {
         }
     );   
     
-    // extension.js is:
-    // nxd_language/nxd-lsp/NXD/extension.js
-    //
-    // lsp_validate.py is:
-    // nxd_language/lsp_validate.py
 
     const problems = [];
 

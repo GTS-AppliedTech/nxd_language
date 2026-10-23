@@ -2,23 +2,23 @@ use serde::Serialize;
 
 use std::io::{self, Read};
 
-use nxd_rust_frontend::diagnostics::parser::parse_with_diagnostics;
+use nxd_language::diagnostics::parser::parse_with_diagnostics;
 
-use nxd_rust_frontend::diagnostics::severity::DiagnosticSeverity;
+use nxd_language::diagnostics::severity::DiagnosticSeverity;
 
-use nxd_rust_frontend::diagnostics::types::{ParserError, WarningDiagnostic};
+use nxd_language::diagnostics::types::{ParserError, WarningDiagnostic};
 
-use nxd_rust_frontend::diagnostics::warnings::{
+use nxd_language::diagnostics::warnings::{
     find_shadowed_bindings, find_unreachable_code, find_unused_variables,
 };
 
-use nxd_rust_frontend::frontend::ast::nodes::{AstFunction, AstModule, AstNode};
+use nxd_language::frontend::ast::nodes::{AstFunction, AstModule, AstNode};
 
-use nxd_rust_frontend::ir::lowering::{lower_function, lower_module, lower_types};
+use nxd_language::ir::lowering::{lower_function, lower_module, lower_types};
 
-use nxd_rust_frontend::ir::nodes::IRRoot;
+use nxd_language::ir::nodes::IRRoot;
 
-use nxd_rust_frontend::orchestrator::semantic_diagnostics_from_ir;
+use nxd_language::orchestrator::semantic_diagnostics_from_ir;
 
 #[derive(Debug, Serialize)]
 struct LspDiagnostic {

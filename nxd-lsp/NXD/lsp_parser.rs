@@ -1,6 +1,6 @@
 use std::io::{self, Read};
 
-use nxd_rust_frontend::frontend::parser::parser::parse;
+use nxd_language::frontend::parser::parser::parse;
 
 fn main() {
     let mut source = String::new();
