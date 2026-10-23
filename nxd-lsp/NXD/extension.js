@@ -170,13 +170,23 @@ function validateDocument(document, diagnostics, extensionPath) {
         'lsp_validate'
     );
 
-    const bundledValidator = path.join(
-        extensionPath,
-        'bin',
-        'linux-x64',
-        'lsp_validate'
-    );
+    let bundledValidator;
 
+    if (process.platform === 'win32') {
+        bundledValidator = path.join(
+            extensionPath,
+            'bin',
+            'windows-x64',
+            'lsp_validate.exe'
+        );
+    } else {
+        bundledValidator = path.join(
+            extensionPath,
+            'bin',
+            'linux-x64',
+            'lsp_validate'
+        );
+    }
 
     let validatorPath = null;
 

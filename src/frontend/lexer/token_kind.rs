@@ -31,7 +31,7 @@ pub struct TokenRule {
 pub const TOKEN_SPEC: &[TokenRule] = &[
     TokenRule {
         kind: TokenKind::Newline,
-        pattern: r"\n",
+        pattern: r"\r\n|\r|\n",
     },
     // TODO: Verify string regex translation
     TokenRule {
