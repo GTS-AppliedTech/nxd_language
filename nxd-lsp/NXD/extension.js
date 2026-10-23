@@ -151,18 +151,10 @@ function validateDocument(document, diagnostics) {
         return;
     }
 
-    const validatorPath = path.join(
-        workspaceRoot,
-        'target',
-        'debug',
-        'lsp_validate'
-    );
-
     console.log("workspaceRoot =", workspaceRoot);
-    console.log("validatorPath =", validatorPath);
-
+    
     const result = cp.spawnSync(
-        validatorPath,
+        'lsp_validate',
         [],
         {
             cwd: workspaceRoot,
