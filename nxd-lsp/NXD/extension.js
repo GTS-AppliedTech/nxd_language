@@ -11,7 +11,11 @@ function activate(context) {
 
     const validate = document => {
         if (document.languageId === 'nxd') {
-            validateDocument(document, diagnostics);
+            validateDocument(
+                document,
+                diagnostics,
+                context.extensionPath
+            );
         }
     };
 
@@ -142,7 +146,7 @@ function activate(context) {
     );
 }
 
-function validateDocument(document, diagnostics) {
+function validateDocument(document, diagnostics, extensionPath) {
     const source = document.getText();
 
     const workspaceRoot =
@@ -166,12 +170,22 @@ function validateDocument(document, diagnostics) {
         'lsp_validate'
     );
 
+    const bundledValidator = path.join(
+        extensionPath,
+        'bin',
+        'linux-x64',
+        'lsp_validate'
+    );
+
+
     let validatorPath = null;
 
     if (fs.existsSync(localValidator)) {
         validatorPath = localValidator;
     } else if (fs.existsSync(cargoValidator)) {
         validatorPath = cargoValidator;
+    } else if (fs.existsSync(bundledValidator)) {
+        validatorPath = bundledValidator;
     }
 
     const problems = [];
