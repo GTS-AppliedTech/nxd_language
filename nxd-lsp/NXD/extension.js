@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const cp = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 function activate(context) {
     const diagnostics =
@@ -151,10 +152,53 @@ function validateDocument(document, diagnostics) {
         return;
     }
 
-    console.log("workspaceRoot =", workspaceRoot);
-    
+    const localValidator = path.join(
+        workspaceRoot,
+        'target',
+        'debug',
+        'lsp_validate'
+    );
+
+    const cargoValidator = path.join(
+        process.env.HOME || '',
+        '.cargo',
+        'bin',
+        'lsp_validate'
+    );
+
+    let validatorPath = null;
+
+    if (fs.existsSync(localValidator)) {
+        validatorPath = localValidator;
+    } else if (fs.existsSync(cargoValidator)) {
+        validatorPath = cargoValidator;
+    }
+
+    const problems = [];
+
+    if (!validatorPath) {
+        problems.push(
+            createDiagnostic(
+                document,
+                1,
+                1,
+                null,
+                null,
+                'NXD validator not found. Build nxd_language or install the NXD toolchain.',
+                vscode.DiagnosticSeverity.Error,
+                'NXD'
+            )
+        );
+
+        diagnostics.set(document.uri, problems);
+        return;
+    }
+
+    console.log('workspaceRoot =', workspaceRoot);
+    console.log('validatorPath =', validatorPath);
+
     const result = cp.spawnSync(
-        'lsp_validate',
+        validatorPath,
         [],
         {
             cwd: workspaceRoot,
@@ -162,10 +206,7 @@ function validateDocument(document, diagnostics) {
             encoding: 'utf8',
             windowsHide: true
         }
-    );   
-    
-
-    const problems = [];
+    );
 
     if (result.error) {
         problems.push(
@@ -176,7 +217,8 @@ function validateDocument(document, diagnostics) {
                 null,
                 null,
                 `NXD parser could not start: ${result.error.message}`,
-                vscode.DiagnosticSeverity.Error, 'NXD'
+                vscode.DiagnosticSeverity.Error,
+                'NXD'
             )
         );
 
@@ -187,7 +229,7 @@ function validateDocument(document, diagnostics) {
     if (result.stderr && result.stderr.trim()) {
         console.error(result.stderr);
     }
-    
+
     try {
         const response = JSON.parse(result.stdout.trim());
 
@@ -219,7 +261,8 @@ function validateDocument(document, diagnostics) {
                 null,
                 null,
                 `Invalid response from NXD parser: ${error.message}`,
-                vscode.DiagnosticSeverity.Error, 'NXD'
+                vscode.DiagnosticSeverity.Error,
+                'NXD'
             )
         );
     }
