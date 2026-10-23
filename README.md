@@ -7,7 +7,7 @@
   "layer": "Root",
   "category": "read me",
   "keywords": [],
-  "doc_version": "2.1",
+  "doc_version": "3.0",
   "status": "active"
 }
 ---

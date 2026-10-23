@@ -1,9 +1,9 @@
 {
   "name": "NXD",
-  "displayName": "NXD Language",
+  "displayName": "nxd language",
   "description": "Official VS Code language support for the NXD programming language.",
   "publisher": "nxdlang",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
