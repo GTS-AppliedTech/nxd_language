@@ -39,6 +39,9 @@ pub enum AsyncViolation {
     InvalidPingTarget,     // S3005-07
     InvalidEscTarget,      // S3005-08
     InvalidTimeoutTarget,  // S3005-09
+    InvalidSyncTarget,     // S3005-10
+    InvalidChannelDecl,    // S3005-11
+    InvalidTaskTarget,     // S3005-12
 }
 
 impl AsyncViolation {
@@ -61,6 +64,12 @@ impl AsyncViolation {
             AsyncViolation::InvalidEscTarget => "NXD-S3005-08",
 
             AsyncViolation::InvalidTimeoutTarget => "NXD-S3005-09",
+
+            AsyncViolation::InvalidSyncTarget => "NXD-S3005-10",
+
+            AsyncViolation::InvalidChannelDecl => "NXD-S3005-11",
+
+            AsyncViolation::InvalidTaskTarget => "NXD-S3005-12",
         }
     }
 
@@ -85,6 +94,12 @@ impl AsyncViolation {
             AsyncViolation::InvalidEscTarget => "Invalid ESC target",
 
             AsyncViolation::InvalidTimeoutTarget => "Invalid TIMEOUT target",
+
+            AsyncViolation::InvalidSyncTarget => "Invalid SYNC target",
+
+            AsyncViolation::InvalidChannelDecl => "Invalid CHANNEL declaration",
+
+            AsyncViolation::InvalidTaskTarget => "Invalid TASK target",
         }
     }
 }
