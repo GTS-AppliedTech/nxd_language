@@ -13,6 +13,50 @@ use crate::semantic::{
     },
 };
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum AsyncOperation {
+    Await,
+    Spawn,
+    Send,
+    Recv,
+    Ping,
+    Esc,
+    Timeout,
+    Sync,
+    Channel,
+    Task,
+}
+
+fn async_operation(expr: &IRExpr) -> Option<AsyncOperation> {
+    let IRExpr::Call { func, .. } = expr else {
+        return None;
+    };
+
+    if func.eq_ignore_ascii_case("AWAIT") {
+        Some(AsyncOperation::Await)
+    } else if func.eq_ignore_ascii_case("SPAWN") {
+        Some(AsyncOperation::Spawn)
+    } else if func.eq_ignore_ascii_case("SEND") {
+        Some(AsyncOperation::Send)
+    } else if func.eq_ignore_ascii_case("RECV") {
+        Some(AsyncOperation::Recv)
+    } else if func.eq_ignore_ascii_case("PING") {
+        Some(AsyncOperation::Ping)
+    } else if func.eq_ignore_ascii_case("ESC") {
+        Some(AsyncOperation::Esc)
+    } else if func.eq_ignore_ascii_case("TIMEOUT") {
+        Some(AsyncOperation::Timeout)
+    } else if func.eq_ignore_ascii_case("SYNC") {
+        Some(AsyncOperation::Sync)
+    } else if func.eq_ignore_ascii_case("CHANNEL") {
+        Some(AsyncOperation::Channel)
+    } else if func.eq_ignore_ascii_case("TASK") {
+        Some(AsyncOperation::Task)
+    } else {
+        None
+    }
+}
+
 pub struct Analyzer {
     pub symbols: SymbolTable,
     pub traits: TraitRegistry,
@@ -558,23 +602,32 @@ impl Analyzer {
                         });
                     }
 
+                    // PING accepts exactly one direct target.
                     if args.len() != 1 {
                         return Err(SemanticError::InvalidAsyncUsage {
                             violation: AsyncViolation::InvalidPingTarget,
                         });
                     }
 
-                    let target_type = self.analyze_expr(&args[0], is_async)?;
+                    // PING may directly target only SEND or RECV.
+                    match &args[0] {
+                        IRExpr::Call {
+                            func: target_func, ..
+                        } if target_func.eq_ignore_ascii_case("SEND")
+                            || target_func.eq_ignore_ascii_case("RECV") => {}
 
-                    unwrap_process_handle_type(&target_type).ok_or(
-                        SemanticError::InvalidAsyncUsage {
-                            violation: AsyncViolation::InvalidPingTarget,
-                        },
-                    )?;
+                        _ => {
+                            return Err(SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::InvalidPingTarget,
+                            });
+                        }
+                    }
+
+                    // Analyze the nested SEND/RECV so it can enforce its own rules.
+                    self.analyze_expr(&args[0], is_async)?;
 
                     return Ok("bool".to_string());
                 }
-
                 if func.eq_ignore_ascii_case("ESC") {
                     if !is_async {
                         return Err(SemanticError::InvalidAsyncUsage {
@@ -637,6 +690,78 @@ impl Analyzer {
                     return Ok("bool".to_string());
                 }
 
+                if func.eq_ignore_ascii_case("SYNC") {
+                    if args.len() != 1 {
+                        return Err(SemanticError::InvalidAsyncUsage {
+                            violation: AsyncViolation::InvalidSyncTarget,
+                        });
+                    }
+
+                    let target_type = self.analyze_expr(&args[0], is_async)?;
+
+                    let synchronizable =
+                        unwrap_task_type(&target_type).is_some()
+                        || unwrap_process_handle_type(&target_type).is_some()
+                        || unwrap_receive_operation_type(&target_type).is_some();
+
+                    if !synchronizable {
+                        return Err(SemanticError::InvalidAsyncUsage {
+                            violation: AsyncViolation::InvalidSyncTarget,
+                        });
+                    }
+
+                    return Ok(target_type);
+                }
+                
+                if func.eq_ignore_ascii_case("CHANNEL") {
+                    if !is_async {
+                        return Err(SemanticError::InvalidAsyncUsage {
+                            violation: AsyncViolation::AsyncContextViolation,
+                        });
+                    }
+
+                    return Ok("bool".to_string());
+                } 
+
+                if func.eq_ignore_ascii_case("TASK") {
+                    if !is_async {
+                        return Err(SemanticError::InvalidAsyncUsage {
+                            violation: AsyncViolation::AsyncContextViolation,
+                        });
+                    }
+
+                    // A TASK wraps exactly one asynchronous operation or composition.
+                    if args.len() != 1 {
+                        return Err(SemanticError::InvalidAsyncUsage {
+                            violation: AsyncViolation::InvalidTaskTarget,
+                        });
+                    }
+
+                    let valid_target = matches!(
+                        async_operation(&args[0]),
+                        Some(
+                            AsyncOperation::Await
+                                | AsyncOperation::Spawn
+                                | AsyncOperation::Send
+                                | AsyncOperation::Recv
+                                | AsyncOperation::Ping
+                                | AsyncOperation::Esc
+                                | AsyncOperation::Timeout
+                                | AsyncOperation::Sync
+                        )
+                    );
+
+                    if !valid_target {
+                        return Err(SemanticError::InvalidAsyncUsage {
+                            violation: AsyncViolation::InvalidTaskTarget,
+                        });
+                    }
+
+                    // Analyze inside-out. The nested operation owns its own diagnostic.
+                    let result_type = self.analyze_expr(&args[0], is_async)?;
+
+                    return Ok(task_type(&result_type));
+                }
                 // Ordinary function-call handling starts here.
                 let (params, ret) = {
                     let symbol = self.symbols.resolve(func).ok_or_else(|| {
