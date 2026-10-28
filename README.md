@@ -5,8 +5,8 @@
   "title": "Read me",
   "description": "nxdlang project repository read-me",
   "layer": "Root",
-  "category": "read me",
-  "keywords": [],
+  "category": "readme",
+  "keywords": ["readme"],
   "doc_version": "3.0",
   "status": "active"
 }
@@ -366,6 +366,15 @@ Invalid 'ESC' target
 
 NXD-S3005-09
 Invalid 'TIMEOUT' target
+
+NXD-S3005-10
+Invalid 'SYNC' target
+
+NXD-S3005-11
+Invalid 'CHANNEL' declaration
+
+NXD-S3005-12
+Invalid 'TASK' target
 
 ---
 

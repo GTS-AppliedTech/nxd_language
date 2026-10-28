@@ -4,8 +4,8 @@
   "title": "TS002 Test Suite User Guide",
   "description": "How to use the test suite",
   "layer": "Test Suite",
-  "category": "",
-  "keywords": [],
+  "category": "Guide",
+  "keywords": ["user", "guide", "test suite"],
   "doc_version": "1.0",
   "status": "active"
 }

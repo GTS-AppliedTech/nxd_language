@@ -4,7 +4,7 @@
   "title": "TS003 Test Command Reference",
   "description": "Test pipeline commands",
   "layer": "Test Suite",
-  "category": "",
+  "category": "Referance",
   "keywords": ["scripts", "commands", "tests", "reference", "Bash", "PowerShell"],
   "doc_version": "2.0",
   "status": "active"

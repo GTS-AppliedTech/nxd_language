@@ -4,8 +4,8 @@
   "title": "TS004 Test Numbering Standard",
   "description": "Reserved ID numbers for testing",
   "layer": "Test Suite",
-  "category": "",
-  "keywords": [],
+  "category": "ID Numbers",
+  "keywords": ["test", "id numbers", "reserved"],
   "doc_version": "1.0",
   "status": "active"
 }

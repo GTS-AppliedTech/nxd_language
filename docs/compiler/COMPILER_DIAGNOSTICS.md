@@ -6,7 +6,7 @@
   "description": "LSP diagnostic code library",
   "layer": "compiler",
   "category": "compiler",
-  "keywords": [diagnostics, warnings, errors, codes],
+  "keywords": ["diagnostics", "warnings", "errors", "codes"],
   "doc_version": "1.0",
   "status": "active"
 }
@@ -61,9 +61,9 @@
 - NXD-S3005-07 Invalid 'PING' target
 - NXD-S3005-08 Invalid 'ESC' target
 - NXD-S3005-09 Invalid 'TIMEOUT' target
-- NXD-S3005-10 ('SYNC' placeholder)
-- NXD-S3005-11 ('CHANNEL' placeholder)
-- NXD-S3005-12 ('TASK' placeholder)
+- NXD-S3005-10 Invalid 'SYNC' target
+- NXD-S3005-11 Invalid 'CHANNEL' declaration
+- NXD-S3005-12 Invalid 'TASK' target
 
 ##### *WARNING CODES:*
  

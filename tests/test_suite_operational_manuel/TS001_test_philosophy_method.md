@@ -4,8 +4,8 @@
   "title": "TS001 Test Suite Philosophy and Methodology",
   "description": "Test Suite Overview",
   "layer": "Test Suite",
-  "category": "",
-  "keywords": [],
+  "category": "Overview",
+  "keywords": ["overview", "philosophy", "methodology", "test"],
   "doc_version": "1.0",
   "status": "active"
 }
