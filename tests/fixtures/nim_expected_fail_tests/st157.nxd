@@ -1,0 +1,5 @@
+ASYNC FUNC TEST():
+    LET CH SET CHANNEL(int)
+    ESC CH
+
+    // Expected NXD-S3005-08: Invalid ESC target

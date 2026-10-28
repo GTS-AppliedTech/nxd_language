@@ -1,4 +1,4 @@
 FUNC TEST():
     CHANNEL(42)
 
-    // Expected S3005-11: Invalid CHANNEL declaration
+    // Expected NXD-P1001: Expected Ident, got Number

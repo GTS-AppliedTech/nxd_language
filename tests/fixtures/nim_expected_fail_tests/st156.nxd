@@ -1,0 +1,4 @@
+ASYNC FUNC TEST():
+    TASK()
+
+// Expected NXD-S3005-12: Invalid TASK target

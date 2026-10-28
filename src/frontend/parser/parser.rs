@@ -1406,8 +1406,7 @@ impl Parser {
     }
 
     pub fn parse_channel_expr(&mut self) -> Result<AstCall, ParserError> {
-        let channel_token =
-            self.eat(Some(TokenKind::Keyword), Some("CHANNEL"))?;
+        let channel_token = self.eat(Some(TokenKind::Keyword), Some("CHANNEL"))?;
 
         self.eat(Some(TokenKind::LParen), None)?;
 
@@ -1659,7 +1658,7 @@ impl Parser {
         if token.kind == TokenKind::Keyword && token.lexeme == "CHANNEL" {
             return Ok(AstExpr::Call(self.parse_channel_expr()?));
         }
-        
+
         if token.kind == TokenKind::Ident {
             if self.next_is(TokenKind::LParen) {
                 return Ok(AstExpr::Call(self.parse_call_expr()?));

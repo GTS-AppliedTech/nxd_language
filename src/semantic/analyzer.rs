@@ -645,7 +645,8 @@ impl Analyzer {
                     let target_type = self.analyze_expr(&args[0], is_async)?;
 
                     let valid = unwrap_process_handle_type(&target_type).is_some()
-                        || unwrap_receive_operation_type(&target_type).is_some();
+                        || unwrap_receive_operation_type(&target_type).is_some()
+                        || unwrap_task_type(&target_type).is_some();
 
                     if !valid {
                         return Err(SemanticError::InvalidAsyncUsage {
@@ -674,7 +675,8 @@ impl Analyzer {
                     let duration_type = self.analyze_expr(&args[1], is_async)?;
 
                     let valid_target = unwrap_process_handle_type(&target_type).is_some()
-                        || unwrap_receive_operation_type(&target_type).is_some();
+                        || unwrap_receive_operation_type(&target_type).is_some()
+                        || unwrap_task_type(&target_type).is_some();
 
                     if !valid_target {
                         return Err(SemanticError::InvalidAsyncUsage {
@@ -732,7 +734,7 @@ impl Analyzer {
 
                     return Ok(channel_type(&message_type));
                 }
-                
+
                 if func.eq_ignore_ascii_case("TASK") {
                     if !is_async {
                         return Err(SemanticError::InvalidAsyncUsage {
