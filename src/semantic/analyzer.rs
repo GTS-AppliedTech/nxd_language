@@ -712,7 +712,7 @@ impl Analyzer {
 
                     return Ok(target_type);
                 }
-                
+
                 if func.eq_ignore_ascii_case("CHANNEL") {
                     if !is_async {
                         return Err(SemanticError::InvalidAsyncUsage {
@@ -722,7 +722,6 @@ impl Analyzer {
 
                     return Ok("bool".to_string());
                 } 
-
                 if func.eq_ignore_ascii_case("TASK") {
                     if !is_async {
                         return Err(SemanticError::InvalidAsyncUsage {
@@ -730,26 +729,25 @@ impl Analyzer {
                         });
                     }
 
-                    // A TASK wraps exactly one asynchronous operation or composition.
                     if args.len() != 1 {
                         return Err(SemanticError::InvalidAsyncUsage {
                             violation: AsyncViolation::InvalidTaskTarget,
                         });
                     }
 
-                    let valid_target = matches!(
-                        async_operation(&args[0]),
-                        Some(
-                            AsyncOperation::Await
-                                | AsyncOperation::Spawn
-                                | AsyncOperation::Send
-                                | AsyncOperation::Recv
-                                | AsyncOperation::Ping
-                                | AsyncOperation::Esc
-                                | AsyncOperation::Timeout
-                                | AsyncOperation::Sync
-                        )
-                    );
+                    let valid_target = match &args[0] {
+                        IRExpr::Call { func: target_func, .. } => {
+                            target_func.eq_ignore_ascii_case("AWAIT")
+                                || target_func.eq_ignore_ascii_case("SPAWN")
+                                || target_func.eq_ignore_ascii_case("SEND")
+                                || target_func.eq_ignore_ascii_case("RECV")
+                                || target_func.eq_ignore_ascii_case("PING")
+                                || target_func.eq_ignore_ascii_case("ESC")
+                                || target_func.eq_ignore_ascii_case("TIMEOUT")
+                        }
+
+                        _ => false,
+                    };
 
                     if !valid_target {
                         return Err(SemanticError::InvalidAsyncUsage {
@@ -757,7 +755,6 @@ impl Analyzer {
                         });
                     }
 
-                    // Analyze inside-out. The nested operation owns its own diagnostic.
                     let result_type = self.analyze_expr(&args[0], is_async)?;
 
                     return Ok(task_type(&result_type));

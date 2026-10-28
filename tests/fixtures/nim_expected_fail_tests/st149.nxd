@@ -1,4 +1,4 @@
-ASYNC FUNC MAIN()
-    LET X SET 42
+ASYNC FUNC TEST():
+    TASK()
 
-    LET OK SET PING X
+    // expected NXD-S3005-12: Invalid TASK target

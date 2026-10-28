@@ -10,7 +10,7 @@ TESTS = [
     "st137",
     "st138",
     "st139",
-    "st140",
+    "st149",
 ]
 
 
@@ -37,6 +37,8 @@ for test_id in TESTS:
             [
                 "cargo",
                 "run",
+                "--bin",
+                "nxd_language",
                 "--",
                 src_path,
                 json_path,

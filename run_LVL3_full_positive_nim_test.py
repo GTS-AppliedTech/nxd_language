@@ -28,6 +28,8 @@ for test_id in TEST_ID:
             [
                 "cargo",
                 "run",
+                "--bin",
+                "nxd_language",
                 "--",
                 src_path,
                 json_path,

@@ -1353,6 +1353,31 @@ impl Parser {
         })
     }
 
+pub fn parse_task_expr(&mut self) -> Result<AstCall, ParserError> {
+    let task_token = self.eat(Some(TokenKind::Keyword), Some("TASK"))?;
+
+    self.eat(Some(TokenKind::LParen), None)?;
+
+    let mut args = Vec::new();
+
+    if !self.at(Some(TokenKind::RParen), None) {
+        args.push(self.parse_expr()?);
+
+        while self.at(Some(TokenKind::Comma), None) {
+            self.eat(Some(TokenKind::Comma), None)?;
+            args.push(self.parse_expr()?);
+        }
+    }
+
+    self.eat(Some(TokenKind::RParen), None)?;
+
+    Ok(AstCall {
+        func: "TASK".to_string(),
+        args,
+        line: task_token.line,
+        column: task_token.column,
+    })
+}
     pub fn parse_expr(&mut self) -> Result<AstExpr, ParserError> {
         self.parse_logic()
     }
@@ -1555,6 +1580,10 @@ impl Parser {
         if token.kind == TokenKind::Keyword && token.lexeme == "TIMEOUT" {
             return Ok(AstExpr::Call(self.parse_timeout_expr()?));
         }
+
+        if token.kind == TokenKind::Keyword && token.lexeme == "TASK" {
+            return Ok(AstExpr::Call(self.parse_task_expr()?));
+}
 
         if token.kind == TokenKind::Ident {
             if self.next_is(TokenKind::LParen) {
