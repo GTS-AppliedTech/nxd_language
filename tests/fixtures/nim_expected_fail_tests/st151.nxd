@@ -1,0 +1,4 @@
+FUNC TEST():
+    SYNC(42)
+
+        // Expected NXD-S3005-10: Invalid SYNC target

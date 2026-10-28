@@ -8,8 +8,9 @@ use crate::semantic::{
     symbols::{Symbol, SymbolTable},
     traits::TraitRegistry,
     types::{
-        check_type, process_handle_type, receive_operation_type, task_type, unwrap_awaitable_type,
-        unwrap_process_handle_type, unwrap_receive_operation_type, unwrap_task_type,
+        channel_type, check_type, process_handle_type, receive_operation_type, task_type,
+        unwrap_awaitable_type, unwrap_channel_type, unwrap_process_handle_type,
+        unwrap_receive_operation_type, unwrap_task_type,
     },
 };
 
@@ -699,8 +700,7 @@ impl Analyzer {
 
                     let target_type = self.analyze_expr(&args[0], is_async)?;
 
-                    let synchronizable =
-                        unwrap_task_type(&target_type).is_some()
+                    let synchronizable = unwrap_task_type(&target_type).is_some()
                         || unwrap_process_handle_type(&target_type).is_some()
                         || unwrap_receive_operation_type(&target_type).is_some();
 
@@ -714,14 +714,25 @@ impl Analyzer {
                 }
 
                 if func.eq_ignore_ascii_case("CHANNEL") {
-                    if !is_async {
+                    if args.len() != 1 {
                         return Err(SemanticError::InvalidAsyncUsage {
-                            violation: AsyncViolation::AsyncContextViolation,
+                            violation: AsyncViolation::InvalidChannelDecl,
                         });
                     }
 
-                    return Ok("bool".to_string());
-                } 
+                    let message_type = match &args[0] {
+                        IRExpr::Var(var) => var.name.clone(),
+
+                        _ => {
+                            return Err(SemanticError::InvalidAsyncUsage {
+                                violation: AsyncViolation::InvalidChannelDecl,
+                            });
+                        }
+                    };
+
+                    return Ok(channel_type(&message_type));
+                }
+                
                 if func.eq_ignore_ascii_case("TASK") {
                     if !is_async {
                         return Err(SemanticError::InvalidAsyncUsage {
@@ -736,7 +747,9 @@ impl Analyzer {
                     }
 
                     let valid_target = match &args[0] {
-                        IRExpr::Call { func: target_func, .. } => {
+                        IRExpr::Call {
+                            func: target_func, ..
+                        } => {
                             target_func.eq_ignore_ascii_case("AWAIT")
                                 || target_func.eq_ignore_ascii_case("SPAWN")
                                 || target_func.eq_ignore_ascii_case("SEND")

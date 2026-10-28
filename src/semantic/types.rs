@@ -63,3 +63,13 @@ pub fn unwrap_process_handle_type(ty: &str) -> Option<String> {
 fn is_primitive(t: &str) -> bool {
     matches!(t, "int" | "float" | "string" | "bool" | "none")
 }
+
+pub fn channel_type(inner: &str) -> String {
+    format!("Channel<{}>", inner)
+}
+
+pub fn unwrap_channel_type(ty: &str) -> Option<String> {
+    ty.strip_prefix("Channel<")
+        .and_then(|value| value.strip_suffix('>'))
+        .map(|value| value.to_string())
+}

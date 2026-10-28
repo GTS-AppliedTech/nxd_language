@@ -2,18 +2,56 @@
 
 ### ASYNC / CONCURRENCY RUNTIME
 
-CORE OPERATIONS
-===============
+#### ASYNC EXECUTION OPERATIONS
+==========================
 AWAIT
 SPAWN
 SEND
 RECV
 TASK
+
+### ASYNC CONTEXT BOUNDARY
+==========================
+
+S3005-06 applies only to operations whose semantics require
+active asynchronous execution.
+
+ASYNC-context operations:
+    SPAWN
+    SEND
+    RECV
+    TASK
+    PING
+    ESC
+    TIMEOUT
+
+Special case:
+    AWAIT is ASYNC-only but owns the more specific S3005-01
+    diagnostic when used outside ASYNC.
+
+Concurrency operations not inherently ASYNC-exclusive:
+    CHANNEL
+    SYNC
+
+Rules:
+    Membership in the concurrency subsystem does not make an
+    operation ASYNC-only.
+
+    CHANNEL may establish communication infrastructure outside
+    active asynchronous execution.
+
+    SYNC may establish a synchronization/reconciliation boundary
+    in either synchronous or asynchronous execution.
+
+    S3005-06 applies only where the operation itself requires
+    ASYNC execution.
+
+#### CONCURRENCY BOUNDARY OPERATIONS
+===============================
 CHANNEL
 SYNC
 
-
-AWAIT
+##### AWAIT
 =====
 Context:
     ASYNC FUNC only
@@ -29,7 +67,7 @@ Notes:
     May wait indefinitely unless bounded by valid surrounding semantics.
 
 
-SPAWN
+##### SPAWN
 =====
 Context:
     ASYNC FUNC
@@ -41,7 +79,7 @@ Produces:
     ProcessHandle[T]
 
 
-SEND
+##### SEND
 ====
 Context:
     ASYNC FUNC
@@ -56,7 +94,7 @@ Return:
     none
 
 
-RECV
+##### RECV
 ====
 Context:
     ASYNC FUNC
@@ -68,13 +106,13 @@ Produces:
     ReceiveOperation[T]
 
 
-TASK
+##### TASK
 ====
 Context:
-    ASYNC FUNC
+    ASYNC FUNC only
 
 Target:
-    Valid asynchronous operation/composition
+    Exactly one valid asynchronous operation/composition
 
 Examples:
     TASK(SEND(...))
@@ -88,64 +126,100 @@ Produces:
     Task[T]
 
 Rules:
+    TASK requires exactly one target.
+    TASK targets must represent valid asynchronous work/composition.
     Nested operations are validated inside-out.
     Each nested operation owns its own diagnostic.
-    A TASK wrapper does not change the validity rules of the
-    operation contained inside it.
+    A TASK wrapper does not make an invalid inner relationship valid.
+
+Parser:
+    TASK is parsed as an expression call.
+    Arity errors are intentionally forwarded to semantic validation.
 
 Diagnostic:
     S3005-12 Invalid TASK target
 
+Current Tests:
+    1 positive
+    1 negative
 
-CHANNEL
+##### CHANNEL
 =======
 Context:
-    TBD during CHANNEL semantic implementation
+    ASYNC or synchronous context
 
 Purpose:
-    Typed communication primitive used by async/concurrent operations.
+    Declares/creates typed communication infrastructure used by
+    asynchronous and concurrent operations.
 
 Produces:
     Channel[T] — proposed, not yet implemented
 
 Rules:
+    CHANNEL declaration itself does not require ASYNC context.
+
+    A CHANNEL may be declared, stored, or passed independently
+    of active asynchronous execution.
+
+    Operations that actively communicate through a CHANNEL remain
+    subject to their own ASYNC-context and target/source rules.
+
     CHANNEL owns validity of channel construction/declaration.
+
     SEND/RECV continue to own validity of their respective
     target/source relationships.
+
+    S3005-06 does not apply merely because CHANNEL is declared
+    outside an ASYNC FUNC.
 
 Diagnostic:
     S3005-11 Invalid CHANNEL declaration
 
+Future: 
+    S3007 reserved for general channel violations outside 
+    the ASYNC-specific diagnostic family. 
 
-SYNC
+
+##### SYNC
 ====
 Context:
     ASYNC or synchronous context
 
 Purpose:
-    Explicit synchronization boundary.
-
-Target:
-    Synchronizable semantic value/operation.
-    Exact accepted types TBD during SYNC implementation.
+    Explicit synchronization/reconciliation boundary.
 
 Rules:
-    SYNC is not ASYNC-exclusive.
+    SYNC is not equivalent to AWAIT.
+
+    AWAIT is completion-oriented and unwraps an awaitable result.
+
+    SYNC is state/synchronization-oriented and does not become
+    invalid merely because it occurs outside an ASYNC FUNC.
+
     S3005-06 does not apply merely because SYNC occurs outside
     an ASYNC FUNC.
 
-Diagnostics:
-    S3005-10 Invalid SYNC target within concurrency semantics.
+    Current ASYNC/concurrency target validation is owned by
+    S3005-10.
 
-    Future:
-    S3006 reserved candidate for non-ASYNC synchronization
-    violations once those semantics are formally defined.
+    Broader non-ASYNC synchronization semantics remain TBD.
+
+Diagnostic:
+    S3005-10 Invalid SYNC target
+
+Current Tests:
+    2 positive
+    2 negative
+
+Future:
+    S3006 reserved for general synchronization violations outside
+    the ASYNC-specific diagnostic family.
 
 
-OPTIONAL GUARDS / CONTROLLERS
+#### OPTIONAL GUARDS / CONTROLLERS
 ============================
 
-PING
+##### PING
 ====
 Context:
     ASYNC FUNC
@@ -175,7 +249,7 @@ Diagnostic:
     S3005-07 Invalid PING target
 
 
-ESC
+##### ESC
 ===
 Context:
     ASYNC FUNC
@@ -198,7 +272,7 @@ Diagnostic:
     S3005-08 Invalid ESC target
 
 
-TIMEOUT
+##### TIMEOUT
 =======
 Context:
     ASYNC FUNC
@@ -223,7 +297,7 @@ Diagnostic:
     S3005-09 Invalid TIMEOUT target
 
 
-SEMANTIC TYPES
+### SEMANTIC TYPES
 ==============
 
 Existing:
@@ -231,12 +305,14 @@ Existing:
     ProcessHandle[T]
     ReceiveOperation[T]
 
-Planned / TBD:
+Planned:
     Channel[T]
-    Synchronizable representation, if one is required
 
+Future / TBD:
+    Additional synchronization state/result representation,
+    only if required by final SYNC semantics.
 
-COMPOSITION RULE
+### COMPOSITION RULE
 ================
 
 Async/concurrency expressions are validated inside-out.
@@ -269,7 +345,7 @@ Invalid:
     S3005-07
 
 
-DIAGNOSTIC OWNERSHIP
+### DIAGNOSTIC OWNERSHIP
 ====================
 
 S3005-01    AWAIT outside ASYNC
@@ -285,8 +361,11 @@ S3005-10    Invalid SYNC target
 S3005-11    Invalid CHANNEL declaration
 S3005-12    Invalid TASK target
 
-Future candidate:
+### Future candidates:
 =================
 S3006 reserved candidate for general (SYNC) synchronization violations
 outside the ASYNC-specific diagnostic family.
+Exact semantics intentionally TBD.
+S3007 reserved candidate for general CHANNEL violations outside the
+ASYNC-specific diagnostic family.
 Exact semantics intentionally TBD.

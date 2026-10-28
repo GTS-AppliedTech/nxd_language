@@ -1,0 +1,4 @@
+FUNC TEST():
+    CHANNEL()
+
+    // Expected S3005-11: Invalid CHANNEL declaration

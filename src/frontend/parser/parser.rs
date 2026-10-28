@@ -1353,31 +1353,98 @@ impl Parser {
         })
     }
 
-pub fn parse_task_expr(&mut self) -> Result<AstCall, ParserError> {
-    let task_token = self.eat(Some(TokenKind::Keyword), Some("TASK"))?;
+    pub fn parse_task_expr(&mut self) -> Result<AstCall, ParserError> {
+        let task_token = self.eat(Some(TokenKind::Keyword), Some("TASK"))?;
 
-    self.eat(Some(TokenKind::LParen), None)?;
+        self.eat(Some(TokenKind::LParen), None)?;
 
-    let mut args = Vec::new();
+        let mut args = Vec::new();
 
-    if !self.at(Some(TokenKind::RParen), None) {
-        args.push(self.parse_expr()?);
-
-        while self.at(Some(TokenKind::Comma), None) {
-            self.eat(Some(TokenKind::Comma), None)?;
+        if !self.at(Some(TokenKind::RParen), None) {
             args.push(self.parse_expr()?);
+
+            while self.at(Some(TokenKind::Comma), None) {
+                self.eat(Some(TokenKind::Comma), None)?;
+                args.push(self.parse_expr()?);
+            }
         }
+
+        self.eat(Some(TokenKind::RParen), None)?;
+
+        Ok(AstCall {
+            func: "TASK".to_string(),
+            args,
+            line: task_token.line,
+            column: task_token.column,
+        })
     }
 
-    self.eat(Some(TokenKind::RParen), None)?;
+    pub fn parse_sync_expr(&mut self) -> Result<AstCall, ParserError> {
+        let sync_token = self.eat(Some(TokenKind::Keyword), Some("SYNC"))?;
 
-    Ok(AstCall {
-        func: "TASK".to_string(),
-        args,
-        line: task_token.line,
-        column: task_token.column,
-    })
-}
+        self.eat(Some(TokenKind::LParen), None)?;
+
+        let mut args = Vec::new();
+
+        if !self.at(Some(TokenKind::RParen), None) {
+            args.push(self.parse_expr()?);
+
+            while self.at(Some(TokenKind::Comma), None) {
+                self.eat(Some(TokenKind::Comma), None)?;
+                args.push(self.parse_expr()?);
+            }
+        }
+
+        self.eat(Some(TokenKind::RParen), None)?;
+
+        Ok(AstCall {
+            func: "SYNC".to_string(),
+            args,
+            line: sync_token.line,
+            column: sync_token.column,
+        })
+    }
+
+    pub fn parse_channel_expr(&mut self) -> Result<AstCall, ParserError> {
+        let channel_token =
+            self.eat(Some(TokenKind::Keyword), Some("CHANNEL"))?;
+
+        self.eat(Some(TokenKind::LParen), None)?;
+
+        let mut args = Vec::new();
+
+        if !self.at(Some(TokenKind::RParen), None) {
+            let type_name = self.parse_type_ref()?;
+
+            args.push(AstExpr::Var(AstVar {
+                name: type_name,
+                line: channel_token.line,
+                column: channel_token.column,
+            }));
+
+            while self.at(Some(TokenKind::Comma), None) {
+                self.eat(Some(TokenKind::Comma), None)?;
+
+                let type_name = self.parse_type_ref()?;
+
+                args.push(AstExpr::Var(AstVar {
+                    name: type_name,
+                    line: channel_token.line,
+                    column: channel_token.column,
+                }));
+            }
+        }
+
+        self.eat(Some(TokenKind::RParen), None)?;
+
+        Ok(AstCall {
+            func: "CHANNEL".to_string(),
+            args,
+            line: channel_token.line,
+            column: channel_token.column,
+        })
+    }
+
     pub fn parse_expr(&mut self) -> Result<AstExpr, ParserError> {
         self.parse_logic()
     }
@@ -1583,8 +1650,16 @@ pub fn parse_task_expr(&mut self) -> Result<AstCall, ParserError> {
 
         if token.kind == TokenKind::Keyword && token.lexeme == "TASK" {
             return Ok(AstExpr::Call(self.parse_task_expr()?));
-}
+        }
 
+        if token.kind == TokenKind::Keyword && token.lexeme == "SYNC" {
+            return Ok(AstExpr::Call(self.parse_sync_expr()?));
+        }
+
+        if token.kind == TokenKind::Keyword && token.lexeme == "CHANNEL" {
+            return Ok(AstExpr::Call(self.parse_channel_expr()?));
+        }
+        
         if token.kind == TokenKind::Ident {
             if self.next_is(TokenKind::LParen) {
                 return Ok(AstExpr::Call(self.parse_call_expr()?));
