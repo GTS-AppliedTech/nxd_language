@@ -242,7 +242,8 @@ All active diagnostics support source location tracking and editor integration.
 
 Parser diagnostics are emitted when a valid token stream cannot be transformed into a valid NXD syntax structure.
 
-Code	DescriptionNXD-P1001	Expected {kind}, got "..."
+Code	Description
+NXD-P1001	Expected {kind}, got "..."
 NXD-P1002	Expected {val}, got "..."
 NXD-P1003	Expected STRUCT, ENUM, UNION, or TRAIT, got "..."
 NXD-P1004	Expected CLONE, got "..."
@@ -373,7 +374,8 @@ Generated when the VS Code extension receives an unexpected or malformed diagnos
 This diagnostic indicates an integration issue between the VS Code extension, Rust LSP, and compiler diagnostic pipeline.
 
 *Current Diagnostic Status*
-Category	StatusParser Diagnostics (NXD-P) - Active
+Category	Status
+Parser Diagnostics (NXD-P) - Active
 Warning Diagnostics (NXD-W)	- Active
 Semantic Diagnostics (NXD-S)	- Active
 Compiler Diagnostics (NXD-LSP)	- Active
@@ -423,7 +425,7 @@ nxdlang.nxd
 
 Current Extension Version:
 
-0.2.6
+0.2.15
 ---
 NXD File Types & Icons
 
