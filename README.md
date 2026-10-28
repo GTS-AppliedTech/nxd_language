@@ -237,24 +237,53 @@ Source spans remain associated with compiler structures throughout parsing, lowe
 NXD provides parser, warning, semantic, and compiler diagnostics through the integrated Rust compiler and Language Server Protocol infrastructure.
 
 All active diagnostics support source location tracking and editor integration.
+
 ---
+
 *Parser Diagnostics* (NXD-P Series)
 
 Parser diagnostics are emitted when a valid token stream cannot be transformed into a valid NXD syntax structure.
 
-Code	Description
-NXD-P1001	Expected {kind}, got "..."
-NXD-P1002	Expected {val}, got "..."
-NXD-P1003	Expected STRUCT, ENUM, UNION, or TRAIT, got "..."
-NXD-P1004	Expected CLONE, got "..."
-NXD-P1005	Expected source identifier after CLONE, got "..."
-NXD-P1006	Expected TO after CLONE source, got "..."
-NXD-P1007	Expected target identifier after TO, got "..."
-NXD-P1008	Expected token in primary
-NXD-P1009	Literal expected, got "..."
-NXD-P1010	Expected map key, got "..."
-NXD-P1011	Expected TO after MOVE source
-NXD-P1012	Expected type after AS/IS, got "..."
+Code	Description:
+
+NXD-P1001
+Expected {kind}, got "..."
+
+NXD-P1002
+Expected {val}, got "..."
+
+NXD-P1003	
+Expected STRUCT, ENUM, UNION, or TRAIT, got "..."
+
+NXD-P1004	
+Expected CLONE, got "..."
+
+NXD-P1005
+Expected source identifier after CLONE, got "..."
+
+NXD-P1006	
+Expected TO after CLONE source, got "..."
+
+NXD-P1007
+Expected target identifier after TO, got "..."
+
+NXD-P1008	
+Expected token in primary
+
+NXD-P1009
+Literal expected, got "..."
+
+NXD-P1010	
+Expected map key, got "..."
+
+NXD-P1011
+Expected TO after MOVE source
+
+NXD-P1012
+Expected type after AS/IS, got "..."
+
+---
+
 Warning Diagnostics (NXD-W Series)
 
 Warnings indicate potentially unintended code while still allowing compilation to continue.
@@ -276,7 +305,9 @@ Variable shadows existing binding
 
 
 Generated when an identifier hides an existing symbol in the current scope hierarchy.
+
 ---
+
 *Semantic Diagnostics* (NXD-S Series)
 
 Semantic diagnostics are produced after parsing and IR lowering during semantic analysis.
@@ -307,7 +338,8 @@ Invalid cast
 
 Generated when a cast is semantically invalid.
 
-NXD-S3005 (ASYNC)
+**NXD-S3005 (ASYNC sub-codes)**
+
 NXD-S3005-01
 'AWAIT' outside 'ASYNC' function
 
@@ -334,7 +366,9 @@ Invalid 'ESC' target
 
 NXD-S3005-09
 Invalid 'TIMEOUT' target
+
 ---
+
 *Compiler & LSP Diagnostics* (NXD-LSP Series)
 
 The NXD VS Code extension communicates with the Rust NXD Language Server through the Language Server Protocol.
