@@ -1,0 +1,4 @@
+FUNC TEST()
+    LET M SET { 42: "value" }
+
+// Expected NXD-P1010: Expected map key, got Number 42

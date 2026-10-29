@@ -1,0 +1,4 @@
+FUNC TEST()
+    LET X SET [1 2]
+    
+    // Expected NXD-P1009-04: Invalid list literal, expected ',' or ']', got Number 2

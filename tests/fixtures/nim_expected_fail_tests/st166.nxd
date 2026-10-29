@@ -1,0 +1,4 @@
+FUNC TEST()
+    LET M SET { "a": 1 "b": 2 }
+
+// Expected NXD-P1009-05: Invalid map literal, expected ',' or '}', got String "b"

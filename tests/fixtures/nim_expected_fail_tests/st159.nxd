@@ -2,3 +2,5 @@ ASYNC FUNC WORKER()
     LET H SET SPAWN WORKER()
     PING H
     ESC H
+
+    // Expected NXD-S3005-07: PING target is not a ProcessHandle

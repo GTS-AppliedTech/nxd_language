@@ -6,3 +6,5 @@ ASYNC FUNC MAIN()
 
     IF PING HANDLE
         PRINTLN("alive")
+
+// Expected NXD-S3005-07: PING target is not a ProcessHandle

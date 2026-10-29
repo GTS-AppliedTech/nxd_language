@@ -1774,6 +1774,17 @@ impl Parser {
 
             if self.at(Some(TokenKind::Comma), None) {
                 self.eat(Some(TokenKind::Comma), None)?;
+            } else if !self.at(Some(TokenKind::RBrack), None) {
+                let token = self.current().unwrap();
+
+                return Err(ParserError::new(
+                    "NXD-P1009-04",
+                    format!(
+                        "NXD-P1009-04: Invalid list literal, expected ',' or ']', got {:?} {}",
+                        token.kind, token.lexeme
+                    ),
+                    token.span(),
+                ));
             }
         }
 
@@ -1841,6 +1852,19 @@ impl Parser {
 
             if self.at(Some(TokenKind::Comma), None) {
                 self.eat(Some(TokenKind::Comma), None)?;
+            } else if !self.at(Some(TokenKind::RBrace), None)
+                && !self.at(Some(TokenKind::Newline), None)
+            {
+                let token = self.current().unwrap();
+
+                return Err(ParserError::new(
+                    "NXD-P1009-05",
+                    format!(
+                        "NXD-P1009-05: Invalid map literal, expected ',' or '}}', got {:?} {}",
+                        token.kind, token.lexeme
+                    ),
+                    token.span(),
+                ));
             }
 
             while self.at(Some(TokenKind::Newline), None) {

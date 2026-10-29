@@ -35,13 +35,13 @@
 - NXD-P1008 Expected token in primary
 - NXD-P1009-01  Literal expected, got {}
 - NXD-P1009-02  Invalid integer literal: {} 
-- NXD-P1009-03  Invalid float literal: {} 
-- NXD-P1009-04  Invalid string literal: {} **(Implementation in progress)**
-- NXD-P1009-05  Invalid boolean literal: {} **(Implementation in progress)**
-- NXD-P1009-06  Invalid none literal: {} **(Implementation in progress)**
-- NXD-P1009-07  Invalid list literal: {} **(Implementation in progress)**
-- NXD-P1009-08  Invalid map literal: {} **(Implementation in progress)**
-- NXD-P1009-09  Invalid lambda literal: {} **(Implementation in progress)**
+- NXD-P1009-03  Invalid float literal: {} | Float literal exceeds finite range: {}
+- NXD-P1009-04  Invalid list literal, expected ',' or `'}'`, got {} 
+- NXD-P1009-05  Invalid map literal, expected ',' or `'}'`, got {} 
+- NXD-P1009-06  Invalid lambda literal: {} **(Implementation in progress)**
+- NXD-P1009-07  Invalid string literal: {} **(Reserved)**
+- NXD-P1009-08  Invalid boolean literal: {} **(Reserved)**
+- NXD-P1009-09  Invalid none literal: {} **(Reserved)**
 - NXD-P1010 Expected map key, got {}
 - NXD-P1011 Expected 'TO' after 'MOVE' source, got {}
 - NXD-P1012 Expected type after 'AS/IS', got {}

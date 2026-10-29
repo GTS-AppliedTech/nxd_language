@@ -8,3 +8,5 @@ ASYNC FUNC MAIN()
         PRINTLN(true)
     ELSE TIMEOUT HANDLE 5000
         PRINTLN(false)
+
+        // Expected NXD-S3005-07: PING target is not a ProcessHandle
