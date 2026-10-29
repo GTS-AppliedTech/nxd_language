@@ -38,7 +38,7 @@
 - NXD-P1009-03  Invalid float literal: {} | Float literal exceeds finite range: {}
 - NXD-P1009-04  Invalid list literal, expected ',' or `'}'`, got {} 
 - NXD-P1009-05  Invalid map literal, expected ',' or `'}'`, got {} 
-- NXD-P1009-06  Invalid lambda literal: {} **(Implementation in progress)**
+- NXD-P1009-06  Invalid lambda literal, expected ',' or `')'`, got {} 
 - NXD-P1009-07  Invalid string literal: {} **(Reserved)**
 - NXD-P1009-08  Invalid boolean literal: {} **(Reserved)**
 - NXD-P1009-09  Invalid none literal: {} **(Reserved)**

@@ -1,0 +1,4 @@
+FUNC TEST()
+    LET FIRST SET fn(X Y) => X
+
+    // Expected NXD-P1009-06: Invalid lambda literal, expected ',' or ')', got Ident Y

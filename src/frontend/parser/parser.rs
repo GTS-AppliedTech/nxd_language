@@ -1887,10 +1887,23 @@ impl Parser {
         if !self.at(Some(TokenKind::RParen), None) {
             params.push(self.eat(Some(TokenKind::Ident), None)?.lexeme);
 
-            while self.at(Some(TokenKind::Comma), None) {
-                self.eat(Some(TokenKind::Comma), None)?;
+            while !self.at(Some(TokenKind::RParen), None) {
+                if self.at(Some(TokenKind::Comma), None) {
+                    self.eat(Some(TokenKind::Comma), None)?;
 
-                params.push(self.eat(Some(TokenKind::Ident), None)?.lexeme);
+                    params.push(self.eat(Some(TokenKind::Ident), None)?.lexeme);
+                } else {
+                    let token = self.current().unwrap();
+
+                    return Err(ParserError::new(
+                        "NXD-P1009-06",
+                        format!(
+                            "NXD-P1009-06: Invalid lambda literal, expected ',' or ')', got {:?} {}",
+                            token.kind, token.lexeme
+                        ),
+                        token.span(),
+                    ));
+                }
             }
         }
 

@@ -286,7 +286,7 @@ NXD-P1009-05
 Invalid map literal, expected ',' or `'}'`, got {} 
 
 NXD-P1009-06  
-Invalid lambda literal: {} **(Implementation in progress)**
+Invalid lambda literal, expected ',' or `')'`, got {} 
 
 NXD-P1009-07  
 Invalid string literal: {} **(Reserved)**
