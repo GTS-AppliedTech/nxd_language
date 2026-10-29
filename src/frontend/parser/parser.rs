@@ -1691,10 +1691,37 @@ impl Parser {
             let value = self.eat(Some(TokenKind::Number), None)?;
 
             if value.lexeme.contains('.') {
-                return Ok(AstLiteral::Float(value.lexeme.parse::<f64>().unwrap()));
+                let parsed = value.lexeme.parse::<f64>().map_err(|_| {
+                    ParserError::new(
+                        "NXD-P1009-03",
+                        format!("NXD-P1009-03: Invalid float literal: {}", value.lexeme),
+                        value.span(),
+                    )
+                })?;
+
+                if !parsed.is_finite() {
+                    return Err(ParserError::new(
+                        "NXD-P1009-03",
+                        format!(
+                            "NXD-P1009-03: Float literal exceeds finite range: {}",
+                            value.lexeme
+                        ),
+                        value.span(),
+                    ));
+                }
+
+                return Ok(AstLiteral::Float(parsed));
             }
 
-            return Ok(AstLiteral::Int(value.lexeme.parse::<i64>().unwrap()));
+            let parsed = value.lexeme.parse::<i64>().map_err(|_| {
+                ParserError::new(
+                    "NXD-P1009-02",
+                    format!("NXD-P1009-02: Invalid integer literal: {}", value.lexeme),
+                    value.span(),
+                )
+            })?;
+
+            return Ok(AstLiteral::Int(parsed));
         }
 
         if token.kind == TokenKind::String {

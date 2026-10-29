@@ -274,10 +274,10 @@ NXD-P1009-01
 Literal expected, got "..."
 
 NXD-P1009-02  
-Invalid integer literal: {} **(Implementation in progress)**
+Invalid integer literal: {} 
 
 NXD-P1009-03  
-Invalid float literal: {} **(Implementation in progress)**
+Invalid float literal: {} 
 
 NXD-P1009-04  
 Invalid string literal: {} **(Implementation in progress)**
