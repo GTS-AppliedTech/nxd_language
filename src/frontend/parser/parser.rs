@@ -1728,9 +1728,9 @@ impl Parser {
         let token = self.current().unwrap();
 
         Err(ParserError::new(
-            "NXD-P1009",
+            "NXD-P1009-01",
             format!(
-                "NXD-P1009: Literal expected, got {:?} {}",
+                "NXD-P1009-01: Literal expected, got {:?} {}",
                 token.kind, token.lexeme
             ),
             token.span(),

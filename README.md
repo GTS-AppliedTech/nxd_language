@@ -270,8 +270,33 @@ Expected target identifier after TO, got "..."
 NXD-P1008	
 Expected token in primary
 
-NXD-P1009
+NXD-P1009-01
 Literal expected, got "..."
+
+NXD-P1009-02  
+Invalid integer literal: {} **(Implementation in progress)**
+
+NXD-P1009-03  
+Invalid float literal: {} **(Implementation in progress)**
+
+NXD-P1009-04  
+Invalid string literal: {} **(Implementation in progress)**
+
+NXD-P1009-05  
+Invalid boolean literal: {} **(Implementation in progress)**
+
+NXD-P1009-06  
+Invalid none literal: {} **(Implementation in progress)**
+
+NXD-P1009-07  
+Invalid list literal: {} **(Implementation in progress)**
+
+NXD-P1009-08  
+Invalid map literal: {} **(Implementation in progress)**
+
+NXD-P1009-09  
+Invalid lambda literal: {} **(Implementation in progress)**
+
 
 NXD-P1010	
 Expected map key, got "..."
