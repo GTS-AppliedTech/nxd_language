@@ -1,0 +1,3 @@
+FUNC TEST()
+    LET X SET []
+    

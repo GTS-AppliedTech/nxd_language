@@ -1,0 +1,4 @@
+FUNC TEST()
+    LET M SET { "a": 1, "b": 2 }
+    PRINTLN(M)
+    

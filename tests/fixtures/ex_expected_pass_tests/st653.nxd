@@ -1,0 +1,8 @@
+ASYNC FUNC WORK():
+    RETURN 1
+
+ASYNC FUNC TEST():
+    LET P SET SPAWN WORK()
+    LET R SET RECV P
+    SYNC(R)
+    

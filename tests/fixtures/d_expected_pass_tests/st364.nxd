@@ -1,0 +1,4 @@
+FUNC TEST()
+    LET M SET {}
+    PRINTLN(M)
+    

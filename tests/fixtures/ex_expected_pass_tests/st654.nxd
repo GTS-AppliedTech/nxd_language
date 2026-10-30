@@ -1,0 +1,2 @@
+FUNC TEST():
+    LET CH SET CHANNEL(int)

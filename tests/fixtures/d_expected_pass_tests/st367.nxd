@@ -1,0 +1,2 @@
+FUNC TEST()
+    LET FIRST SET fn(X, Y) => X

@@ -1,0 +1,3 @@
+FUNC TEST()
+    LET DOUBLE SET fn(X) => X MUL 2
+    
