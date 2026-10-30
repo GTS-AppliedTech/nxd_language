@@ -1,13 +1,13 @@
 ---
 {
   "@context": "https://nxdlang.org/schema",
-  "doc_id": "",
-  "title": "",
+  "doc_id": "BE001",
+  "title": "BE001 Backend Mapping Philosophy",
   "description": "",
-  "layer": "",
+  "layer": "Backend",
   "category": "",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["backend", "mapping"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

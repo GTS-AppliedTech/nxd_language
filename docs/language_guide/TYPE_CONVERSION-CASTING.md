@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "LG004",
-  "title": "",
+  "title": "LG004 Type Conversion & Casting Semantics",
   "description": "",
   "layer": "language guide",
   "category": "language guide",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["language", "guide", "type", "conversion", "casting", "semantics"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

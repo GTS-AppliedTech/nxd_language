@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RO001",
-  "title": "",
+  "title": "RO001 Error Handling Specification",
   "description": "",
   "layer": "Root",
   "category": "Errors",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["Error handling", "specification"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

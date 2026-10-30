@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RT005",
-  "title": "",
+  "title": "RT005 Runtime Architecture",
   "description": "",
   "layer": "runtime",
   "category": "runtime",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["runtime", "architechture", "async", "syncronious", "conurrency"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

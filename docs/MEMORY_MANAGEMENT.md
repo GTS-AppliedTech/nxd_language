@@ -2,11 +2,11 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RO003",
-  "title": "",
+  "title": "RO003 Memeory Management",
   "description": "",
   "layer": "Root",
   "category": "Memory",
-  "keywords": [],
+  "keywords": ["memory", "management"],
   "doc_version": "",
   "status": "active"
 }

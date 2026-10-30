@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RO004",
-  "title": "",
-  "description": "",
+  "title": "RO004 NXD Vision",
+  "description": "Goals and reason behind NXD",
   "layer": "root",
   "category": "vision",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["vision", "goals"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

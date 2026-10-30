@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "ES002",
-  "title": "",
+  "title": "ES002 Module & Package System Specification",
   "description": "",
   "layer": "ecosystem",
   "category": "ecosystem",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["ecosystem", "module", "package", "system", "specification"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

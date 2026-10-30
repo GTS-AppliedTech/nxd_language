@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "CP001",
-  "title": "",
-  "description": "",
+  "title": "CP001 Architecture",
+  "description": "NXD compiler architecture",
   "layer": "compiler",
   "category": "compiler",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["compiler", "architecture"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

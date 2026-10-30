@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RT001",
-  "title": "",
+  "title": "RT001 Channel Semantics Specification",
   "description": "",
   "layer": "runtime",
   "category": "runtime",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["runtime", "async", "syncronious", "semantics", "channel", "specification", "FIFO"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

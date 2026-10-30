@@ -2,11 +2,11 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "LG003",
-  "title": "",
+  "title": "LG003 Grammer Structure",
   "description": "",
   "layer": "language guide",
   "category": "language guide",
-  "keywords": [],
+  "keywords": ["language", "guide", "lexer", "grammer", "structure", "syntax"],
   "doc_version": "",
   "status": "active"
 }

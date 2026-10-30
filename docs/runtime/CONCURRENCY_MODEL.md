@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RT002",
-  "title": "",
+  "title": "RT002 Concurrency Model",
   "description": "",
   "layer": "runtime",
   "category": "runtime",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["runtime", "semantics", "concurrency", "model", "async"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

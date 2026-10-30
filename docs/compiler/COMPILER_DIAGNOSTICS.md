@@ -3,7 +3,7 @@
   "@context": "https://nxdlang.org/schema",
   "doc_id": "CP004",
   "title": "CP004 Compiler Diagnostics",
-  "description": "LSP diagnostic code library",
+  "description": "LSP and compiler diagnostic code library",
   "layer": "compiler",
   "category": "compiler",
   "keywords": ["diagnostics", "warnings", "errors", "codes"],

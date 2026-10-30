@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "LG002",
-  "title": "",
+  "title": "LG002 Generic Constraints Specification",
   "description": "",
   "layer": "language guide",
   "category": "language guide",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["Language", "generic", "specification", "constraints", "guide"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

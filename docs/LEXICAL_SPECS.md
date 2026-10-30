@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RO002",
-  "title": "",
-  "description": "",
+  "title": "RO002 Lexical Specification",
+  "description": "Lexer syntax rules ",
   "layer": "Root",
   "category": "Lexical",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["lexer", "syntax", "rules", "identifiers", "keywords", "operators", "literals"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

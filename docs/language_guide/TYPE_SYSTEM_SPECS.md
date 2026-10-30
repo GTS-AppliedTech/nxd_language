@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "LG005",
-  "title": "",
+  "title": "LG005 Type System Specification",
   "description": "",
   "layer": "language guide",
   "category": "language guide",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["language", "guide", "type", "system", "specification", "primitive", "generics", "enums", structs", "semantics", "ownership"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

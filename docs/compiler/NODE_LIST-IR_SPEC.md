@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "CP003",
-  "title": "",
+  "title": "CP003 Node List & IR Specifications",
   "description": "",
   "layer": "compiler",
   "category": "compiler",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["node", "IR", "compiler", "AST", "specifications"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

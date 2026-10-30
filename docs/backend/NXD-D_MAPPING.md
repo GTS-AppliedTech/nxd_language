@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "BE002",
-  "title": "",
+  "title": "BE002 Mapping D",
   "description": "",
   "layer": "backend",
   "category": "backend",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["mapping", "D"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

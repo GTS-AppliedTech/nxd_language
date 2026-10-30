@@ -2,11 +2,11 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "ES003",
-  "title": "",
+  "title": "ES003 Standard Library",
   "description": "",
   "layer": "ecosystem",
   "category": "ecosystem",
-  "keywords": [],
+  "keywords": ["OP", "type", "core", "library", "ecosystem"],
   "doc_version": "",
   "status": "active"
 }

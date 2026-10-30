@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "LG001",
-  "title": "",
+  "title": "LG001 Equality & Mutation Semantics Specification",
   "description": "",
   "layer": "language guide",
   "category": "language guide",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["language", "guide", "semantics", "equality", "mutation", "specification"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

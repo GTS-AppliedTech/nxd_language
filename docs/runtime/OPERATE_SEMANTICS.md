@@ -2,11 +2,11 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RT004",
-  "title": "",
+  "title": "RT004 Operational Semantics",
   "description": "",
   "layer": "runtime",
   "category": "runtime",
-  "keywords": [],
+  "keywords": ["runtime", "semantics", "operational"],
   "doc_version": "",
   "status": "active"
 }

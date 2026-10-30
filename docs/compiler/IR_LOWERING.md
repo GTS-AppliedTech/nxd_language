@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "CP002",
-  "title": "",
+  "title": "CP002 IR Lowering",
   "description": "",
   "layer": "compiler",
   "category": "compiler",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["IR", "lowering", "compiler"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

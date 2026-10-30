@@ -1,3 +1,4 @@
+---
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RT006",
@@ -5,7 +6,7 @@
   "description": "NXD standalone runtime exploration/implementation",
   "layer": "runtime",
   "category": "runtime",
-  "keywords": [nxd runtime, ASYNC, AWAIT, SEND, RECV, SPAWN],
+  "keywords": ["nxd runtime", "ASYNC", "AWAIT", "SEND", "RECV", "SPAWN", "ESC", "TIMEOUT", "PING", "TASK", "CHANNEL", "SYNC", "syncronious", "notes", "exploration", "semantics" ],
   "doc_version": "1.0",
   "status": "active"
 }

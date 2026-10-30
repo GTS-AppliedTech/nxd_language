@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "BE004",
-  "title": "",
+  "title": "BE004 Mapping Nim",
   "description": "",
   "layer": "backend",
   "category": "backend",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["mapping", "Nim"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

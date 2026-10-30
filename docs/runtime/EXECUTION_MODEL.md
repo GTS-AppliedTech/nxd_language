@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RT003",
-  "title": "",
+  "title": "RT003 Execution Model",
   "description": "",
   "layer": "runtime",
   "category": "runtime",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["runtime", "execution", "model"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---

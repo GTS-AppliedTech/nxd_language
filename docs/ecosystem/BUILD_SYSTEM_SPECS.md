@@ -2,12 +2,12 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "ES001",
-  "title": "",
+  "title": "ES001 Build System Specs",
   "description": "",
   "layer": "ecosystem",
   "category": "ecosystem",
-  "keywords": [],
-  "doc_version": "",
+  "keywords": ["build", "system", "specifications", "ecosystem"],
+  "doc_version": "1.0",
   "status": "active"
 }
 ---
