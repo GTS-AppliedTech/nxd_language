@@ -1,0 +1,67 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "TEST",
+      "span": {
+        "line": 1,
+        "column": 1,
+        "end_line": 3,
+        "end_column": 16
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "M",
+            "value": {
+              "Literal": {
+                "Map": {
+                  "a": {
+                    "Literal": {
+                      "Int": 1
+                    }
+                  },
+                  "b": {
+                    "Literal": {
+                      "Int": 2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "M",
+                    "span": {
+                      "line": 3,
+                      "column": 13,
+                      "end_line": 3,
+                      "end_column": 14
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

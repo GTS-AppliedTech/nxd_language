@@ -1,0 +1,49 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "TEST",
+      "span": {
+        "line": 1,
+        "column": 1,
+        "end_line": 2,
+        "end_column": 28
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "CH",
+            "value": {
+              "Call": {
+                "func": "CHANNEL",
+                "args": [
+                  {
+                    "Var": {
+                      "name": "int",
+                      "span": {
+                        "line": 2,
+                        "column": 16,
+                        "end_line": 2,
+                        "end_column": 19
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

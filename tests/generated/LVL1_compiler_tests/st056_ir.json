@@ -1,0 +1,97 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "WORK",
+      "span": {
+        "line": 1,
+        "column": 7,
+        "end_line": 3,
+        "end_column": 2
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Return": {
+            "Literal": {
+              "Int": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TEST",
+      "span": {
+        "line": 4,
+        "column": 7,
+        "end_line": 6,
+        "end_column": 21
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Let": {
+            "name": "T",
+            "value": {
+              "Call": {
+                "func": "TASK",
+                "args": [
+                  {
+                    "Call": {
+                      "func": "SPAWN",
+                      "args": [
+                        {
+                          "Call": {
+                            "func": "WORK",
+                            "args": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "TIMEOUT",
+              "args": [
+                {
+                  "Var": {
+                    "name": "T",
+                    "span": {
+                      "line": 6,
+                      "column": 13,
+                      "end_line": 6,
+                      "end_column": 14
+                    }
+                  }
+                },
+                {
+                  "Literal": {
+                    "Int": 10000
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

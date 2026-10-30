@@ -1,0 +1,52 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "TEST",
+      "span": {
+        "line": 1,
+        "column": 1,
+        "end_line": 2,
+        "end_column": 25
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "List": [
+                  {
+                    "Literal": {
+                      "Int": 1
+                    }
+                  },
+                  {
+                    "Literal": {
+                      "Int": 2
+                    }
+                  },
+                  {
+                    "Literal": {
+                      "Int": 3
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

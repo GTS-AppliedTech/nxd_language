@@ -1,0 +1,108 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "WORK",
+      "span": {
+        "line": 1,
+        "column": 7,
+        "end_line": 3,
+        "end_column": 2
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Return": {
+            "Literal": {
+              "Int": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TEST",
+      "span": {
+        "line": 4,
+        "column": 7,
+        "end_line": 7,
+        "end_column": 13
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": true,
+      "body": [
+        {
+          "Let": {
+            "name": "P",
+            "value": {
+              "Call": {
+                "func": "SPAWN",
+                "args": [
+                  {
+                    "Call": {
+                      "func": "WORK",
+                      "args": []
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "R",
+            "value": {
+              "Call": {
+                "func": "RECV",
+                "args": [
+                  {
+                    "Var": {
+                      "name": "P",
+                      "span": {
+                        "line": 6,
+                        "column": 20,
+                        "end_line": 6,
+                        "end_column": 21
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "SYNC",
+              "args": [
+                {
+                  "Var": {
+                    "name": "R",
+                    "span": {
+                      "line": 7,
+                      "column": 10,
+                      "end_line": 7,
+                      "end_column": 11
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

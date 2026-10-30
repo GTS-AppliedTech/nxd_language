@@ -1,0 +1,52 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "TEST",
+      "span": {
+        "line": 1,
+        "column": 1,
+        "end_line": 2,
+        "end_column": 32
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "FIRST",
+            "value": {
+              "Literal": {
+                "Lambda": {
+                  "params": [
+                    "X",
+                    "Y"
+                  ],
+                  "body": {
+                    "Var": {
+                      "name": "X",
+                      "span": {
+                        "line": 2,
+                        "column": 31,
+                        "end_line": 2,
+                        "end_column": 32
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

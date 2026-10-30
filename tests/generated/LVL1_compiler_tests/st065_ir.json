@@ -1,0 +1,61 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "TEST",
+      "span": {
+        "line": 1,
+        "column": 1,
+        "end_line": 2,
+        "end_column": 37
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "DOUBLE",
+            "value": {
+              "Literal": {
+                "Lambda": {
+                  "params": [
+                    "X"
+                  ],
+                  "body": {
+                    "Binary": {
+                      "kind": "MUL",
+                      "left": {
+                        "Var": {
+                          "name": "X",
+                          "span": {
+                            "line": 2,
+                            "column": 29,
+                            "end_line": 2,
+                            "end_column": 30
+                          }
+                        }
+                      },
+                      "right": {
+                        "Literal": {
+                          "Int": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}
