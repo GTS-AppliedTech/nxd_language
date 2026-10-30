@@ -58,7 +58,7 @@
 
 - NXD-S3001 Undefined symbol
 - NXD-S3002 Type mismatch
-- NXD-S3003 Trait not implemented
+- NXD-S3003 Trait not implemented*** *(See note)*
 - NXD-S3004 Invalid cast
 - NXD-S3005-01 'AWAIT' Outside 'ASYNC' function
 - NXD-S3005-02 'AWAIT' non awaitable function
@@ -72,6 +72,11 @@
 - NXD-S3005-10 Invalid 'SYNC' target
 - NXD-S3005-11 Invalid 'CHANNEL' declaration
 - NXD-S3005-12 Invalid 'TASK' target
+
+***Note NXD-S3003: Trait not implemented:
+*Trait declarations and implementations are preserved through the AST and IR and are* *available to semantic analysis through the trait registry.*
+*Trait conformance lookup infrastructure exists; however, no currently implemented language* *construct requires trait conformance during semantic analysis.*
+*This diagnostic remains reserved until a trait requirement, such as generic trait* *constraints, requires enforcement.*
 
 ##### *WARNING CODES:*
  

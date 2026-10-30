@@ -7,16 +7,14 @@ use crate::semantic::symbols::Symbol;
 use crate::semantic::traits::TraitRegistry;
 
 fn analyze_ir(ir_root: &IRRoot) -> Result<(), SemanticError> {
-    let traits = TraitRegistry::new();
-
+    let traits = TraitRegistry::from_ir(&ir_root.traits, &ir_root.impls);
     let mut analyzer = Analyzer::new(traits);
 
     analyzer.analyze(ir_root)
 }
 
 fn analyze_ir_with_symbols(ir_root: &IRRoot) -> Result<Analyzer, SemanticError> {
-    let traits = TraitRegistry::new();
-
+    let traits = TraitRegistry::from_ir(&ir_root.traits, &ir_root.impls);
     let mut analyzer = Analyzer::new(traits);
 
     analyzer.analyze(ir_root)?;

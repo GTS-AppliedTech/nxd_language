@@ -354,9 +354,10 @@ NXD-S3003
 Trait not implemented
 
 
-Diagnostic infrastructure exists; however, generic constraint resolution and trait enforcement are not currently implemented.
+Trait declarations and implementations are preserved through the AST and IR and are available to semantic analysis through the trait registry.
 
-This diagnostic is reserved for future generic constraint validation.
+Trait conformance lookup infrastructure exists; however, no currently implemented language construct requires trait conformance during semantic analysis.
+This diagnostic remains reserved until a trait requirement, such as generic trait constraints, requires enforcement.
 
 NXD-S3004
 Invalid cast

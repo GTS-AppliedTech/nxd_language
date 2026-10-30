@@ -14,6 +14,13 @@ impl TraitRegistry {
         }
     }
 
+    pub fn from_ir(traits: &[IRTrait], impls: &[IRImpl]) -> Self {
+        Self {
+            traits: traits.to_vec(),
+            impls: impls.to_vec(),
+        }
+    }
+
     pub fn implements(&self, trait_name: &str, ty: &str) -> bool {
         self.impls
             .iter()

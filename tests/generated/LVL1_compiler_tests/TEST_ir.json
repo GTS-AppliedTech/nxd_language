@@ -1,0 +1,72 @@
+{
+  "module": {
+    "name": "ANONYMOUS",
+    "imports": []
+  },
+  "types": [
+    {
+      "kind": "trait",
+      "name": "DISPLAYABLE",
+      "methods": [
+        {
+          "name": "DISPLAY",
+          "params": [],
+          "return_type": "string"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "ITEM",
+      "fields": [
+        {
+          "name": "VALUE",
+          "ty": "string"
+        }
+      ]
+    }
+  ],
+  "traits": [
+    {
+      "name": "DISPLAYABLE",
+      "methods": [
+        {
+          "name": "DISPLAY",
+          "params": [],
+          "return_type": "string"
+        }
+      ]
+    }
+  ],
+  "impls": [
+    {
+      "trait_name": "DISPLAYABLE",
+      "target_type": "ITEM",
+      "methods": [
+        {
+          "name": "DISPLAY",
+          "span": {
+            "line": 8,
+            "column": 5,
+            "end_line": 9,
+            "end_column": 22
+          },
+          "params": [],
+          "return_type": "string",
+          "is_async": false,
+          "body": [
+            {
+              "Return": {
+                "Literal": {
+                  "String": "item"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "functions": [],
+  "statements": []
+}

@@ -49,6 +49,14 @@ pub fn lower_types(ast_nodes: &[AstNode]) -> Vec<IRTypeDecl> {
     out
 }
 
+pub fn lower_impl(ast: &AstImpl) -> IRImpl {
+    IRImpl {
+        trait_name: ast.trait_name.clone(),
+        target_type: ast.target_type.clone(),
+        methods: ast.methods.iter().map(lower_function).collect(),
+    }
+}
+
 pub fn lower_struct(ast: &AstStruct) -> IRStruct {
     IRStruct {
         name: ast.name.clone(),

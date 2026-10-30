@@ -1,6 +1,7 @@
 use crate::diagnostics::warnings::find_shadowed_bindings;
 use crate::diagnostics::warnings::find_unreachable_code;
 use crate::diagnostics::warnings::find_unused_variables;
+use crate::frontend::ast::nodes::AstNode;
 use crate::frontend::parser::parser::parse;
 
 use crate::ir::lowering::*;
@@ -21,14 +22,30 @@ pub fn compile_to_ir(src: &str) -> Result<IRRoot, Box<dyn std::error::Error>> {
     println!("\n=== WARNINGS ===");
     println!("{:#?}", warnings);
 
+    let traits = ast_types
+        .iter()
+        .filter_map(|node| match node {
+            AstNode::Trait(trait_node) => Some(lower_trait(trait_node)),
+            _ => None,
+        })
+        .collect();
+
+    let impls = ast_types
+        .iter()
+        .filter_map(|node| match node {
+            AstNode::Impl(impl_node) => Some(lower_impl(impl_node)),
+            _ => None,
+        })
+        .collect();
+
     let ir_root = IRRoot {
         module: lower_module(&ast_module),
 
         types: lower_types(&ast_types),
 
-        traits: Vec::new(),
+        traits,
 
-        impls: Vec::new(),
+        impls,
 
         functions: ast_functions.iter().map(lower_function).collect(),
 
