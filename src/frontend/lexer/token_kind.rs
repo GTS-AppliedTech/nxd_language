@@ -3,6 +3,7 @@ pub enum TokenKind {
     Newline,
     Skip,
     Number,
+    Dot,
     String,
     LBrace,
     RBrace,
@@ -41,6 +42,10 @@ pub const TOKEN_SPEC: &[TokenRule] = &[
     TokenRule {
         kind: TokenKind::Number,
         pattern: r"\d+(\.\d+)?",
+    },
+    TokenRule {
+        kind: TokenKind::Dot,
+        pattern: r"\.",
     },
     TokenRule {
         kind: TokenKind::Skip,

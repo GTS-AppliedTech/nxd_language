@@ -20,6 +20,7 @@ pub enum Symbol {
     },
     Type {
         name: String,
+        fields: HashMap<String, String>,
     },
     Trait {
         name: String,

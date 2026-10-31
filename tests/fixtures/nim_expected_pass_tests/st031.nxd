@@ -4,11 +4,11 @@ FUNC MAIN()
     CONST STATE SET "READY"
 
     MATCH STATE:
-        CASE "READY":
+        CASE "READY"
             PRINTLN("GO")
 
-        CASE "WAIT":
+        CASE "WAIT"
             PRINTLN("HOLD")
 
-        OTHERWISE:
+        OTHERWISE
             PRINTLN("UNKNOWN")

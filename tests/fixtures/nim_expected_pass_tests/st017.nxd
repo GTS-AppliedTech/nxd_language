@@ -4,11 +4,11 @@ FUNC MAIN()
     LET X SET 2
 
     MATCH X:
-        CASE 1:
+        CASE 1
             PRINTLN("ONE")
 
-        CASE 2:
+        CASE 2
             PRINTLN("TWO")
 
-        OTHERWISE:
+        OTHERWISE
             PRINTLN("OTHER")

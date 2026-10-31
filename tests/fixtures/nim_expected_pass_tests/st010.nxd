@@ -1,5 +1,9 @@
 MODULE TEST
 
+TYPE PERSON STRUCT:
+    NAME: string
+    AGE: int
+
 FUNC MAIN():
     LET P SET PERSON {
         NAME: "gabriel",

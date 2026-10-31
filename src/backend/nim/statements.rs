@@ -103,6 +103,14 @@ pub fn emit_expr(expr: &crate::ir::nodes::IRExpr) -> String {
 
         Var(var) => var.name.to_lowercase(),
 
+        MemberAccess(access) => {
+            format!(
+                "{}.{}",
+                emit_expr(&access.object),
+                access.member.to_lowercase()
+            )
+        }
+
         Pipeline { value, func } => {
             crate::backend::nim::operators::emit_pipeline(&emit_expr(value), func)
         }

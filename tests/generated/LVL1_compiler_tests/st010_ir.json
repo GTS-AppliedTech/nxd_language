@@ -1,0 +1,125 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [
+    {
+      "kind": "struct",
+      "name": "PERSON",
+      "fields": [
+        {
+          "name": "NAME",
+          "ty": "string"
+        },
+        {
+          "name": "AGE",
+          "ty": "int"
+        }
+      ]
+    }
+  ],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 7,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 19
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "P",
+            "value": {
+              "ObjectInit": {
+                "type_name": "PERSON",
+                "fields": {
+                  "NAME": {
+                    "Literal": {
+                      "String": "gabriel"
+                    }
+                  },
+                  "AGE": {
+                    "Literal": {
+                      "Int": 42
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "MemberAccess": {
+                    "object": {
+                      "Var": {
+                        "name": "P",
+                        "span": {
+                          "line": 13,
+                          "column": 13,
+                          "end_line": 13,
+                          "end_column": 14
+                        }
+                      }
+                    },
+                    "member": "NAME",
+                    "span": {
+                      "line": 13,
+                      "column": 15,
+                      "end_line": 13,
+                      "end_column": 19
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "MemberAccess": {
+                    "object": {
+                      "Var": {
+                        "name": "P",
+                        "span": {
+                          "line": 14,
+                          "column": 13,
+                          "end_line": 14,
+                          "end_column": 14
+                        }
+                      }
+                    },
+                    "member": "AGE",
+                    "span": {
+                      "line": 14,
+                      "column": 15,
+                      "end_line": 14,
+                      "end_column": 18
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

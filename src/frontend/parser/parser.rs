@@ -257,8 +257,21 @@ impl Parser {
 
         let path_token = self.eat(Some(TokenKind::Ident), None)?;
 
-        let mut alias = None;
+        let mut path = path_token.lexeme.clone();
         let mut end_span = path_token.span();
+
+        while self.at(Some(TokenKind::Dot), None) {
+            self.eat(Some(TokenKind::Dot), None)?;
+
+            let segment = self.eat(Some(TokenKind::Ident), None)?;
+
+            path.push('.');
+            path.push_str(&segment.lexeme);
+
+            end_span = segment.span();
+        }
+
+        let mut alias = None;
 
         if self.at(Some(TokenKind::Op), Some("AS")) {
             self.eat(Some(TokenKind::Op), Some("AS"))?;
@@ -270,7 +283,7 @@ impl Parser {
         }
 
         Ok(AstImport {
-            path: path_token.lexeme,
+            path,
             alias,
             span: SourceSpan {
                 line: import_token.line,
@@ -1585,7 +1598,7 @@ impl Parser {
                 if matches!(token.lexeme.as_str(), "NOT" | "BORROW" | "SUB") {
                     let op = self.eat(Some(TokenKind::Op), None)?.lexeme;
 
-                    let expr = self.parse_primary()?;
+                    let expr = self.parse_member_access()?;
 
                     return Ok(AstExpr::Unary(Box::new(AstUnary {
                         kind: op,
@@ -1595,7 +1608,7 @@ impl Parser {
             }
         }
 
-        self.parse_primary()
+        self.parse_member_access()
     }
 
     pub fn parse_primary(&mut self) -> Result<AstExpr, ParserError> {
@@ -1682,6 +1695,24 @@ impl Parser {
             format!("NXD-P1008: Unexpected token in primary: {}", token.lexeme),
             token.span(),
         ))
+    }
+
+    pub fn parse_member_access(&mut self) -> Result<AstExpr, ParserError> {
+        let mut expr = self.parse_primary()?;
+
+        while self.at(Some(TokenKind::Dot), None) {
+            self.eat(Some(TokenKind::Dot), None)?;
+
+            let member_token = self.eat(Some(TokenKind::Ident), None)?;
+
+            expr = AstExpr::MemberAccess(Box::new(AstMemberAccess {
+                object: Box::new(expr),
+                member: member_token.lexeme.clone(),
+                span: member_token.span(),
+            }));
+        }
+
+        Ok(expr)
     }
 
     pub fn parse_literal(&mut self) -> Result<AstLiteral, ParserError> {

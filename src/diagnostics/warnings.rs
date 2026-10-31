@@ -183,6 +183,10 @@ fn collect_expression_usage(
             collect_literal_usage(literal, declared, used);
         }
 
+        AstExpr::MemberAccess(access) => {
+            collect_expression_usage(&access.object, declared, used);
+        }
+
         AstExpr::Pipeline(_) => {
             // Fill this in once we compare the AstPipeline fields.
         }

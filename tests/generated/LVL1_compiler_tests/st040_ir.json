@@ -1,0 +1,45 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": [
+      {
+        "path": "STD.IO",
+        "alias": null
+      }
+    ]
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 5,
+        "column": 1,
+        "end_line": 6,
+        "end_column": 27
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Literal": {
+                    "String": "IMPORT_TEST"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

@@ -13,6 +13,7 @@ use crate::semantic::{
         unwrap_receive_operation_type, unwrap_task_type,
     },
 };
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum AsyncOperation {
@@ -92,6 +93,7 @@ impl Analyzer {
             &module.name,
             Symbol::Type {
                 name: module.name.clone(),
+                fields: HashMap::new(),
             },
         );
         Ok(())
@@ -101,10 +103,17 @@ impl Analyzer {
         for t in types {
             match t {
                 IRTypeDecl::Struct(s) => {
+                    let fields = s
+                        .fields
+                        .iter()
+                        .map(|field| (field.name.clone(), field.ty.clone()))
+                        .collect();
+
                     self.symbols.define(
                         &s.name,
                         Symbol::Type {
                             name: s.name.clone(),
+                            fields,
                         },
                     );
                 }
@@ -113,6 +122,7 @@ impl Analyzer {
                         &e.name,
                         Symbol::Type {
                             name: e.name.clone(),
+                            fields: HashMap::new(),
                         },
                     );
                 }
@@ -121,6 +131,7 @@ impl Analyzer {
                         &u.name,
                         Symbol::Type {
                             name: u.name.clone(),
+                            fields: HashMap::new(),
                         },
                     );
                 }
@@ -327,6 +338,32 @@ impl Analyzer {
     fn analyze_expr(&mut self, expr: &IRExpr, is_async: bool) -> Result<String, SemanticError> {
         match expr {
             IRExpr::Literal(literal) => Ok(self.literal_type(literal)),
+
+            IRExpr::MemberAccess(access) => {
+                let object_type = self.analyze_expr(&access.object, is_async)?;
+
+                match self.symbols.resolve(&object_type) {
+                    Some(Symbol::Type { fields, .. }) => fields
+                        .iter()
+                        .find(|(name, _)| name.eq_ignore_ascii_case(&access.member))
+                        .map(|(_, field_type)| field_type.clone())
+                        .ok_or_else(|| SemanticError::UndefinedSymbol {
+                            name: format!("{}.{}", object_type, access.member),
+                            line: access.span.line,
+                            column: access.span.column,
+                            end_line: access.span.end_line,
+                            end_column: access.span.end_column,
+                        }),
+
+                    _ => Err(SemanticError::UndefinedSymbol {
+                        name: format!("{}.{}", object_type, access.member),
+                        line: access.span.line,
+                        column: access.span.column,
+                        end_line: access.span.end_line,
+                        end_column: access.span.end_column,
+                    }),
+                }
+            }
 
             IRExpr::ObjectInit(init) => {
                 for value in init.fields.values() {

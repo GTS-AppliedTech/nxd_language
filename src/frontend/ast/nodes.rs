@@ -298,6 +298,13 @@ pub struct AstObjectInit {
 }
 
 #[derive(Clone, Debug)]
+pub struct AstMemberAccess {
+    pub object: Box<AstExpr>,
+    pub member: String,
+    pub span: SourceSpan,
+}
+
+#[derive(Clone, Debug)]
 pub struct AstBinary {
     pub kind: String,
     pub left: Box<AstExpr>,
@@ -340,6 +347,7 @@ pub enum AstExpr {
     Var(AstVar),
     Pipeline(Box<AstPipeline>),
     ObjectInit(AstObjectInit),
+    MemberAccess(Box<AstMemberAccess>),
 }
 
 #[derive(Clone, Debug)]

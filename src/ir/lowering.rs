@@ -219,6 +219,12 @@ pub fn lower_statement(ast: &AstStatement) -> IRStatement {
 
 pub fn lower_expr(ast: &AstExpr) -> IRExpr {
     match ast {
+        AstExpr::MemberAccess(access) => IRExpr::MemberAccess(Box::new(IRMemberAccess {
+            object: Box::new(lower_expr(&access.object)),
+            member: access.member.clone(),
+            span: access.span.clone(),
+        })),
+
         AstExpr::Literal(lit) => IRExpr::Literal(lower_literal(lit)),
 
         AstExpr::Binary(op) => IRExpr::Binary(Box::new(IRBinaryOp {

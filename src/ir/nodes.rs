@@ -187,6 +187,13 @@ pub struct IRTry {
 // ===============================
 
 #[derive(Clone, Debug, Serialize)]
+pub struct IRMemberAccess {
+    pub object: Box<IRExpr>,
+    pub member: String,
+    pub span: SourceSpan,
+}
+
+#[derive(Clone, Debug, Serialize)]
 pub struct IRVar {
     pub name: String,
     pub span: SourceSpan,
@@ -201,6 +208,7 @@ pub enum IRExpr {
     Var(IRVar),
     Pipeline { value: Box<IRExpr>, func: String },
     ObjectInit(IRObjectInit),
+    MemberAccess(Box<IRMemberAccess>),
 }
 
 // ===============================
@@ -294,6 +302,10 @@ impl fmt::Display for IRExpr {
 
             IRExpr::Var(var) => {
                 write!(f, "{}", var.name.to_lowercase())
+            }
+
+            IRExpr::MemberAccess(access) => {
+                write!(f, "{}.{}", access.object, access.member)
             }
 
             IRExpr::Binary(op) => {
