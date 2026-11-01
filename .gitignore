@@ -34,7 +34,26 @@ Cargo.lock
 # Nim
 # =========================
 nimcache/
-nimblecache/
+.nimblecache/
+
+# =========================
+# D
+# =========================
+.dub/
+dub.selections.json
+*.o
+*.obj
+*.a
+*.lib
+
+# =========================
+# Elixir / Mix
+# =========================
+_build/
+deps/
+.cover/
+*.ez
+erl_crash.dump
 
 # =========================
 # Build Artifacts
@@ -50,6 +69,8 @@ out/
 *.ir
 *.ir.json
 *.nim
+*.d
+*.ex
 
 /output/
 /generated/
