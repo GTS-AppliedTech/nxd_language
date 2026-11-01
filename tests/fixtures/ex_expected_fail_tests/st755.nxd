@@ -1,0 +1,4 @@
+FUNC TEST():
+    TASK()
+
+// Expected NXD-S3005-06: An async operation may only be used inside an ASYNC FUNC

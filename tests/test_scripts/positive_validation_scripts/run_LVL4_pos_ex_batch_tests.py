@@ -1,52 +1,57 @@
-from pathlib import Path
-from src.frontend.ir.main import compile_to_ir_json
 import subprocess
 
 TESTS = [
-    "st601",
-    "st602",
-    "st603",
-    "st604",
-    "st605",
-    "st606",
-    "st607",
-    "st608",
-    "st609",
-    "st610"
+    "st610",
+    "st617",
+    "st618",
+    "st641",
+    "st629",
+    "st631",
+    "st637",
+    "st660",
+    "st619",
+    "st640",
 ]
 
-for test_id in TESTS:
 
+for test_id in TESTS:
     print(f"\n=== Running {test_id} ===")
 
-    src_path = f"tests/fixtures/expected_pass_tests/{test_id}.nxd"
-    json_path = f"tests/generated/LVL1_compiler_tests/{test_id}_ir.json"
-    ex_path = f"tests/generated/LVL3_full_pipeline_ex_tests/{test_id}.ex"
+    src_path = (
+        "tests/fixtures/ex_expected_pass_tests/"
+        f"{test_id}.nxd"
+    )
+
+    json_path = (
+        "tests/generated/LVL1_compiler_tests/"
+        f"{test_id}_ir.json"
+    )
+
+    ex_path = (
+        "tests/generated/LVL3_full_pipeline_ex_tests/"
+        f"{test_id}.ex"
+    )
 
     try:
-        src = Path(src_path).read_text()
-
-        compile_to_ir_json(
-            src,
-            json_path
-        )
-
-        print(f"{test_id}: IR generated")
-
         subprocess.run(
             [
                 "cargo",
                 "run",
+                "--bin",
+                "nxd_language",
                 "--",
-                "--semantics",
+                src_path,
                 json_path,
-                ex_path
+                ex_path,
             ],
-            check=True
+            check=True,
         )
 
-        print(f"{test_id}: Semantic + Rust compilation successful")
+        print(f"{test_id}: PASSED")
 
-    except Exception as e:
+    except subprocess.CalledProcessError as error:
         print(f"{test_id}: FAILED")
-        print(e)
+        print(
+            f"Compiler exit code: "
+            f"{error.returncode}"
+        )

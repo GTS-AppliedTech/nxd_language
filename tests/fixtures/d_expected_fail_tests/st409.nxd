@@ -1,0 +1,7 @@
+MODULE TEST
+
+FUNC MAIN()
+    LET VALID SET TRUE
+
+    IF VALID:
+        PRINTLN("True")

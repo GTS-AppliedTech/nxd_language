@@ -1,0 +1,4 @@
+FUNC TEST():
+    CHANNEL(42)
+
+    // Expected NXD-P1001: Expected Ident, got Number

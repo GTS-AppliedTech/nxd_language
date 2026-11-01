@@ -1,0 +1,9 @@
+TRAIT DISPLAYABLE:
+    FUNC DISPLAY(): string
+
+TYPE ITEM STRUCT:
+    VALUE: string
+
+IMPL DISPLAYABLE FOR ITEM:
+    FUNC DISPLAY(): string
+        RETURN "item"
