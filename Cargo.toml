@@ -16,6 +16,3 @@ regex = "1"
 name = "lsp_validate"
 path = "lsp_validate.rs"
 
-[[bin]]
-name = "lsp_parser"
-path = "nxd-lsp/NXD/lsp_parser.rs"
