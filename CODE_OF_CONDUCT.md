@@ -53,7 +53,10 @@ Final decisions regarding the direction of NXD and its official projects are mad
 #### Scope
 
 This Code of Conduct applies to official NXD project spaces:[nxd_language](https://github.com/GTS-AppliedTech/nxd_language), [nxd-extension](https://github.com/GTS-AppliedTech/nxd-extension), [nxdlang.org](https://github.com/GTS-AppliedTech/nxdlang.org), and [nxd-rust-frontend](https://github.com/GTS-AppliedTech/nxd-rust-frontend). Including and not limited to: issue trackers, pull requests, discussions, and other community spaces managed by the project.
-Enforcement
+
+---
+
+#### Enforcement
 
 Behavior that violates this Code of Conduct may result in warnings, removal of content, temporary restrictions, or permanent exclusion from project spaces, depending on the severity and circumstances of the behavior.
 
