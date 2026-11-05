@@ -25,14 +25,14 @@
             "value": {
               "Literal": {
                 "Map": {
-                  "a": {
-                    "Literal": {
-                      "Int": 1
-                    }
-                  },
                   "b": {
                     "Literal": {
                       "Int": 2
+                    }
+                  },
+                  "a": {
+                    "Literal": {
+                      "Int": 1
                     }
                   }
                 }
