@@ -5,7 +5,7 @@ FUNC MAIN()
     LET Y SET 2
 
     TRY:
-        PRINTLN("TRY")
+        PRINTLN(TRY)
 
     CATCH:
         PRINTLN("CATCH")

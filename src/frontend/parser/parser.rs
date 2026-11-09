@@ -2,7 +2,7 @@ use crate::diagnostics::severity::DiagnosticSeverity;
 use crate::diagnostics::span::SourceSpan;
 use crate::diagnostics::types::*;
 use crate::frontend::ast::nodes::*;
-use crate::frontend::lexer::scanner::lex;
+use crate::frontend::lexer::scanner::{lex, LexerError};
 use crate::frontend::lexer::token::Token;
 use crate::frontend::lexer::token_kind::TokenKind;
 use std::collections::HashMap;
@@ -36,7 +36,7 @@ impl Parser {
 
     // Constructor
 
-    pub fn new(src: &str, recover_errors: bool) -> Result<Self, String> {
+    pub fn new(src: &str, recover_errors: bool) -> Result<Self, LexerError> {
         let tokens = lex(src)?;
 
         Ok(Self {
@@ -2005,19 +2005,13 @@ impl Parser {
 }
 
 pub fn parse(src: &str) -> Result<(AstModule, Vec<AstNode>, Vec<AstFunction>), ParserError> {
-    let mut parser = Parser::new(src, false).map_err(|message| {
+    let mut parser = Parser::new(src, false).map_err(|error| {
         ParserError::new(
             "NXD-P1099",
-            message,
-            SourceSpan {
-                line: 0,
-                column: 0,
-                end_line: 0,
-                end_column: 0,
-            },
+            error.message,
+            error.span,
         )
     })?;
-
     let module = parser.parse_program()?;
 
     let mut ast_types = Vec::new();

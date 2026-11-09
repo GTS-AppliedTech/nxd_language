@@ -28,19 +28,13 @@ impl std::error::Error for ParserError {}
 pub fn parse_with_diagnostics(
     src: &str,
 ) -> Result<(AstModule, Vec<AstNode>, Vec<AstFunction>, Vec<ParserError>), ParserError> {
-    let mut parser = Parser::new(src, true).map_err(|message| {
+    let mut parser = Parser::new(src, true).map_err(|error| {
         ParserError::new(
             "NXD-P1099",
-            message,
-            SourceSpan {
-                line: 0,
-                column: 0,
-                end_line: 0,
-                end_column: 0,
-            },
+            error.message,
+            error.span,
         )
     })?;
-
     let module = parser.parse_program()?;
 
     let mut ast_types = Vec::new();

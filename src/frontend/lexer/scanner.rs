@@ -2,6 +2,21 @@ use regex::Regex;
 
 use crate::frontend::lexer::token::Token;
 use crate::frontend::lexer::token_kind::{TOKEN_SPEC, TokenKind};
+use crate::diagnostics::span::SourceSpan;
+
+#[derive(Debug)]
+pub struct LexerError {
+    pub message: String,
+    pub span: SourceSpan,
+}
+
+impl std::fmt::Display for LexerError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+impl std::error::Error for LexerError {}
 
 pub fn strip_line_comments(source: &str) -> String {
     // Removes NXD // line comments while preserving:
@@ -62,7 +77,7 @@ pub fn strip_line_comments(source: &str) -> String {
     output
 }
 
-pub fn lex(src: &str) -> Result<Vec<Token>, String> {
+pub fn lex(src: &str) -> Result<Vec<Token>, LexerError> {
     let src = strip_line_comments(src);
 
     eprintln!("=== STRIPPED SOURCE ===");
@@ -83,7 +98,15 @@ pub fn lex(src: &str) -> Result<Vec<Token>, String> {
         })
         .collect();
 
-    let rules = rules?;
+    let rules = rules.map_err(|message| LexerError {
+        message,
+        span: SourceSpan {
+            line: 1,
+            column: 1,
+            end_line: 1,
+            end_column: 1,
+        },
+    })?;
 
     let mut tokens = Vec::new();
 
@@ -105,10 +128,16 @@ pub fn lex(src: &str) -> Result<Vec<Token>, String> {
         }
 
         let Some((kind, value)) = matched_rule else {
-            return Err(format!(
-                "Unable to tokenize source at line {}, column {}",
-                line, column
-            ));
+            return Err(LexerError {
+                message: format!("Unable to tokenize source at line {}, column {}",
+                line, column),
+                    span: SourceSpan {
+                        line,
+                        column,
+                        end_line: line,
+                        end_column: column + 1,
+                    },
+            });
         };
 
         let character_count = value.chars().count();
@@ -131,12 +160,16 @@ pub fn lex(src: &str) -> Result<Vec<Token>, String> {
             }
 
             TokenKind::Mismatch => {
-                return Err(format!(
-                    "Unexpected character {:?} at line {}, column {}",
-                    value, line, column
-                ));
+                return Err(LexerError {
+                    message: format!("Unexpected character {:?}", value),
+                    span: SourceSpan {
+                        line,
+                        column,
+                        end_line: line,
+                        end_column: column + character_count as u32,
+                    },
+                });
             }
-
             _ => {
                 tokens.push(Token {
                     kind,
@@ -231,7 +264,10 @@ mod tests {
     fn rejects_invalid_characters() {
         let error = lex("LET VALUE @").expect_err("Lexer should reject @");
 
-        assert!(error.contains("Unexpected character"));
-        assert!(error.contains("line 1"));
+        assert!(error.message.contains("Unexpected character"));
+        assert_eq!(error.span.line, 1);
+        assert_eq!(error.span.column, 11);
+        assert_eq!(error.span.end_line, 1);
+        assert_eq!(error.span.end_column, 12);
     }
 }
