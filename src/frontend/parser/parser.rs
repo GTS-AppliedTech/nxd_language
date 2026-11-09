@@ -2,7 +2,7 @@ use crate::diagnostics::severity::DiagnosticSeverity;
 use crate::diagnostics::span::SourceSpan;
 use crate::diagnostics::types::*;
 use crate::frontend::ast::nodes::*;
-use crate::frontend::lexer::scanner::{lex, LexerError};
+use crate::frontend::lexer::scanner::{LexerError, lex};
 use crate::frontend::lexer::token::Token;
 use crate::frontend::lexer::token_kind::TokenKind;
 use std::collections::HashMap;
@@ -507,14 +507,11 @@ impl Parser {
         let func_token = self.eat(Some(TokenKind::Keyword), Some("FUNC"))?;
         let name_token = self.eat(Some(TokenKind::Ident), None)?;
 
-        let expected_lparen_column =
-            name_token.column + name_token.lexeme.chars().count() as u32;
+        let expected_lparen_column = name_token.column + name_token.lexeme.chars().count() as u32;
 
         let lparen_token = self.current().cloned().unwrap();
 
-        if lparen_token.kind == TokenKind::LParen
-            && lparen_token.column != expected_lparen_column
-        {
+        if lparen_token.kind == TokenKind::LParen && lparen_token.column != expected_lparen_column {
             return Err(ParserError::new(
                 "NXD-P1013",
                 "NXD-P1013: Function name must be immediately followed by '('",
@@ -525,7 +522,7 @@ impl Parser {
         let name = name_token.lexeme;
 
         self.eat(Some(TokenKind::LParen), None)?;
-        
+
         let mut parsed_params: Vec<(String, String)> = Vec::new();
 
         if !self.at(Some(TokenKind::RParen), None) {
@@ -561,7 +558,7 @@ impl Parser {
 
         self.expect_block_colon()?;
 
-        let body = self.parse_block()?;
+        let body = self.parse_block(func_token.column)?;
 
         if let Some(previous_token) = self.previous() {
             function_end_span = previous_token.span();
@@ -618,7 +615,7 @@ impl Parser {
         Ok(())
     }
 
-    pub fn parse_block(&mut self) -> Result<Vec<AstStatement>, ParserError> {
+    pub fn parse_block(&mut self, parent_column: u32) -> Result<Vec<AstStatement>, ParserError> {
         let mut statements: Vec<AstStatement> = Vec::new();
 
         // Ignore blank lines before the block's first statement.
@@ -633,8 +630,17 @@ impl Parser {
         // The first statement defines this block's indentation.
         let block_column = self.current_column().unwrap_or(0);
 
-        self.indent_stack.push(block_column);
+        if block_column <= parent_column {
+            let token = self.current().cloned().unwrap();
 
+            return Err(ParserError::new(
+                "NXD-P1014",
+                "NXD-P1014: Expected an indented block",
+                token.span(),
+            ));
+        }
+
+        self.indent_stack.push(block_column);
         // Use a closure so indent_stack is popped whether parsing
         // succeeds or returns a ParserError.
         let result = (|| -> Result<(), ParserError> {
@@ -650,6 +656,16 @@ impl Parser {
                 // Dedent closes the current block.
                 if current_column < block_column {
                     break;
+                }
+
+                if current_column > block_column {
+                    let token = self.current().cloned().unwrap();
+
+                    return Err(ParserError::new(
+                        "NXD-P1015",
+                        "NXD-P1015: Unexpected indentation",
+                        token.span(),
+                    ));
                 }
 
                 // The enclosing parser handles these tokens.
@@ -1120,7 +1136,7 @@ impl Parser {
 
         self.expect_block_colon()?;
 
-        let body = self.parse_block()?;
+        let body = self.parse_block(loop_token.column)?;
 
         Ok(AstLoop {
             body,
@@ -1136,16 +1152,16 @@ impl Parser {
 
         self.expect_block_colon()?;
 
-        let then_branch = self.parse_block()?;
+        let then_branch = self.parse_block(if_token.column)?;
 
         let mut else_branch = Vec::new();
 
         if self.at(Some(TokenKind::Keyword), Some("ELSE")) {
-            self.eat(Some(TokenKind::Keyword), Some("ELSE"))?;
+            let else_token = self.eat(Some(TokenKind::Keyword), Some("ELSE"))?;
 
             self.expect_block_colon()?;
 
-            else_branch = self.parse_block()?;
+            else_branch = self.parse_block(else_token.column)?;
         }
 
         Ok(AstIf {
@@ -1177,11 +1193,11 @@ impl Parser {
         }
 
         if self.at(Some(TokenKind::Keyword), Some("OTHERWISE")) {
-            self.eat(Some(TokenKind::Keyword), Some("OTHERWISE"))?;
+            let otherwise_token = self.eat(Some(TokenKind::Keyword), Some("OTHERWISE"))?;
 
             self.expect_block_colon()?;
 
-            otherwise = Some(self.parse_block()?);
+            otherwise = Some(self.parse_block(otherwise_token.column)?);
         }
 
         Ok(AstMatch {
@@ -1198,25 +1214,25 @@ impl Parser {
 
         self.eat(Some(TokenKind::Colon), None)?;
 
-        let try_body = self.parse_block()?;
+        let try_body = self.parse_block(try_token.column)?;
 
         let mut catch_body = Vec::new();
         let mut finally_body = Vec::new();
 
         if self.at(Some(TokenKind::Keyword), Some("CATCH")) {
-            self.eat(Some(TokenKind::Keyword), Some("CATCH"))?;
+            let catch_token = self.eat(Some(TokenKind::Keyword), Some("CATCH"))?;
 
             self.eat(Some(TokenKind::Colon), None)?;
 
-            catch_body = self.parse_block()?;
+            catch_body = self.parse_block(catch_token.column)?;
         }
 
         if self.at(Some(TokenKind::Keyword), Some("FINALLY")) {
-            self.eat(Some(TokenKind::Keyword), Some("FINALLY"))?;
+            let finally_token = self.eat(Some(TokenKind::Keyword), Some("FINALLY"))?;
 
             self.eat(Some(TokenKind::Colon), None)?;
 
-            finally_body = self.parse_block()?;
+            finally_body = self.parse_block(finally_token.column)?;
         }
 
         Ok(AstTry {
@@ -1229,13 +1245,13 @@ impl Parser {
     }
 
     pub fn parse_case_block(&mut self) -> Result<AstMatchArm, ParserError> {
-        self.eat(Some(TokenKind::Keyword), Some("CASE"))?;
+        let case_token = self.eat(Some(TokenKind::Keyword), Some("CASE"))?;
 
         let pattern = self.parse_pattern()?;
 
         self.expect_block_colon()?;
 
-        let body = self.parse_block()?;
+        let body = self.parse_block(case_token.column)?;
 
         Ok(AstMatchArm { pattern, body })
     }
@@ -2019,13 +2035,8 @@ impl Parser {
 }
 
 pub fn parse(src: &str) -> Result<(AstModule, Vec<AstNode>, Vec<AstFunction>), ParserError> {
-    let mut parser = Parser::new(src, false).map_err(|error| {
-        ParserError::new(
-            "NXD-P1099",
-            error.message,
-            error.span,
-        )
-    })?;
+    let mut parser = Parser::new(src, false)
+        .map_err(|error| ParserError::new("NXD-P1099", error.message, error.span))?;
     let module = parser.parse_program()?;
 
     let mut ast_types = Vec::new();

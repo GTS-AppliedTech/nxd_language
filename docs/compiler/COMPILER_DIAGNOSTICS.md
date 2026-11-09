@@ -46,6 +46,8 @@
 - NXD-P1011 Expected 'TO' after 'MOVE' source, got {}
 - NXD-P1012 Expected type after 'AS/IS', got {}
 - NXD-P1013 Function name must be immediately followed by `'('`
+- NXD-P1014 Expected an indented block
+- NXD-P1015 Unexpected indentation
 
 ##### *WARNING CODES:*
 

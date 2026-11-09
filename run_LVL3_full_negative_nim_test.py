@@ -1,7 +1,7 @@
 import subprocess
 
 TEST_ID = [
-    "st103",
+    "st126",
 ]
 
 

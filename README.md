@@ -311,6 +311,12 @@ Expected type after AS/IS, got "..."
 NXD-P1013
 Function name must be immediately followed by `'('`
 
+NXD-P1014
+Expected an indented block
+
+NXD-P1015
+Unexpected indentation
+
 ---
 
 Warning Diagnostics (NXD-W Series)

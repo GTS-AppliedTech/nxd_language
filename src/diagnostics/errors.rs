@@ -161,10 +161,7 @@ impl SemanticError {
             }
 
             SemanticError::TypeMismatch { expected, actual } => {
-                format!(
-                    "Type mismatch (expected {}, got {})",
-                    expected, actual
-                )
+                format!("Type mismatch (expected {}, got {})", expected, actual)
             }
 
             SemanticError::TraitNotImplemented { trait_name, ty } => {

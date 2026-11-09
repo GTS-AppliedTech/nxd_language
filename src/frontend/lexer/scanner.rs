@@ -1,8 +1,8 @@
 use regex::Regex;
 
+use crate::diagnostics::span::SourceSpan;
 use crate::frontend::lexer::token::Token;
 use crate::frontend::lexer::token_kind::{TOKEN_SPEC, TokenKind};
-use crate::diagnostics::span::SourceSpan;
 
 #[derive(Debug)]
 pub struct LexerError {
@@ -129,14 +129,16 @@ pub fn lex(src: &str) -> Result<Vec<Token>, LexerError> {
 
         let Some((kind, value)) = matched_rule else {
             return Err(LexerError {
-                message: format!("Unable to tokenize source at line {}, column {}",
-                line, column),
-                    span: SourceSpan {
-                        line,
-                        column,
-                        end_line: line,
-                        end_column: column + 1,
-                    },
+                message: format!(
+                    "Unable to tokenize source at line {}, column {}",
+                    line, column
+                ),
+                span: SourceSpan {
+                    line,
+                    column,
+                    end_line: line,
+                    end_column: column + 1,
+                },
             });
         };
 
