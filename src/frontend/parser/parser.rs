@@ -1462,7 +1462,24 @@ impl Parser {
     }
 
     pub fn parse_expr(&mut self) -> Result<AstExpr, ParserError> {
-        self.parse_logic()
+        self.parse_pipeline()
+    }
+
+    pub fn parse_pipeline(&mut self) -> Result<AstExpr, ParserError> {
+        let mut value = self.parse_logic()?;
+
+        while self.at(Some(TokenKind::Op), Some("PIPE")) {
+            self.eat(Some(TokenKind::Op), Some("PIPE"))?;
+
+            let func_token = self.eat(Some(TokenKind::Ident), None)?;
+
+            value = AstExpr::Pipeline(Box::new(AstPipeline {
+                value: Box::new(value),
+                func: func_token.lexeme,
+            }));
+        }
+
+        Ok(value)
     }
 
     pub fn parse_logic(&mut self) -> Result<AstExpr, ParserError> {
