@@ -1,4 +1,18 @@
-# Code of Conduct
+---
+{
+  "@context": "https://nxdlang.org/schema",
+  "doc_id": "RO960",
+  "title": "RO960 Code of Conduct",
+  "description": "expected morals, standards, and personal conduct",
+  "layer": "Root",
+  "category": "Code of Conduct",
+  "keywords": [],
+  "doc_version": "1.0",
+  "status": "active"
+}
+---
+
+# RO960 Code of Conduct
 ### *Our Commitment*
 
 The NXD project is committed to maintaining a welcoming, productive, and respectful environment for everyone participating in the project.

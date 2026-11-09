@@ -1,3 +1,4 @@
+---
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "TS004",
@@ -9,7 +10,7 @@
   "doc_version": "1.0",
   "status": "active"
 }
-
+---
 
 # TS004 - NXD Test Numbering Standard
 Purpose

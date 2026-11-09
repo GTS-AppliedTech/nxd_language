@@ -2,8 +2,8 @@
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "RO910",
-  "title": "",
-  "description": "",
+  "title": "RO910 Contributing",
+  "description": "how to contribute",
   "layer": "Root",
   "category": "Contributing",
   "keywords": [],

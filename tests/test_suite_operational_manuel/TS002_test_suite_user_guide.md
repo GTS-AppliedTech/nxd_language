@@ -1,3 +1,4 @@
+---
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "TS002",
@@ -9,6 +10,7 @@
   "doc_version": "1.0",
   "status": "active"
 }
+---
 
 # TS002 Test Suite User Guide
 ### Purpose

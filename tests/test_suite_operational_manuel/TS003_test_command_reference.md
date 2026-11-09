@@ -1,3 +1,4 @@
+---
 {
   "@context": "https://nxdlang.org/schema",
   "doc_id": "TS003",
@@ -9,6 +10,7 @@
   "doc_version": "2.0",
   "status": "active"
 }
+---
 
 # TS003 -  Test Command Reference
 
