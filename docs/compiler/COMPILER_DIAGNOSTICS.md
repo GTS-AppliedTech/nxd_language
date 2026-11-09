@@ -45,6 +45,7 @@
 - NXD-P1010 Expected map key, got {}
 - NXD-P1011 Expected 'TO' after 'MOVE' source, got {}
 - NXD-P1012 Expected type after 'AS/IS', got {}
+- NXD-P1013 Function name must be immediately followed by `'('`
 
 ##### *WARNING CODES:*
 

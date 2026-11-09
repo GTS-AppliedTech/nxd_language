@@ -308,6 +308,9 @@ Expected TO after MOVE source
 NXD-P1012
 Expected type after AS/IS, got "..."
 
+NXD-P1013
+Function name must be immediately followed by `'('`
+
 ---
 
 Warning Diagnostics (NXD-W Series)

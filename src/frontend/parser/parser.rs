@@ -505,13 +505,27 @@ impl Parser {
 
     pub fn parse_func_decl(&mut self, is_async: bool) -> Result<AstNode, ParserError> {
         let func_token = self.eat(Some(TokenKind::Keyword), Some("FUNC"))?;
-
         let name_token = self.eat(Some(TokenKind::Ident), None)?;
+
+        let expected_lparen_column =
+            name_token.column + name_token.lexeme.chars().count() as u32;
+
+        let lparen_token = self.current().cloned().unwrap();
+
+        if lparen_token.kind == TokenKind::LParen
+            && lparen_token.column != expected_lparen_column
+        {
+            return Err(ParserError::new(
+                "NXD-P1013",
+                "NXD-P1013: Function name must be immediately followed by '('",
+                lparen_token.span(),
+            ));
+        }
 
         let name = name_token.lexeme;
 
         self.eat(Some(TokenKind::LParen), None)?;
-
+        
         let mut parsed_params: Vec<(String, String)> = Vec::new();
 
         if !self.at(Some(TokenKind::RParen), None) {
