@@ -1,0 +1,77 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 1,
+        "end_line": 7,
+        "end_column": 15
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "Literal": {
+                "Int": 5
+              }
+            }
+          }
+        },
+        {
+          "Let": {
+            "name": "Y",
+            "value": {
+              "Unary": {
+                "kind": "CLONE",
+                "expr": {
+                  "Var": {
+                    "name": "X",
+                    "span": {
+                      "line": 5,
+                      "column": 21,
+                      "end_line": 5,
+                      "end_column": 22
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "Y",
+                    "span": {
+                      "line": 7,
+                      "column": 13,
+                      "end_line": 7,
+                      "end_column": 14
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

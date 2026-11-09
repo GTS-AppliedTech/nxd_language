@@ -1,0 +1,111 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 1,
+        "end_line": 8,
+        "end_column": 24
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Const": {
+            "name": "VALUE",
+            "value": {
+              "Literal": {
+                "Int": 10
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Unary": {
+                    "kind": "CLONE",
+                    "expr": {
+                      "Var": {
+                        "name": "VALUE",
+                        "span": {
+                          "line": 6,
+                          "column": 19,
+                          "end_line": 6,
+                          "end_column": 24
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Unary": {
+                    "kind": "BORROW",
+                    "expr": {
+                      "Var": {
+                        "name": "VALUE",
+                        "span": {
+                          "line": 7,
+                          "column": 20,
+                          "end_line": 7,
+                          "end_column": 25
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Unary": {
+                    "kind": "MOVE",
+                    "expr": {
+                      "Var": {
+                        "name": "VALUE",
+                        "span": {
+                          "line": 8,
+                          "column": 18,
+                          "end_line": 8,
+                          "end_column": 23
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

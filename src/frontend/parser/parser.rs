@@ -1150,6 +1150,10 @@ impl Parser {
 
         self.expect_block_colon()?;
 
+        while self.at(Some(TokenKind::Newline), None) {
+            self.eat(Some(TokenKind::Newline), None)?;
+        }
+
         let mut arms = Vec::new();
 
         let mut otherwise = None;
@@ -1226,7 +1230,7 @@ impl Parser {
         let token = self.current().cloned().unwrap();
 
         if matches!(token.kind, TokenKind::Number | TokenKind::String) {
-            return Ok(token.lexeme);
+            return Ok(self.eat(Some(token.kind), None)?.lexeme);
         }
 
         Ok(self.eat(Some(TokenKind::Ident), None)?.lexeme)
@@ -1595,7 +1599,7 @@ impl Parser {
     pub fn parse_unary(&mut self) -> Result<AstExpr, ParserError> {
         if self.at(Some(TokenKind::Op), None) {
             if let Some(token) = self.current() {
-                if matches!(token.lexeme.as_str(), "NOT" | "BORROW" | "SUB") {
+                if matches!(token.lexeme.as_str(), "MOVE" | "CLONE" | "BORROW" | "NOT" | "SUB") {
                     let op = self.eat(Some(TokenKind::Op), None)?.lexeme;
 
                     let expr = self.parse_member_access()?;
