@@ -162,7 +162,7 @@ impl SemanticError {
 
             SemanticError::TypeMismatch { expected, actual } => {
                 format!(
-                    "NXD-S3002: Type mismatch (expected {}, got {})",
+                    "Type mismatch (expected {}, got {})",
                     expected, actual
                 )
             }

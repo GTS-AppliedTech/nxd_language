@@ -1616,7 +1616,10 @@ impl Parser {
     pub fn parse_unary(&mut self) -> Result<AstExpr, ParserError> {
         if self.at(Some(TokenKind::Op), None) {
             if let Some(token) = self.current() {
-                if matches!(token.lexeme.as_str(), "MOVE" | "CLONE" | "BORROW" | "NOT" | "SUB") {
+                if matches!(
+                    token.lexeme.as_str(),
+                    "MOVE" | "CLONE" | "BORROW" | "NOT" | "SUB"
+                ) {
                     let op = self.eat(Some(TokenKind::Op), None)?.lexeme;
 
                     let expr = self.parse_member_access()?;

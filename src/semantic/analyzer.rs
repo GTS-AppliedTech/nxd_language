@@ -337,8 +337,30 @@ impl Analyzer {
 
     fn analyze_expr(&mut self, expr: &IRExpr, is_async: bool) -> Result<String, SemanticError> {
         match expr {
-            IRExpr::Literal(literal) => Ok(self.literal_type(literal)),
+            IRExpr::Literal(literal) => {
+                if let IRLiteral::List(items) = literal {
+                    if let Some(first) = items.first() {
+                        let first_type = self.analyze_expr(first, is_async)?;
 
+                        for item in &items[1..] {
+                            let item_type = self.analyze_expr(item, is_async)?;
+
+                            let compatible = first_type == item_type
+                                || (matches!(first_type.as_str(), "bool" | "none")
+                                    && matches!(item_type.as_str(), "bool" | "none"));
+
+                            if !compatible {
+                                return Err(SemanticError::TypeMismatch {
+                                    expected: first_type.clone(),
+                                    actual: item_type,
+                                });
+                            }
+                        }
+                    }
+                }
+
+                Ok(self.literal_type(literal))
+            }
             IRExpr::MemberAccess(access) => {
                 let object_type = self.analyze_expr(&access.object, is_async)?;
 
