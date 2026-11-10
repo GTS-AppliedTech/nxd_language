@@ -412,6 +412,16 @@ Invalid 'CHANNEL' declaration
 NXD-S3005-12
 Invalid 'TASK' target
 
+NXD-S3006
+(RESERVED FOR NON-ASYNC 'SYNC')
+
+NXD-S3007
+(RESERVED FOR NON-ASYNC 'CHANNEL')
+
+NXD-S3008
+Cannot use '{}' after it has been moved
+
+
 ---
 
 *Compiler & LSP Diagnostics* (NXD-LSP Series)

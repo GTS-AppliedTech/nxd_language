@@ -75,6 +75,10 @@
 - NXD-S3005-10 Invalid 'SYNC' target
 - NXD-S3005-11 Invalid 'CHANNEL' declaration
 - NXD-S3005-12 Invalid 'TASK' target
+- NXD-S3006 *(RESERVED FOR 'SYNC' AS NON-ASYNC)*
+- NXD-S3007 *(RESERVED FOR 'CHANNEL' AS NON-ASYNC)*
+- NXD-S3008 Cannot use '{}' after it has been moved
+
 
 ***Note NXD-S3003: Trait not implemented:
 *Trait declarations and implementations are preserved through the AST and IR and are* *available to semantic analysis through the trait registry.*
