@@ -13,7 +13,7 @@ use crate::semantic::{
         unwrap_receive_operation_type, unwrap_task_type,
     },
 };
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum AsyncOperation {
@@ -62,6 +62,7 @@ fn async_operation(expr: &IRExpr) -> Option<AsyncOperation> {
 pub struct Analyzer {
     pub symbols: SymbolTable,
     pub traits: TraitRegistry,
+    pub moved_symbols: HashSet<String>,
 }
 
 impl Analyzer {
@@ -79,7 +80,11 @@ impl Analyzer {
             },
         );
 
-        Self { symbols, traits }
+        Self {
+            symbols,
+            traits,
+            moved_symbols: HashSet::new(),
+        }
     }
     pub fn analyze(&mut self, ir: &IRRoot) -> Result<(), SemanticError> {
         self.analyze_module(&ir.module)?;
@@ -277,6 +282,11 @@ impl Analyzer {
                 }
             }
             IRStatement::Move(move_node) => {
+                let source_name = match &move_node.source {
+                    IRExpr::Var(var) => Some(var.name.clone()),
+                    _ => None,
+                };
+
                 let source_type = self.analyze_expr(&move_node.source, is_async)?;
 
                 let target_name = match &move_node.target {
@@ -301,6 +311,9 @@ impl Analyzer {
                         ty: source_type,
                     },
                 );
+                if let Some(source_name) = source_name {
+                    self.moved_symbols.insert(source_name);
+                }
             }
             IRStatement::Clone(clone_node) => {
                 let source_type = self.analyze_expr(&clone_node.source, is_async)?;
@@ -396,6 +409,15 @@ impl Analyzer {
             }
 
             IRExpr::Var(var) => {
+                if self.moved_symbols.contains(&var.name) {
+                    return Err(SemanticError::UseAfterMove {
+                        name: var.name.clone(),
+                        line: var.span.line,
+                        column: var.span.column,
+                        end_line: var.span.end_line,
+                        end_column: var.span.end_column,
+                    });
+                }
                 if let Some(symbol) = self.symbols.resolve(&var.name) {
                     match symbol {
                         Symbol::Var { ty, .. } => Ok(ty.clone()),

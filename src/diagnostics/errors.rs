@@ -26,6 +26,13 @@ pub enum SemanticError {
     InvalidAsyncUsage {
         violation: AsyncViolation,
     },
+    UseAfterMove {
+        name: String,
+        line: u32,
+        column: u32,
+        end_line: u32,
+        end_column: u32,
+    },
 }
 
 #[derive(Debug)]
@@ -119,6 +126,8 @@ impl SemanticError {
             SemanticError::CastFailure { .. } => "NXD-S3004",
 
             SemanticError::InvalidAsyncUsage { .. } => "NXD-S3005",
+
+            SemanticError::UseAfterMove { .. } => "NXD-S3008",
         }
     }
 
@@ -157,7 +166,7 @@ impl SemanticError {
     pub fn message(&self) -> String {
         match self {
             SemanticError::UndefinedSymbol { name, .. } => {
-                format!("NXD-S3001: Undefined symbol '{}'", name)
+                format!("Undefined symbol '{}'", name)
             }
 
             SemanticError::TypeMismatch { expected, actual } => {
@@ -166,19 +175,24 @@ impl SemanticError {
 
             SemanticError::TraitNotImplemented { trait_name, ty } => {
                 format!(
-                    "NXD-S3003: Trait '{}' not implemented for '{}'",
+                    "Trait '{}' not implemented for '{}'",
                     trait_name, ty
                 )
             }
 
             SemanticError::CastFailure { from, to, reason } => {
                 format!(
-                    "NXD-S3004: Invalid cast from '{}' to '{}': {}",
+                    "Invalid cast from '{}' to '{}': {}",
                     from, to, reason
                 )
             }
+
             SemanticError::InvalidAsyncUsage { violation } => {
                 format!("{}: {}", violation.code(), violation.message(),)
+            }
+
+            SemanticError::UseAfterMove { name, .. } => {
+                format!("Cannot use '{}' after it has been moved", name)
             }
         }
     }

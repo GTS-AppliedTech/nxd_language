@@ -1,0 +1,82 @@
+{
+  "module": {
+    "name": "NIM_MOVE_INVALID_REUSE",
+    "imports": []
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 3,
+        "column": 1,
+        "end_line": 9,
+        "end_column": 2
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "SOURCE",
+            "value": {
+              "Literal": {
+                "String": "NXD"
+              }
+            }
+          }
+        },
+        {
+          "Move": {
+            "source": {
+              "Var": {
+                "name": "SOURCE",
+                "span": {
+                  "line": 5,
+                  "column": 10,
+                  "end_line": 5,
+                  "end_column": 16
+                }
+              }
+            },
+            "target": {
+              "Var": {
+                "name": "TARGET",
+                "span": {
+                  "line": 5,
+                  "column": 20,
+                  "end_line": 5,
+                  "end_column": 26
+                }
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Var": {
+                    "name": "SOURCE",
+                    "span": {
+                      "line": 6,
+                      "column": 13,
+                      "end_line": 6,
+                      "end_column": 19
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

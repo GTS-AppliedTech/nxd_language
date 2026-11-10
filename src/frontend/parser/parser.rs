@@ -1003,7 +1003,7 @@ impl Parser {
             column: source_token.column,
         });
 
-        if !(self.at(Some(TokenKind::Ident), None)
+        if !(self.at(Some(TokenKind::Keyword), None)
             && self.current().map(|token| token.lexeme.as_str()) == Some("TO"))
         {
             let token = self.current().cloned().unwrap();
@@ -1018,7 +1018,7 @@ impl Parser {
             ));
         }
 
-        self.eat(Some(TokenKind::Ident), None)?;
+        self.eat(Some(TokenKind::Keyword), None)?;
 
         if !self.at(Some(TokenKind::Ident), None) {
             let token = self.current().cloned().unwrap();
@@ -1054,7 +1054,7 @@ impl Parser {
 
         let source = self.parse_primary()?;
 
-        if !(self.at(Some(TokenKind::Ident), None)
+        if !(self.at(Some(TokenKind::Keyword), None)
             && self.current().map(|token| token.lexeme.as_str()) == Some("TO"))
         {
             let token = self.current().cloned().unwrap();
@@ -1069,7 +1069,7 @@ impl Parser {
             ));
         }
 
-        self.eat(Some(TokenKind::Ident), None)?;
+        self.eat(Some(TokenKind::Keyword), None)?;
 
         let target = self.parse_primary()?;
 
