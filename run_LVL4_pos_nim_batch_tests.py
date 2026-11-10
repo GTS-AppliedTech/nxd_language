@@ -1,9 +1,16 @@
 import subprocess
 
 TESTS = [
-    "st017",
-    "st029",
-    "st031"
+    "st061",
+    "st062",
+    "st063",
+    "st064",
+    "st065",
+    "st066",
+    "st067",
+    "st068",
+    "st059",
+    "st060"
 
 ]
 

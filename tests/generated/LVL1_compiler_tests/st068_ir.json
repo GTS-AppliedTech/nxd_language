@@ -81,9 +81,9 @@
                     "name": "T",
                     "span": {
                       "line": 5,
-                      "column": 12,
+                      "column": 8,
                       "end_line": 5,
-                      "end_column": 13
+                      "end_column": 9
                     }
                   }
                 },
@@ -92,9 +92,9 @@
                     "name": "int",
                     "span": {
                       "line": 5,
-                      "column": 17,
+                      "column": 13,
                       "end_line": 5,
-                      "end_column": 20
+                      "end_column": 16
                     }
                   }
                 }
@@ -111,9 +111,9 @@
                           "name": "T",
                           "span": {
                             "line": 6,
-                            "column": 16,
+                            "column": 12,
                             "end_line": 6,
-                            "end_column": 17
+                            "end_column": 13
                           }
                         }
                       },
@@ -153,9 +153,9 @@
                           "name": "T",
                           "span": {
                             "line": 8,
-                            "column": 16,
+                            "column": 12,
                             "end_line": 8,
-                            "end_column": 17
+                            "end_column": 13
                           }
                         }
                       },

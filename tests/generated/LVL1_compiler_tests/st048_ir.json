@@ -33,8 +33,8 @@
       "span": {
         "line": 4,
         "column": 7,
-        "end_line": 8,
-        "end_column": 26
+        "end_line": 7,
+        "end_column": 21
       },
       "params": [],
       "return_type": null,
@@ -59,42 +59,30 @@
           }
         },
         {
-          "If": {
-            "condition": {
-              "Call": {
-                "func": "PING",
-                "args": [
-                  {
-                    "Var": {
-                      "name": "HANDLE",
-                      "span": {
-                        "line": 7,
-                        "column": 13,
-                        "end_line": 7,
-                        "end_column": 19
-                      }
-                    }
-                  }
-                ]
-              }
-            },
-            "then_branch": [
-              {
-                "Expr": {
+          "Expr": {
+            "Call": {
+              "func": "PING",
+              "args": [
+                {
                   "Call": {
-                    "func": "PRINTLN",
+                    "func": "RECV",
                     "args": [
                       {
-                        "Literal": {
-                          "String": "alive"
+                        "Var": {
+                          "name": "HANDLE",
+                          "span": {
+                            "line": 7,
+                            "column": 15,
+                            "end_line": 7,
+                            "end_column": 21
+                          }
                         }
                       }
                     ]
                   }
                 }
-              }
-            ],
-            "else_branch": []
+              ]
+            }
           }
         }
       ]

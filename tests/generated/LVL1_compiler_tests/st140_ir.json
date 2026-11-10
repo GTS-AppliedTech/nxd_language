@@ -1,0 +1,51 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": [
+      {
+        "path": "STD.INVALID",
+        "alias": null,
+        "span": {
+          "line": 3,
+          "column": 1,
+          "end_line": 3,
+          "end_column": 19
+        }
+      }
+    ]
+  },
+  "types": [],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 5,
+        "column": 1,
+        "end_line": 6,
+        "end_column": 27
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Literal": {
+                    "String": "IMPORT_TEST"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

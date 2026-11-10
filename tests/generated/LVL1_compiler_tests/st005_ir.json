@@ -13,7 +13,7 @@
         "line": 1,
         "column": 7,
         "end_line": 3,
-        "end_column": 19
+        "end_column": 15
       },
       "params": [],
       "return_type": null,
@@ -39,9 +39,9 @@
                     "name": "X",
                     "span": {
                       "line": 3,
-                      "column": 17,
+                      "column": 13,
                       "end_line": 3,
-                      "end_column": 18
+                      "end_column": 14
                     }
                   }
                 }

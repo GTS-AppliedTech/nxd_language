@@ -26,8 +26,54 @@
       ]
     }
   ],
-  "traits": [],
-  "impls": [],
+  "traits": [
+    {
+      "name": "DISPLAYABLE",
+      "methods": [
+        {
+          "name": "DISPLAY",
+          "params": [],
+          "return_type": null
+        }
+      ]
+    }
+  ],
+  "impls": [
+    {
+      "trait_name": "DISPLAYABLE",
+      "target_type": "PERSON",
+      "methods": [
+        {
+          "name": "DISPLAY",
+          "span": {
+            "line": 10,
+            "column": 5,
+            "end_line": 11,
+            "end_column": 26
+          },
+          "params": [],
+          "return_type": null,
+          "is_async": false,
+          "body": [
+            {
+              "Expr": {
+                "Call": {
+                  "func": "PRINTLN",
+                  "args": [
+                    {
+                      "Literal": {
+                        "String": "PERSON"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "functions": [
     {
       "name": "MAIN",

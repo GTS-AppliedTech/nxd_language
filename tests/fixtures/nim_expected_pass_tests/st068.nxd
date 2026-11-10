@@ -2,11 +2,11 @@ FUNC LOGIC_TEST():
     LET X SET 42
     LET Y SET 69
     LET T SET X ADD Y
-        IF T IS int
-            IF T EQ 111
-                PRINTLN(true)
-            IF T NEQ 111
-                PRINTLN(false)
+    IF T IS int
+        IF T EQ 111
+            PRINTLN(true)
+        IF T NEQ 111
+            PRINTLN(false)
         ELSE 
             PRINTLN("Error")
             

@@ -12,8 +12,8 @@
       "span": {
         "line": 1,
         "column": 7,
-        "end_line": 2,
-        "end_column": 11
+        "end_line": 3,
+        "end_column": 2
       },
       "params": [],
       "return_type": null,

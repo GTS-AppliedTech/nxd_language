@@ -308,17 +308,18 @@ impl Parser {
         }
 
         if self.at(Some(TokenKind::Keyword), Some("ASYNC")) {
-            self.eat(Some(TokenKind::Keyword), Some("ASYNC"))?;
+            let async_token = self.eat(Some(TokenKind::Keyword), Some("ASYNC"))?;
 
             let is_async = true;
 
-            return self.parse_func_decl(is_async);
+            return self.parse_func_decl(is_async, async_token.column);
         }
 
         if self.at(Some(TokenKind::Keyword), Some("FUNC")) {
             let is_async = false;
+            let declaration_column = self.current_column().unwrap_or(0);
 
-            return self.parse_func_decl(is_async);
+            return self.parse_func_decl(is_async, declaration_column);
         }
 
         let statement = self.parse_statement()?;
@@ -503,7 +504,11 @@ impl Parser {
         }))
     }
 
-    pub fn parse_func_decl(&mut self, is_async: bool) -> Result<AstNode, ParserError> {
+    pub fn parse_func_decl(
+        &mut self,
+        is_async: bool,
+        declaration_column: u32,
+    ) -> Result<AstNode, ParserError> {
         let func_token = self.eat(Some(TokenKind::Keyword), Some("FUNC"))?;
         let name_token = self.eat(Some(TokenKind::Ident), None)?;
 
@@ -558,7 +563,7 @@ impl Parser {
 
         self.expect_block_colon()?;
 
-        let body = self.parse_block(func_token.column)?;
+        let body = self.parse_block(declaration_column)?;
 
         if let Some(previous_token) = self.previous() {
             function_end_span = previous_token.span();

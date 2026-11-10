@@ -26,14 +26,14 @@
               "ObjectInit": {
                 "type_name": "PERSON",
                 "fields": {
-                  "NAME": {
-                    "Literal": {
-                      "String": "gabriel"
-                    }
-                  },
                   "AGE": {
                     "Literal": {
                       "Int": 42
+                    }
+                  },
+                  "NAME": {
+                    "Literal": {
+                      "String": "gabriel"
                     }
                   }
                 }

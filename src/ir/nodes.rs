@@ -32,6 +32,7 @@ pub struct IRModule {
 pub struct IRImport {
     pub path: String,
     pub alias: Option<String>,
+    pub span: SourceSpan,
 }
 
 #[derive(Clone, Debug, Serialize)]

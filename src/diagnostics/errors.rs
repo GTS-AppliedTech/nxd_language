@@ -174,17 +174,11 @@ impl SemanticError {
             }
 
             SemanticError::TraitNotImplemented { trait_name, ty } => {
-                format!(
-                    "Trait '{}' not implemented for '{}'",
-                    trait_name, ty
-                )
+                format!("Trait '{}' not implemented for '{}'", trait_name, ty)
             }
 
             SemanticError::CastFailure { from, to, reason } => {
-                format!(
-                    "Invalid cast from '{}' to '{}': {}",
-                    from, to, reason
-                )
+                format!("Invalid cast from '{}' to '{}': {}", from, to, reason)
             }
 
             SemanticError::InvalidAsyncUsage { violation } => {

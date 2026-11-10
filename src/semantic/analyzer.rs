@@ -267,6 +267,18 @@ impl Analyzer {
             IRStatement::Match(m) => {
                 self.analyze_expr(&m.scrutinee, is_async)?;
                 validate_match_arms(&m.arms)?;
+
+                for arm in &m.arms {
+                    for statement in &arm.body {
+                        self.analyze_statement(statement, is_async)?;
+                    }
+                }
+
+                if let Some(otherwise) = &m.otherwise {
+                    for statement in otherwise {
+                        self.analyze_statement(statement, is_async)?;
+                    }
+                }
             }
             IRStatement::Try(t) => {
                 for s in &t.try_body {

@@ -42,7 +42,7 @@
       "body": [
         {
           "Let": {
-            "name": "TASK",
+            "name": "FETCH_TASK",
             "value": {
               "Call": {
                 "func": "FETCH",
@@ -60,12 +60,12 @@
                 "args": [
                   {
                     "Var": {
-                      "name": "TASK",
+                      "name": "FETCH_TASK",
                       "span": {
                         "line": 7,
                         "column": 21,
                         "end_line": 7,
-                        "end_column": 25
+                        "end_column": 31
                       }
                     }
                   }

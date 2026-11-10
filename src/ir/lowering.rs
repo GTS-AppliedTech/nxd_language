@@ -17,6 +17,7 @@ pub fn lower_import(ast: &AstImport) -> IRImport {
     IRImport {
         path: ast.path.clone(),
         alias: ast.alias.clone(),
+        span: ast.span.clone(),
     }
 }
 

@@ -1,0 +1,92 @@
+{
+  "module": {
+    "name": "TEST",
+    "imports": []
+  },
+  "types": [
+    {
+      "kind": "union",
+      "name": "RESULT",
+      "variants": [
+        {
+          "kind": "SUCCESS",
+          "fields": [
+            {
+              "name": "VALUE",
+              "ty": "int"
+            }
+          ]
+        },
+        {
+          "kind": "FAILURE",
+          "fields": [
+            {
+              "name": "MESSAGE",
+              "ty": "string"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "traits": [],
+  "impls": [],
+  "functions": [
+    {
+      "name": "MAIN",
+      "span": {
+        "line": 7,
+        "column": 1,
+        "end_line": 9,
+        "end_column": 30
+      },
+      "params": [],
+      "return_type": null,
+      "is_async": false,
+      "body": [
+        {
+          "Let": {
+            "name": "X",
+            "value": {
+              "MemberAccess": {
+                "object": {
+                  "Var": {
+                    "name": "RESULT",
+                    "span": {
+                      "line": 8,
+                      "column": 15,
+                      "end_line": 8,
+                      "end_column": 21
+                    }
+                  }
+                },
+                "member": "UNKNOWN",
+                "span": {
+                  "line": 8,
+                  "column": 22,
+                  "end_line": 8,
+                  "end_column": 29
+                }
+              }
+            }
+          }
+        },
+        {
+          "Expr": {
+            "Call": {
+              "func": "PRINTLN",
+              "args": [
+                {
+                  "Literal": {
+                    "String": "UNION_DECLARED"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statements": []
+}

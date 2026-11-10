@@ -8,11 +8,11 @@
   "impls": [],
   "functions": [
     {
-      "name": "MAIN",
+      "name": "TEST",
       "span": {
         "line": 1,
         "column": 1,
-        "end_line": 4,
+        "end_line": 3,
         "end_column": 2
       },
       "params": [],
@@ -20,22 +20,16 @@
       "is_async": false,
       "body": [
         {
-          "Let": {
-            "name": "X",
-            "value": {
-              "Literal": {
-                "Int": 1
-              }
-            }
-          }
-        },
-        {
-          "Let": {
-            "name": "X",
-            "value": {
-              "Literal": {
-                "Int": 2
-              }
+          "Expr": {
+            "Call": {
+              "func": "SYNC",
+              "args": [
+                {
+                  "Literal": {
+                    "Int": 42
+                  }
+                }
+              ]
             }
           }
         }
