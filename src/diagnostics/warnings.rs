@@ -5,9 +5,21 @@ use crate::frontend::ast::nodes::*;
 
 use std::collections::{HashMap, HashSet};
 
-pub fn collect_usage(
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum DeclarationKind {
+    Variable,
+    Constant,
+}
+
+#[derive(Clone, Debug)]
+struct DeclarationInfo {
+    span: SourceSpan,
+    kind: DeclarationKind,
+}
+
+fn collect_usage(
     module: &AstModule,
-    declared: &mut HashMap<String, SourceSpan>,
+    declared: &mut HashMap<String, DeclarationInfo>,
     used: &mut HashSet<String>,
 ) {
     for node in &module.body {
@@ -17,7 +29,7 @@ pub fn collect_usage(
 
 fn collect_node_usage(
     node: &AstNode,
-    declared: &mut HashMap<String, SourceSpan>,
+    declared: &mut HashMap<String, DeclarationInfo>,
     used: &mut HashSet<String>,
 ) {
     match node {
@@ -45,18 +57,21 @@ fn collect_node_usage(
 
 fn collect_statement_usage(
     statement: &AstStatement,
-    declared: &mut HashMap<String, SourceSpan>,
+    declared: &mut HashMap<String, DeclarationInfo>,
     used: &mut HashSet<String>,
 ) {
     match statement {
         AstStatement::Let(let_statement) => {
             declared.insert(
                 let_statement.name.clone(),
-                SourceSpan {
-                    line: let_statement.line,
-                    column: let_statement.column,
-                    end_line: let_statement.line,
-                    end_column: let_statement.column + let_statement.name.len() as u32,
+                DeclarationInfo {
+                    span: SourceSpan {
+                        line: let_statement.line,
+                        column: let_statement.column,
+                        end_line: let_statement.line,
+                        end_column: let_statement.column + let_statement.name.len() as u32,
+                    },
+                    kind: DeclarationKind::Variable,
                 },
             );
 
@@ -66,11 +81,14 @@ fn collect_statement_usage(
         AstStatement::Const(const_statement) => {
             declared.insert(
                 const_statement.name.clone(),
-                SourceSpan {
-                    line: const_statement.line,
-                    column: const_statement.column,
-                    end_line: const_statement.line,
-                    end_column: const_statement.column + const_statement.name.len() as u32,
+                DeclarationInfo {
+                    span: SourceSpan {
+                        line: const_statement.line,
+                        column: const_statement.column,
+                        end_line: const_statement.line,
+                        end_column: const_statement.column + const_statement.name.len() as u32,
+                    },
+                    kind: DeclarationKind::Constant,
                 },
             );
 
@@ -149,7 +167,7 @@ fn collect_statement_usage(
 
 fn collect_expression_usage(
     expression: &AstExpr,
-    declared: &mut HashMap<String, SourceSpan>,
+    declared: &mut HashMap<String, DeclarationInfo>,
     used: &mut HashSet<String>,
 ) {
     match expression {
@@ -194,7 +212,7 @@ fn collect_expression_usage(
 
 fn collect_literal_usage(
     literal: &AstLiteral,
-    declared: &mut HashMap<String, SourceSpan>,
+    declared: &mut HashMap<String, DeclarationInfo>,
     used: &mut HashSet<String>,
 ) {
     match literal {
@@ -230,20 +248,29 @@ pub fn find_unused_variables(module: &AstModule) -> Vec<WarningDiagnostic> {
 
     let mut warnings = Vec::new();
 
-    for (name, span) in declared.iter() {
-        if !used.contains(name) {
-            warnings.push(WarningDiagnostic {
-                code: "NXD-W2001".to_string(),
+    for (name, declaration) in declared.iter() {
+        if used.contains(name) {
+            continue;
+        }
 
-                message: format!("NXD-W2001: Variable '{}' declared but never used.", name,),
+        match declaration.kind {
+            DeclarationKind::Variable => {
+                warnings.push(WarningDiagnostic::new(
+                    "NXD-W2001",
+                    format!("NXD-W2001: Variable '{}' declared but never used.", name),
+                    declaration.span.clone(),
+                ));
+            }
 
-                span: span.clone(),
-
-                severity: DiagnosticSeverity::Warning,
-            });
+            DeclarationKind::Constant => {
+                warnings.push(WarningDiagnostic::new(
+                    "NXD-W2010",
+                    format!("NXD-W2010: CONST '{}' declared but never used.", name),
+                    declaration.span.clone(),
+                ));
+            }
         }
     }
-
     warnings
 }
 
@@ -488,7 +515,10 @@ fn collect_unused_parameters_for_function(
         if !used.contains(&parameter.name) {
             warnings.push(WarningDiagnostic::new(
                 "NXD-W2005",
-                format!("NXD-W2005: Parameter '{}' declared but never used.", parameter.name),
+                format!(
+                    "NXD-W2005: Parameter '{}' declared but never used.",
+                    parameter.name
+                ),
                 parameter.span.clone(),
             ));
         }

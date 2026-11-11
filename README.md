@@ -366,7 +366,7 @@ NXD-W2009
 
 
 NXD-W2010 
-*(RESERVED UNUSED 'CONST')*
+'CONST' '{}' declared but never used.
 
 
 ---

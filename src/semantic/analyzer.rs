@@ -115,17 +115,44 @@ impl Analyzer {
         let mut inferred_type: Option<String> = None;
 
         for statement in &function.body {
-            if let IRStatement::Return(expr) = statement {
-                let return_type = self.analyze_expr(expr, function.is_async)?;
+            match statement {
+                IRStatement::Let { name, value } => {
+                    let ty = self.analyze_expr(value, function.is_async)?;
 
-                if let Some(existing_type) = &inferred_type {
-                    check_type(existing_type, &return_type)?;
-                } else {
-                    inferred_type = Some(return_type);
+                    self.symbols.define(
+                        name,
+                        Symbol::Var {
+                            name: name.clone(),
+                            ty,
+                        },
+                    );
                 }
+
+                IRStatement::Const { name, value } => {
+                    let ty = self.analyze_expr(value, function.is_async)?;
+
+                    self.symbols.define(
+                        name,
+                        Symbol::Const {
+                            name: name.clone(),
+                            ty,
+                        },
+                    );
+                }
+
+                IRStatement::Return(expr) => {
+                    let return_type = self.analyze_expr(expr, function.is_async)?;
+
+                    if let Some(existing_type) = &inferred_type {
+                        check_type(existing_type, &return_type)?;
+                    } else {
+                        inferred_type = Some(return_type);
+                    }
+                }
+
+                _ => {}
             }
         }
-
         Ok(inferred_type.unwrap_or_else(|| "none".to_string()))
     }
 

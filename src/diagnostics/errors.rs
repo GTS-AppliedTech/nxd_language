@@ -166,19 +166,28 @@ impl SemanticError {
     pub fn message(&self) -> String {
         match self {
             SemanticError::UndefinedSymbol { name, .. } => {
-                format!("Undefined symbol '{}'", name)
+                format!("NXD-S3001: Undefined symbol '{}'", name)
             }
 
             SemanticError::TypeMismatch { expected, actual } => {
-                format!("Type mismatch (expected {}, got {})", expected, actual)
+                format!(
+                    "NXD-S3002: Type mismatch (expected {}, got {})",
+                    expected, actual
+                )
             }
 
             SemanticError::TraitNotImplemented { trait_name, ty } => {
-                format!("Trait '{}' not implemented for '{}'", trait_name, ty)
+                format!(
+                    "NXD-S3003: Trait '{}' not implemented for '{}'",
+                    trait_name, ty
+                )
             }
 
             SemanticError::CastFailure { from, to, reason } => {
-                format!("Invalid cast from '{}' to '{}': {}", from, to, reason)
+                format!(
+                    "NXD-S3004: Invalid cast from '{}' to '{}': {}",
+                    from, to, reason
+                )
             }
 
             SemanticError::InvalidAsyncUsage { violation } => {
@@ -186,7 +195,7 @@ impl SemanticError {
             }
 
             SemanticError::UseAfterMove { name, .. } => {
-                format!("Cannot use '{}' after it has been moved", name)
+                format!("NXD-S3008: Cannot use '{}' after it has been moved", name)
             }
         }
     }
