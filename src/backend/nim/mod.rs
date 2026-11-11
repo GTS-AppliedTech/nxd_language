@@ -1,5 +1,4 @@
 pub mod emitter;
-pub mod mapping;
 
 pub mod control_flow;
 pub mod functions;
