@@ -1,4 +1,3 @@
-use crate::diagnostics::severity::DiagnosticSeverity;
 use crate::diagnostics::span::SourceSpan;
 use crate::diagnostics::types::*;
 use crate::frontend::ast::nodes::*;

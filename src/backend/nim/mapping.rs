@@ -1,6 +1,4 @@
-use crate::backend::nim::{
-    control_flow, functions, impls, literals, module, operators, statements, traits, types,
-};
+use crate::backend::nim::{functions, impls, module, statements, traits, types};
 use crate::ir::nodes::*;
 
 pub fn emit_ir(ir: &IRRoot) -> String {

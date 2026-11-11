@@ -2,10 +2,6 @@ use crate::diagnostics::span::SourceSpan;
 use crate::frontend::ast::nodes::*;
 use crate::ir::nodes::*;
 
-fn lower_span(span: &SourceSpan) -> SourceSpan {
-    span.clone()
-}
-
 pub fn lower_module(ast: &AstModule) -> IRModule {
     IRModule {
         name: ast.name.clone(),

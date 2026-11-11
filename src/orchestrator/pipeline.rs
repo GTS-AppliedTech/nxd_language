@@ -45,14 +45,6 @@ pub fn compile_from_ir(ir_root: &IRRoot) -> Result<String, String> {
     Ok(nim_code)
 }
 
-pub fn compile_from_ir_with_semantics(ir_root: &IRRoot) -> Result<String, String> {
-    analyze_ir(ir_root).map_err(|error| format!("Semantic error: {}", error.message(),))?;
-
-    let nim_code = emitter::emit(ir_root);
-
-    Ok(nim_code)
-}
-
 pub fn semantic_diagnostics_from_ir(ir_root: &IRRoot) -> SemanticDiagnosticResponse {
     match analyze_ir(ir_root) {
         Ok(()) => SemanticDiagnosticResponse {

@@ -1,5 +1,4 @@
 use crate::diagnostics::errors::*;
-use crate::diagnostics::span::SourceSpan;
 use crate::ir::nodes::*;
 use crate::semantic::{
     casts::{check_as_cast, check_is},
@@ -9,55 +8,11 @@ use crate::semantic::{
     traits::TraitRegistry,
     types::{
         channel_type, check_type, process_handle_type, receive_operation_type, task_type,
-        unwrap_awaitable_type, unwrap_channel_type, unwrap_process_handle_type,
-        unwrap_receive_operation_type, unwrap_task_type,
+        unwrap_awaitable_type, unwrap_process_handle_type, unwrap_receive_operation_type,
+        unwrap_task_type,
     },
 };
 use std::collections::{HashMap, HashSet};
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum AsyncOperation {
-    Await,
-    Spawn,
-    Send,
-    Recv,
-    Ping,
-    Esc,
-    Timeout,
-    Sync,
-    Channel,
-    Task,
-}
-
-fn async_operation(expr: &IRExpr) -> Option<AsyncOperation> {
-    let IRExpr::Call { func, .. } = expr else {
-        return None;
-    };
-
-    if func.eq_ignore_ascii_case("AWAIT") {
-        Some(AsyncOperation::Await)
-    } else if func.eq_ignore_ascii_case("SPAWN") {
-        Some(AsyncOperation::Spawn)
-    } else if func.eq_ignore_ascii_case("SEND") {
-        Some(AsyncOperation::Send)
-    } else if func.eq_ignore_ascii_case("RECV") {
-        Some(AsyncOperation::Recv)
-    } else if func.eq_ignore_ascii_case("PING") {
-        Some(AsyncOperation::Ping)
-    } else if func.eq_ignore_ascii_case("ESC") {
-        Some(AsyncOperation::Esc)
-    } else if func.eq_ignore_ascii_case("TIMEOUT") {
-        Some(AsyncOperation::Timeout)
-    } else if func.eq_ignore_ascii_case("SYNC") {
-        Some(AsyncOperation::Sync)
-    } else if func.eq_ignore_ascii_case("CHANNEL") {
-        Some(AsyncOperation::Channel)
-    } else if func.eq_ignore_ascii_case("TASK") {
-        Some(AsyncOperation::Task)
-    } else {
-        None
-    }
-}
 
 pub struct Analyzer {
     pub symbols: SymbolTable,

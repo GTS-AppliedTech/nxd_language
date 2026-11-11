@@ -10,6 +10,11 @@ pub fn emit_binary_op(op: &IRBinaryOp) -> String {
 
 pub fn emit_unary_op(op: &IRUnaryOp) -> String {
     let expr = &op.expr;
+
+    if op.kind == "BORROW" {
+        return emit_borrow(&expr.to_string());
+    }
+
     let op_str = map_unary_op(&op.kind);
 
     format!("{} {}", op_str, expr)
@@ -42,15 +47,6 @@ fn map_unary_op(kind: &str) -> &str {
 }
 
 // Ownership / pipeline helpers
-
-pub fn emit_move(expr: &str) -> String {
-    // MOVE is a no-op in Nim for now
-    expr.to_string()
-}
-
-pub fn emit_clone(expr: &str) -> String {
-    format!("deepCopy({})", expr)
-}
 
 pub fn emit_borrow(expr: &str) -> String {
     // BORROW as reference semantics

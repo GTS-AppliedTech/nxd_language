@@ -6,7 +6,7 @@ pub enum OwnershipOp {
     Borrow,
 }
 
-pub fn check_ownership(op: OwnershipOp, ty: &str) -> Result<(), SemanticError> {
+pub fn check_ownership(op: OwnershipOp, _ty: &str) -> Result<(), SemanticError> {
     match op {
         OwnershipOp::Move => Ok(()),   // MOVE always allowed
         OwnershipOp::Clone => Ok(()),  // TODO: forbid clone on non-cloneable types

@@ -7,8 +7,6 @@ use crate::frontend::parser::parser::parse;
 use crate::ir::lowering::*;
 use crate::ir::nodes::*;
 
-use serde_json::to_string_pretty;
-
 pub fn compile_to_ir(src: &str) -> Result<IRRoot, Box<dyn std::error::Error>> {
     let (ast_module, ast_types, ast_functions) = parse(src)?;
 
@@ -53,12 +51,4 @@ pub fn compile_to_ir(src: &str) -> Result<IRRoot, Box<dyn std::error::Error>> {
     };
 
     Ok(ir_root)
-}
-
-pub fn compile_to_ir_json(src: &str) -> Result<String, Box<dyn std::error::Error>> {
-    let ir_root = compile_to_ir(src)?;
-
-    let json = to_string_pretty(&ir_root)?;
-
-    Ok(json)
 }
