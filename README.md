@@ -346,7 +346,7 @@ NXD-W2004
 
 
 NXD-W2005 
-*(RESERVED UNUSED PARAMETER)*
+Parameter '{}' declared but never used
 
 
 NXD-W2006 
