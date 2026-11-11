@@ -416,8 +416,9 @@ impl Parser {
                 let parameter_token = self.eat(Some(TokenKind::Ident), None)?;
 
                 params.push(AstParam {
-                    name: parameter_token.lexeme,
+                    name: parameter_token.lexeme.clone(),
                     ty: "any".to_string(),
+                    span: parameter_token.span(),
                 });
 
                 while self.at(Some(TokenKind::Comma), None) {
@@ -426,8 +427,9 @@ impl Parser {
                     let parameter_token = self.eat(Some(TokenKind::Ident), None)?;
 
                     params.push(AstParam {
-                        name: parameter_token.lexeme,
+                        name: parameter_token.lexeme.clone(),
                         ty: "any".to_string(),
+                        span: parameter_token.span(),
                     });
                 }
             }
@@ -527,7 +529,7 @@ impl Parser {
 
         self.eat(Some(TokenKind::LParen), None)?;
 
-        let mut parsed_params: Vec<(String, String)> = Vec::new();
+        let mut parsed_params: Vec<AstParam> = Vec::new();
 
         if !self.at(Some(TokenKind::RParen), None) {
             parsed_params.push(self.parse_param()?);
@@ -568,14 +570,6 @@ impl Parser {
             function_end_span = previous_token.span();
         }
 
-        let params: Vec<AstParam> = parsed_params
-            .into_iter()
-            .map(|(parameter_name, parameter_type)| AstParam {
-                name: parameter_name,
-                ty: parameter_type,
-            })
-            .collect();
-
         Ok(AstNode::Function(AstFunction {
             name,
             span: SourceSpan {
@@ -584,29 +578,33 @@ impl Parser {
                 end_line: function_end_span.end_line,
                 end_column: function_end_span.end_column,
             },
-            params,
+            params: parsed_params,
             return_type,
             body,
             is_async,
         }))
     }
 
-    pub fn parse_param(&mut self) -> Result<(String, String), ParserError> {
+    pub fn parse_param(&mut self) -> Result<AstParam, ParserError> {
         let name_token = self.eat(Some(TokenKind::Ident), None)?;
 
-        let name = name_token.lexeme;
+        let name = name_token.lexeme.clone();
+        let span = name_token.span();
 
         if self.at(Some(TokenKind::Colon), None) {
             self.eat(Some(TokenKind::Colon), None)?;
 
             let ty = self.parse_type_ref()?;
 
-            return Ok((name, ty));
+            return Ok(AstParam { name, ty, span });
         }
 
-        Ok((name, "any".to_string()))
+        Ok(AstParam {
+            name,
+            ty: "any".to_string(),
+            span,
+        })
     }
-
     pub fn expect_block_colon(&mut self) -> Result<(), ParserError> {
         if self.at(Some(TokenKind::Colon), None) {
             self.eat(Some(TokenKind::Colon), None)?;
@@ -803,8 +801,9 @@ impl Parser {
                 let parameter_token = self.eat(Some(TokenKind::Ident), None)?;
 
                 params.push(AstParam {
-                    name: parameter_token.lexeme,
+                    name: parameter_token.lexeme.clone(),
                     ty: "any".to_string(),
+                    span: parameter_token.span(),
                 });
 
                 while self.at(Some(TokenKind::Comma), None) {
@@ -813,8 +812,9 @@ impl Parser {
                     let parameter_token = self.eat(Some(TokenKind::Ident), None)?;
 
                     params.push(AstParam {
-                        name: parameter_token.lexeme,
+                        name: parameter_token.lexeme.clone(),
                         ty: "any".to_string(),
+                        span: parameter_token.span(),
                     });
                 }
             }

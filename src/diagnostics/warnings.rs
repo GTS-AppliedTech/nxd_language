@@ -186,9 +186,8 @@ fn collect_expression_usage(
         AstExpr::MemberAccess(access) => {
             collect_expression_usage(&access.object, declared, used);
         }
-
-        AstExpr::Pipeline(_) => {
-            // Fill this in once we compare the AstPipeline fields.
+        AstExpr::Pipeline(pipeline) => {
+            collect_expression_usage(&pipeline.value, declared, used);
         }
     }
 }
@@ -448,6 +447,50 @@ impl WarningDiagnostic {
             message: message.into(),
             span,
             severity: DiagnosticSeverity::Warning,
+        }
+    }
+}
+
+pub fn find_unused_parameters(module: &AstModule) -> Vec<WarningDiagnostic> {
+    let mut warnings = Vec::new();
+
+    for node in &module.body {
+        match node {
+            AstNode::Function(function) => {
+                collect_unused_parameters_for_function(function, &mut warnings);
+            }
+
+            AstNode::Impl(implementation) => {
+                for method in &implementation.methods {
+                    collect_unused_parameters_for_function(method, &mut warnings);
+                }
+            }
+
+            _ => {}
+        }
+    }
+
+    warnings
+}
+
+fn collect_unused_parameters_for_function(
+    function: &AstFunction,
+    warnings: &mut Vec<WarningDiagnostic>,
+) {
+    let mut declared = HashMap::new();
+    let mut used = HashSet::new();
+
+    for statement in &function.body {
+        collect_statement_usage(statement, &mut declared, &mut used);
+    }
+
+    for parameter in &function.params {
+        if !used.contains(&parameter.name) {
+            warnings.push(WarningDiagnostic::new(
+                "NXD-W2005",
+                format!("NXD-W2005: Parameter '{}' declared but never used.", parameter.name),
+                parameter.span.clone(),
+            ));
         }
     }
 }

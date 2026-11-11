@@ -341,6 +341,34 @@ Variable shadows existing binding
 
 Generated when an identifier hides an existing symbol in the current scope hierarchy.
 
+NXD-W2004 
+*(RESERVED UNUSED 'IMPORT')*
+
+
+NXD-W2005 
+*(RESERVED UNUSED PARAMETER)*
+
+
+NXD-W2006 
+*(RESERVED UNUSED 'FUNC')*
+
+
+NXD-W2007 
+*(RESERVED CONSTANT CONDITION)*
+
+
+NXD-W2008 
+*(RESERVED DUPLICATE/REDUNDANT 'MATCH' ARM)*
+
+
+NXD-W2009 
+*(RESERVED NON-EXHAUSTIVE 'MATCH')*
+
+
+NXD-W2010 
+*(RESERVED UNUSED 'CONST')*
+
+
 ---
 
 *Semantic Diagnostics* (NXD-S Series)

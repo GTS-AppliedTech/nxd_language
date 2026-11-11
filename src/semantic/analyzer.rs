@@ -131,32 +131,45 @@ impl Analyzer {
 
     fn analyze_functions(&mut self, funcs: &Vec<IRFunction>) -> Result<(), SemanticError> {
         for f in funcs {
+            // Parameters must be visible while inferring the return type.
+            self.symbols.enter_scope();
+
+            for p in &f.params {
+                self.symbols.define(
+                    &p.name,
+                    Symbol::Var {
+                        name: p.name.clone(),
+                        ty: p.ty.clone(),
+                    },
+                );
+            }
+
             let resolved_return_type = match &f.return_type {
                 Some(return_type) => return_type.clone(),
-
                 None => self.infer_function_return_type(f)?,
             };
 
+            self.symbols.exit_scope();
+
+            // Function itself remains in the outer scope.
             self.symbols.define(
                 &f.name,
                 Symbol::Func {
                     name: f.name.clone(),
-
                     params: f.params.iter().map(|p| p.ty.clone()).collect(),
-
                     ret: if f.is_async {
                         Some(task_type(&resolved_return_type))
                     } else {
                         Some(resolved_return_type)
                     },
-
                     is_async: f.is_async,
                     span: Some(f.span.clone()),
                 },
             );
 
-            // Existing body analysis follows.
+            // Normal function-body scope.
             self.symbols.enter_scope();
+
             for p in &f.params {
                 self.symbols.define(
                     &p.name,
@@ -173,9 +186,9 @@ impl Analyzer {
 
             self.symbols.exit_scope();
         }
+
         Ok(())
     }
-
     fn analyze_statement(
         &mut self,
         stmt: &IRStatement,

@@ -9,7 +9,7 @@ use nxd_language::diagnostics::severity::DiagnosticSeverity;
 use nxd_language::diagnostics::types::{ParserError, WarningDiagnostic};
 
 use nxd_language::diagnostics::warnings::{
-    find_shadowed_bindings, find_unreachable_code, find_unused_variables,
+    find_shadowed_bindings, find_unreachable_code, find_unused_parameters, find_unused_variables,
 };
 
 use nxd_language::frontend::ast::nodes::{AstFunction, AstModule, AstNode};
@@ -120,6 +120,10 @@ fn validate_source(source: &str) -> ValidationResponse {
     let shadowed_warnings = find_shadowed_bindings(&module);
 
     diagnostics.extend(shadowed_warnings.iter().map(warning_to_lsp));
+
+    let unused_parameters = find_unused_parameters(&module);
+
+    diagnostics.extend(unused_parameters.iter().map(warning_to_lsp));
 
     /*
      * Preserve the Python behavior:

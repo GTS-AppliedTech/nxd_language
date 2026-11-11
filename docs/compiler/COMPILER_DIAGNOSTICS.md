@@ -49,10 +49,18 @@
 - NXD-P1014 Expected an indented block
 - NXD-P1015 Unexpected indentation
 
-##### *WARNING CODES:*
+### *WARNING CODES:*
 
 - NXD-W2001 Variable '<name>' declared but never used 
+- NXD-W2002 Unreachable code
 - NXD-W2003 Variable shadows existing binding
+- NXD-W2004 *(RESERVED UNUSED 'IMPORT')*
+- NXD-W2005 *(RESERVED UNUSED PARAMETER)*
+- NXD-W2006 *(RESERVED UNUSED 'FUNC')*
+- NXD-W2007 *(RESERVED CONSTANT CONDITION)*
+- NXD-W2008 *(RESERVED DUPLICATE/REDUNDANT 'MATCH' ARM)*
+- NXD-W2009 *(RESERVED NON-EXHAUSTIVE 'MATCH')*
+- NXD-W2010 *(RESERVED UNUSED 'CONST')*
 
 
 ### **SEMANTICS CODES**
@@ -85,6 +93,3 @@
 *Trait conformance lookup infrastructure exists; however, no currently implemented language* *construct requires trait conformance during semantic analysis.*
 *This diagnostic remains reserved until a trait requirement, such as generic trait* *constraints, requires enforcement.*
 
-##### *WARNING CODES:*
- 
-- NXD-W2002 Unreachable code

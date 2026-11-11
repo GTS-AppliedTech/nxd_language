@@ -403,6 +403,12 @@ mod tests {
             params: vec![AstParam {
                 name: "x".to_string(),
                 ty: "INT".to_string(),
+                span: SourceSpan {
+                    line: 1,
+                    column: 1,
+                    end_line: 1,
+                    end_column: 2,
+                },
             }],
 
             return_type: Some("INT".to_string()),

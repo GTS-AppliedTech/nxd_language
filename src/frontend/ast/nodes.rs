@@ -83,6 +83,7 @@ pub struct AstImpl {
 pub struct AstParam {
     pub name: String,
     pub ty: String,
+    pub span: SourceSpan,
 }
 
 // ==========================================
