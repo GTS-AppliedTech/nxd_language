@@ -353,8 +353,8 @@ NXD-W2006
 FUNC '{}' declared but never used.
 
 
-NXD-W2007 
-*(RESERVED CONSTANT CONDITION)*
+NXD-W2007
+Condition is always '{}'.
 
 
 NXD-W2008 
