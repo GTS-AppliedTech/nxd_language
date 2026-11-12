@@ -699,3 +699,93 @@ pub fn find_unused_functions(module: &AstModule) -> Vec<WarningDiagnostic> {
 
     warnings
 }
+
+fn check_constant_condition(if_statement: &AstIf, warnings: &mut Vec<WarningDiagnostic>) {
+    let AstExpr::Literal(AstLiteral::Bool(value)) = &if_statement.condition else {
+        return;
+    };
+
+    let condition_text = if *value { "true" } else { "false" };
+    let condition_column = if_statement.column + 3;
+
+    warnings.push(WarningDiagnostic::new(
+        "NXD-W2007",
+        format!("NXD-W2007: Condition is always {}.", condition_text),
+        SourceSpan {
+            line: if_statement.line,
+            column: condition_column,
+            end_line: if_statement.line,
+            end_column: condition_column + condition_text.len() as u32,
+        },
+    ));
+}
+
+fn visit_statements_for_constant_conditions(
+    statements: &[AstStatement],
+    warnings: &mut Vec<WarningDiagnostic>,
+) {
+    for statement in statements {
+        match statement {
+            AstStatement::If(if_statement) => {
+                check_constant_condition(if_statement, warnings);
+
+                visit_statements_for_constant_conditions(&if_statement.then_branch, warnings);
+
+                visit_statements_for_constant_conditions(&if_statement.else_branch, warnings);
+            }
+
+            AstStatement::Loop(loop_statement) => {
+                visit_statements_for_constant_conditions(&loop_statement.body, warnings);
+            }
+
+            AstStatement::Try(try_statement) => {
+                visit_statements_for_constant_conditions(&try_statement.try_body, warnings);
+
+                visit_statements_for_constant_conditions(&try_statement.catch_body, warnings);
+
+                visit_statements_for_constant_conditions(&try_statement.finally_body, warnings);
+            }
+
+            AstStatement::Match(match_statement) => {
+                for arm in &match_statement.arms {
+                    visit_statements_for_constant_conditions(&arm.body, warnings);
+                }
+
+                if let Some(otherwise) = &match_statement.otherwise {
+                    visit_statements_for_constant_conditions(otherwise, warnings);
+                }
+            }
+
+            _ => {}
+        }
+    }
+}
+
+pub fn find_constant_conditions(module: &AstModule) -> Vec<WarningDiagnostic> {
+    let mut warnings = Vec::new();
+
+    for node in &module.body {
+        match node {
+            AstNode::Function(function) => {
+                visit_statements_for_constant_conditions(&function.body, &mut warnings);
+            }
+
+            AstNode::Impl(implementation) => {
+                for method in &implementation.methods {
+                    visit_statements_for_constant_conditions(&method.body, &mut warnings);
+                }
+            }
+
+            AstNode::Statement(statement) => {
+                visit_statements_for_constant_conditions(
+                    std::slice::from_ref(statement),
+                    &mut warnings,
+                );
+            }
+
+            _ => {}
+        }
+    }
+
+    warnings
+}

@@ -1,0 +1,8 @@
+MODULE TEST
+
+FUNC CHECK(FLAG: bool)
+    IF FLAG:
+        PRINTLN("YES")
+
+FUNC MAIN()
+    CHECK(true)

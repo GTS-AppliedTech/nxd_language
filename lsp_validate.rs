@@ -9,8 +9,8 @@ use nxd_language::diagnostics::severity::DiagnosticSeverity;
 use nxd_language::diagnostics::types::{ParserError, WarningDiagnostic};
 
 use nxd_language::diagnostics::warnings::{
-    find_shadowed_bindings, find_unreachable_code, find_unused_functions, find_unused_parameters,
-    find_unused_variables,
+    find_constant_conditions, find_shadowed_bindings, find_unreachable_code, find_unused_functions,
+    find_unused_parameters, find_unused_variables,
 };
 
 use nxd_language::frontend::ast::nodes::{AstFunction, AstModule, AstNode};
@@ -129,6 +129,10 @@ fn validate_source(source: &str) -> ValidationResponse {
     let unused_functions = find_unused_functions(&module);
 
     diagnostics.extend(unused_functions.iter().map(warning_to_lsp));
+
+    let constant_conditions = find_constant_conditions(&module);
+
+    diagnostics.extend(constant_conditions.iter().map(warning_to_lsp));
 
     /*
      * Preserve the Python behavior:

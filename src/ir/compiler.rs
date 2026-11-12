@@ -1,8 +1,7 @@
-use crate::diagnostics::warnings::find_shadowed_bindings;
-use crate::diagnostics::warnings::find_unreachable_code;
-use crate::diagnostics::warnings::find_unused_functions;
-use crate::diagnostics::warnings::find_unused_parameters;
-use crate::diagnostics::warnings::find_unused_variables;
+use crate::diagnostics::warnings::{
+    find_constant_conditions, find_shadowed_bindings, find_unreachable_code, find_unused_functions,
+    find_unused_parameters, find_unused_variables,
+};
 use crate::frontend::ast::nodes::AstNode;
 use crate::frontend::parser::parser::parse;
 
@@ -17,6 +16,7 @@ pub fn compile_to_ir(src: &str) -> Result<IRRoot, Box<dyn std::error::Error>> {
     warnings.extend(find_shadowed_bindings(&ast_module));
     warnings.extend(find_unused_parameters(&ast_module));
     warnings.extend(find_unused_functions(&ast_module));
+    warnings.extend(find_constant_conditions(&ast_module));
 
     println!("\n=== AST ===");
     println!("{:#?}", ast_module);
