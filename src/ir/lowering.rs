@@ -392,10 +392,16 @@ mod tests {
     fn lowers_function_metadata() {
         let ast = AstFunction {
             name: "TEST".to_string(),
+            name_span: SourceSpan {
+                line: 1,
+                column: 6,
+                end_line: 1,
+                end_column: 10,
+            },
 
             span: SourceSpan {
                 line: 1,
-                column: 1,
+                column: 6,
                 end_line: 1,
                 end_column: 10,
             },

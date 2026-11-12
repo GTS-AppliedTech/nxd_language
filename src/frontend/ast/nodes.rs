@@ -93,6 +93,7 @@ pub struct AstParam {
 #[derive(Clone, Debug)]
 pub struct AstFunction {
     pub name: String,
+    pub name_span: SourceSpan,
     pub span: SourceSpan,
     pub params: Vec<AstParam>,
     pub return_type: Option<String>,

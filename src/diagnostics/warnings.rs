@@ -17,6 +17,142 @@ struct DeclarationInfo {
     kind: DeclarationKind,
 }
 
+fn collect_called_functions_from_expression(expression: &AstExpr, called: &mut HashSet<String>) {
+    match expression {
+        AstExpr::Call(call) => {
+            called.insert(call.func.clone());
+
+            for argument in &call.args {
+                collect_called_functions_from_expression(argument, called);
+            }
+        }
+
+        AstExpr::Pipeline(pipeline) => {
+            called.insert(pipeline.func.clone());
+            collect_called_functions_from_expression(&pipeline.value, called);
+        }
+
+        AstExpr::Binary(binary) => {
+            collect_called_functions_from_expression(&binary.left, called);
+            collect_called_functions_from_expression(&binary.right, called);
+        }
+
+        AstExpr::Unary(unary) => {
+            collect_called_functions_from_expression(&unary.expr, called);
+        }
+
+        AstExpr::ObjectInit(object) => {
+            for value in object.fields.values() {
+                collect_called_functions_from_expression(value, called);
+            }
+        }
+
+        AstExpr::MemberAccess(access) => {
+            collect_called_functions_from_expression(&access.object, called);
+        }
+
+        AstExpr::Literal(literal) => match literal {
+            AstLiteral::List(items) => {
+                for item in items {
+                    collect_called_functions_from_expression(item, called);
+                }
+            }
+
+            AstLiteral::Map(entries) => {
+                for value in entries.values() {
+                    collect_called_functions_from_expression(value, called);
+                }
+            }
+
+            AstLiteral::Lambda { body, .. } => {
+                collect_called_functions_from_expression(body, called);
+            }
+
+            _ => {}
+        },
+
+        AstExpr::Var(_) => {}
+    }
+}
+
+fn collect_called_functions_from_statement(statement: &AstStatement, called: &mut HashSet<String>) {
+    match statement {
+        AstStatement::Let(let_statement) => {
+            collect_called_functions_from_expression(&let_statement.value, called);
+        }
+
+        AstStatement::Const(const_statement) => {
+            collect_called_functions_from_expression(&const_statement.value, called);
+        }
+
+        AstStatement::Return(return_statement) => {
+            collect_called_functions_from_expression(&return_statement.value, called);
+        }
+
+        AstStatement::If(if_statement) => {
+            collect_called_functions_from_expression(&if_statement.condition, called);
+
+            for statement in &if_statement.then_branch {
+                collect_called_functions_from_statement(statement, called);
+            }
+
+            for statement in &if_statement.else_branch {
+                collect_called_functions_from_statement(statement, called);
+            }
+        }
+
+        AstStatement::Loop(loop_statement) => {
+            for statement in &loop_statement.body {
+                collect_called_functions_from_statement(statement, called);
+            }
+        }
+
+        AstStatement::Try(try_statement) => {
+            for statement in &try_statement.try_body {
+                collect_called_functions_from_statement(statement, called);
+            }
+
+            for statement in &try_statement.catch_body {
+                collect_called_functions_from_statement(statement, called);
+            }
+
+            for statement in &try_statement.finally_body {
+                collect_called_functions_from_statement(statement, called);
+            }
+        }
+
+        AstStatement::Match(match_statement) => {
+            collect_called_functions_from_expression(&match_statement.scrutinee, called);
+
+            for arm in &match_statement.arms {
+                for statement in &arm.body {
+                    collect_called_functions_from_statement(statement, called);
+                }
+            }
+
+            if let Some(otherwise) = &match_statement.otherwise {
+                for statement in otherwise {
+                    collect_called_functions_from_statement(statement, called);
+                }
+            }
+        }
+
+        AstStatement::Move(move_statement) => {
+            collect_called_functions_from_expression(&move_statement.source, called);
+            collect_called_functions_from_expression(&move_statement.target, called);
+        }
+
+        AstStatement::Clone(clone_statement) => {
+            collect_called_functions_from_expression(&clone_statement.source, called);
+            collect_called_functions_from_expression(&clone_statement.target, called);
+        }
+
+        AstStatement::Expr(expression) => {
+            collect_called_functions_from_expression(expression, called);
+        }
+    }
+}
+
 fn collect_usage(
     module: &AstModule,
     declared: &mut HashMap<String, DeclarationInfo>,
@@ -523,4 +659,43 @@ fn collect_unused_parameters_for_function(
             ));
         }
     }
+}
+
+pub fn find_unused_functions(module: &AstModule) -> Vec<WarningDiagnostic> {
+    let mut called = HashSet::new();
+
+    // First collect every function call made anywhere in module functions.
+    for node in &module.body {
+        if let AstNode::Function(function) = node {
+            for statement in &function.body {
+                collect_called_functions_from_statement(statement, &mut called);
+            }
+        }
+    }
+
+    let mut warnings = Vec::new();
+
+    // Then find declared functions that were never called.
+    for node in &module.body {
+        if let AstNode::Function(function) = node {
+            // MAIN is the program entry point, not something expected
+            // to be called explicitly.
+            if function.name.eq_ignore_ascii_case("MAIN") {
+                continue;
+            }
+
+            if !called.contains(&function.name) {
+                warnings.push(WarningDiagnostic::new(
+                    "NXD-W2006",
+                    format!(
+                        "NXD-W2006: FUNC '{}' declared but never used.",
+                        function.name
+                    ),
+                    function.name_span.clone(),
+                ));
+            }
+        }
+    }
+
+    warnings
 }

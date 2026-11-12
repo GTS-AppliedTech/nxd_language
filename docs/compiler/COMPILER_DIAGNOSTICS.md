@@ -56,7 +56,7 @@
 - NXD-W2003 Variable shadows existing binding
 - NXD-W2004 *(RESERVED UNUSED 'IMPORT')*
 - NXD-W2005 Parameter '{}' declared but never used
-- NXD-W2006 *(RESERVED UNUSED 'FUNC')*
+- NXD-W2006 FUNC '{}' declared but never used.
 - NXD-W2007 *(RESERVED CONSTANT CONDITION)*
 - NXD-W2008 *(RESERVED DUPLICATE/REDUNDANT 'MATCH' ARM)*
 - NXD-W2009 *(RESERVED NON-EXHAUSTIVE 'MATCH')*

@@ -406,6 +406,8 @@ impl Parser {
 
             let method_name_token = self.eat(Some(TokenKind::Ident), None)?;
 
+            let name_span = method_name_token.span();
+
             let method_name = method_name_token.lexeme;
 
             self.eat(Some(TokenKind::LParen), None)?;
@@ -485,6 +487,7 @@ impl Parser {
 
             methods.push(AstFunction {
                 name: method_name,
+                name_span,
                 span: SourceSpan {
                     line: func_token.line,
                     column: func_token.column,
@@ -512,6 +515,7 @@ impl Parser {
     ) -> Result<AstNode, ParserError> {
         let func_token = self.eat(Some(TokenKind::Keyword), Some("FUNC"))?;
         let name_token = self.eat(Some(TokenKind::Ident), None)?;
+        let name_span = name_token.span();
 
         let expected_lparen_column = name_token.column + name_token.lexeme.chars().count() as u32;
 
@@ -572,6 +576,7 @@ impl Parser {
 
         Ok(AstNode::Function(AstFunction {
             name,
+            name_span,
             span: SourceSpan {
                 line: func_token.line,
                 column: func_token.column,

@@ -350,7 +350,7 @@ Parameter '{}' declared but never used
 
 
 NXD-W2006 
-*(RESERVED UNUSED 'FUNC')*
+FUNC '{}' declared but never used.
 
 
 NXD-W2007 
