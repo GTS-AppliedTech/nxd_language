@@ -358,7 +358,7 @@ Condition is always '{}'.
 
 
 NXD-W2008 
-*(RESERVED DUPLICATE/REDUNDANT 'MATCH' ARM)*
+Duplicate/redundant MATCH arm '{}'.
 
 
 NXD-W2009 

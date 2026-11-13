@@ -1256,25 +1256,34 @@ impl Parser {
     pub fn parse_case_block(&mut self) -> Result<AstMatchArm, ParserError> {
         let case_token = self.eat(Some(TokenKind::Keyword), Some("CASE"))?;
 
-        let pattern = self.parse_pattern()?;
+        let (pattern, pattern_span) = self.parse_pattern()?;
 
         self.expect_block_colon()?;
 
         let body = self.parse_block(case_token.column)?;
 
-        Ok(AstMatchArm { pattern, body })
+        Ok(AstMatchArm {
+            pattern,
+            pattern_span,
+            body,
+        })
     }
 
-    pub fn parse_pattern(&mut self) -> Result<String, ParserError> {
+    pub fn parse_pattern(&mut self) -> Result<(String, SourceSpan), ParserError> {
         let token = self.current().cloned().unwrap();
 
         if matches!(token.kind, TokenKind::Number | TokenKind::String) {
-            return Ok(self.eat(Some(token.kind), None)?.lexeme);
+            let token = self.eat(Some(token.kind), None)?;
+            let span = token.span();
+
+            return Ok((token.lexeme, span));
         }
 
-        Ok(self.eat(Some(TokenKind::Ident), None)?.lexeme)
-    }
+        let token = self.eat(Some(TokenKind::Ident), None)?;
+        let span = token.span();
 
+        Ok((token.lexeme, span))
+    }
     pub fn parse_spawn(&mut self) -> Result<AstCall, ParserError> {
         self.eat(Some(TokenKind::Keyword), Some("SPAWN"))?;
 

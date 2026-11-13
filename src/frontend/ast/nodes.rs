@@ -181,6 +181,7 @@ pub struct AstMatch {
 #[derive(Clone, Debug)]
 pub struct AstMatchArm {
     pub pattern: String,
+    pub pattern_span: SourceSpan,
     pub body: Vec<AstStatement>,
 }
 

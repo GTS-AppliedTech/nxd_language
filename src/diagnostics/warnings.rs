@@ -789,3 +789,90 @@ pub fn find_constant_conditions(module: &AstModule) -> Vec<WarningDiagnostic> {
 
     warnings
 }
+
+fn check_redundant_match_arms(match_statement: &AstMatch, warnings: &mut Vec<WarningDiagnostic>) {
+    let mut seen_patterns = HashSet::new();
+
+    for arm in &match_statement.arms {
+        if !seen_patterns.insert(arm.pattern.clone()) {
+            warnings.push(WarningDiagnostic::new(
+                "NXD-W2008",
+                format!(
+                    "NXD-W2008: Duplicate/redundant MATCH arm '{}'.",
+                    arm.pattern
+                ),
+                arm.pattern_span.clone(),
+            ));
+        }
+    }
+}
+
+fn visit_statements_for_redundant_match_arms(
+    statements: &[AstStatement],
+    warnings: &mut Vec<WarningDiagnostic>,
+) {
+    for statement in statements {
+        match statement {
+            AstStatement::If(if_statement) => {
+                visit_statements_for_redundant_match_arms(&if_statement.then_branch, warnings);
+
+                visit_statements_for_redundant_match_arms(&if_statement.else_branch, warnings);
+            }
+
+            AstStatement::Loop(loop_statement) => {
+                visit_statements_for_redundant_match_arms(&loop_statement.body, warnings);
+            }
+
+            AstStatement::Try(try_statement) => {
+                visit_statements_for_redundant_match_arms(&try_statement.try_body, warnings);
+
+                visit_statements_for_redundant_match_arms(&try_statement.catch_body, warnings);
+
+                visit_statements_for_redundant_match_arms(&try_statement.finally_body, warnings);
+            }
+
+            AstStatement::Match(match_statement) => {
+                check_redundant_match_arms(match_statement, warnings);
+
+                for arm in &match_statement.arms {
+                    visit_statements_for_redundant_match_arms(&arm.body, warnings);
+                }
+
+                if let Some(otherwise) = &match_statement.otherwise {
+                    visit_statements_for_redundant_match_arms(otherwise, warnings);
+                }
+            }
+
+            _ => {}
+        }
+    }
+}
+
+pub fn find_redundant_match_arms(module: &AstModule) -> Vec<WarningDiagnostic> {
+    let mut warnings = Vec::new();
+
+    for node in &module.body {
+        match node {
+            AstNode::Function(function) => {
+                visit_statements_for_redundant_match_arms(&function.body, &mut warnings);
+            }
+
+            AstNode::Impl(implementation) => {
+                for method in &implementation.methods {
+                    visit_statements_for_redundant_match_arms(&method.body, &mut warnings);
+                }
+            }
+
+            AstNode::Statement(statement) => {
+                visit_statements_for_redundant_match_arms(
+                    std::slice::from_ref(statement),
+                    &mut warnings,
+                );
+            }
+
+            _ => {}
+        }
+    }
+
+    warnings
+}
