@@ -876,3 +876,85 @@ pub fn find_redundant_match_arms(module: &AstModule) -> Vec<WarningDiagnostic> {
 
     warnings
 }
+
+fn check_non_exhaustive_match(match_statement: &AstMatch, warnings: &mut Vec<WarningDiagnostic>) {
+    if match_statement.otherwise.is_some() {
+        return;
+    }
+
+    warnings.push(WarningDiagnostic::new(
+        "NXD-W2009",
+        "NXD-W2009: Non-exhaustive MATCH.".to_string(),
+        match_statement.span.clone(),
+    ));
+}
+
+fn visit_statements_for_non_exhaustive_matches(
+    statements: &[AstStatement],
+    warnings: &mut Vec<WarningDiagnostic>,
+) {
+    for statement in statements {
+        match statement {
+            AstStatement::If(if_statement) => {
+                visit_statements_for_non_exhaustive_matches(&if_statement.then_branch, warnings);
+
+                visit_statements_for_non_exhaustive_matches(&if_statement.else_branch, warnings);
+            }
+
+            AstStatement::Loop(loop_statement) => {
+                visit_statements_for_non_exhaustive_matches(&loop_statement.body, warnings);
+            }
+
+            AstStatement::Try(try_statement) => {
+                visit_statements_for_non_exhaustive_matches(&try_statement.try_body, warnings);
+
+                visit_statements_for_non_exhaustive_matches(&try_statement.catch_body, warnings);
+
+                visit_statements_for_non_exhaustive_matches(&try_statement.finally_body, warnings);
+            }
+
+            AstStatement::Match(match_statement) => {
+                check_non_exhaustive_match(match_statement, warnings);
+
+                for arm in &match_statement.arms {
+                    visit_statements_for_non_exhaustive_matches(&arm.body, warnings);
+                }
+
+                if let Some(otherwise) = &match_statement.otherwise {
+                    visit_statements_for_non_exhaustive_matches(otherwise, warnings);
+                }
+            }
+
+            _ => {}
+        }
+    }
+}
+
+pub fn find_non_exhaustive_matches(module: &AstModule) -> Vec<WarningDiagnostic> {
+    let mut warnings = Vec::new();
+
+    for node in &module.body {
+        match node {
+            AstNode::Function(function) => {
+                visit_statements_for_non_exhaustive_matches(&function.body, &mut warnings);
+            }
+
+            AstNode::Impl(implementation) => {
+                for method in &implementation.methods {
+                    visit_statements_for_non_exhaustive_matches(&method.body, &mut warnings);
+                }
+            }
+
+            AstNode::Statement(statement) => {
+                visit_statements_for_non_exhaustive_matches(
+                    std::slice::from_ref(statement),
+                    &mut warnings,
+                );
+            }
+
+            _ => {}
+        }
+    }
+
+    warnings
+}

@@ -358,11 +358,11 @@ Condition is always '{}'.
 
 
 NXD-W2008 
-Duplicate/redundant MATCH arm '{}'.
+Duplicate/redundant 'MATCH' arm '{}'.
 
 
 NXD-W2009 
-*(RESERVED NON-EXHAUSTIVE 'MATCH')*
+Non-exhaustive 'MATCH'.
 
 
 NXD-W2010 

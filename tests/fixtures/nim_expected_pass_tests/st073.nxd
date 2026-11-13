@@ -15,7 +15,7 @@ FUNC MAIN()
                 OTHERWISE 
                     PRINTLN("INNER OTHER")
 
-        CASE 1
+        CASE 2
             PRINTLN("OUTER TWO")
 
         OTHERWISE 

@@ -1184,6 +1184,7 @@ impl Parser {
 
     pub fn parse_match(&mut self) -> Result<AstMatch, ParserError> {
         let match_token = self.eat(Some(TokenKind::Keyword), Some("MATCH"))?;
+        let span = match_token.span();
 
         let scrutinee = self.parse_expr()?;
 
@@ -1213,8 +1214,7 @@ impl Parser {
             scrutinee,
             arms,
             otherwise,
-            line: match_token.line,
-            column: match_token.column,
+            span,
         })
     }
 

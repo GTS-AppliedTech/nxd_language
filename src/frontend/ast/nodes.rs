@@ -174,8 +174,7 @@ pub struct AstMatch {
     pub scrutinee: AstExpr,
     pub arms: Vec<AstMatchArm>,
     pub otherwise: Option<Vec<AstStatement>>,
-    pub line: u32,
-    pub column: u32,
+    pub span: SourceSpan,
 }
 
 #[derive(Clone, Debug)]
@@ -258,12 +257,7 @@ impl AstStatement {
                 end_column: stmt.column + 1,
             },
 
-            AstStatement::Match(stmt) => SourceSpan {
-                line: stmt.line,
-                column: stmt.column,
-                end_line: stmt.line,
-                end_column: stmt.column + 1,
-            },
+            AstStatement::Match(stmt) => stmt.span.clone(),
 
             AstStatement::Expr(_) => SourceSpan {
                 line: 0,
