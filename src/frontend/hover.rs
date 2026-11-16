@@ -74,22 +74,18 @@ pub fn hover_at(source: &str, line: u32, column: u32) -> Option<HoverInfo> {
     }
 
     for rule in TOKEN_SPEC {
-        if rule.kind != TokenKind::LowType {
-            continue;
+        if rule.kind == TokenKind::LowType {
+            if rule.pattern.split('|').any(|candidate| candidate == word) {
+                return Some(HoverInfo {
+                    label: word.to_string(),
+                    detail: "NXD primitive type".to_string(),
+                });
+            }
         }
 
-        if rule.pattern.split('|').any(|candidate| candidate == word) {
-            return Some(HoverInfo {
-                label: word.to_string(),
-                detail: "NXD primitive type".to_string(),
-            });
-        }
-
-        if !matches!(rule.kind, TokenKind::Keyword | TokenKind::Op) {
-            continue;
-        }
-
-        if rule.pattern.split('|').any(|candidate| candidate == word) {
+        if matches!(rule.kind, TokenKind::Keyword | TokenKind::Op)
+            && rule.pattern.split('|').any(|candidate| candidate == word)
+        {
             let kind = match rule.kind {
                 TokenKind::Keyword => "NXD keyword",
                 TokenKind::Op => "NXD operator",
