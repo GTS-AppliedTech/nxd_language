@@ -15,10 +15,10 @@ pub fn emit_statements(stmts: &Vec<IRStatement>) -> String {
 
 pub fn emit_statement(stmt: &IRStatement) -> String {
     match stmt {
-        IRStatement::Let { name, value } => {
+        IRStatement::Let { name, value, .. } => {
             format!("var {} = {}\n", name.to_lowercase(), emit_expr(value))
         }
-        IRStatement::Const { name, value } => {
+        IRStatement::Const { name, value, .. } => {
             format!("  let {} = {}\n", name.to_lowercase(), emit_expr(value))
         }
         IRStatement::Return(expr) => {

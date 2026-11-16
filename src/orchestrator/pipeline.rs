@@ -4,6 +4,7 @@ use crate::diagnostics::errors::SemanticError;
 use crate::ir::nodes::IRRoot;
 use crate::semantic::analyzer::Analyzer;
 use crate::semantic::symbols::Symbol;
+use crate::semantic::tooling::ToolingAnalysis;
 use crate::semantic::traits::TraitRegistry;
 
 fn analyze_ir(ir_root: &IRRoot) -> Result<(), SemanticError> {
@@ -72,4 +73,10 @@ pub fn semantic_diagnostics_from_ir(ir_root: &IRRoot) -> SemanticDiagnosticRespo
             }],
         },
     }
+}
+
+pub fn tooling_analysis_from_ir(ir_root: &IRRoot) -> Result<ToolingAnalysis, String> {
+    let analyzer = analyze_ir_with_symbols(ir_root).map_err(|error| error.message())?;
+
+    Ok(analyzer.tooling)
 }

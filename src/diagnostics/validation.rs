@@ -43,7 +43,11 @@ fn warning_to_diagnostic(warning: &WarningDiagnostic) -> LanguageDiagnostic {
     }
 }
 
-fn build_ir(module: &AstModule, ast_types: &[AstNode], ast_functions: &[AstFunction]) -> IRRoot {
+pub fn build_ir(
+    module: &AstModule,
+    ast_types: &[AstNode],
+    ast_functions: &[AstFunction],
+) -> IRRoot {
     IRRoot {
         module: lower_module(module),
         types: lower_types(ast_types),

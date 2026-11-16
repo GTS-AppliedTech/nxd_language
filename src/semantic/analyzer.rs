@@ -1,5 +1,6 @@
 use crate::diagnostics::errors::*;
 use crate::ir::nodes::*;
+use crate::semantic::tooling::{FunctionToolingInfo, ToolingAnalysis, ToolingSymbol};
 use crate::semantic::{
     casts::{check_as_cast, check_is},
     ownership::{OwnershipOp, check_ownership},
@@ -18,6 +19,7 @@ pub struct Analyzer {
     pub symbols: SymbolTable,
     pub traits: TraitRegistry,
     pub moved_symbols: HashSet<String>,
+    pub tooling: ToolingAnalysis,
 }
 
 impl Analyzer {
@@ -39,6 +41,7 @@ impl Analyzer {
             symbols,
             traits,
             moved_symbols: HashSet::new(),
+            tooling: ToolingAnalysis::default(),
         }
     }
     pub fn analyze(&mut self, ir: &IRRoot) -> Result<(), SemanticError> {
@@ -116,7 +119,7 @@ impl Analyzer {
 
         for statement in &function.body {
             match statement {
-                IRStatement::Let { name, value } => {
+                IRStatement::Let { name, value, .. } => {
                     let ty = self.analyze_expr(value, function.is_async)?;
 
                     self.symbols.define(
@@ -128,7 +131,7 @@ impl Analyzer {
                     );
                 }
 
-                IRStatement::Const { name, value } => {
+                IRStatement::Const { name, value, .. } => {
                     let ty = self.analyze_expr(value, function.is_async)?;
 
                     self.symbols.define(
@@ -158,6 +161,14 @@ impl Analyzer {
 
     fn analyze_functions(&mut self, funcs: &Vec<IRFunction>) -> Result<(), SemanticError> {
         for f in funcs {
+            self.tooling.functions.insert(
+                f.name.clone(),
+                FunctionToolingInfo {
+                    span: f.span.clone(),
+                    variables: HashMap::new(),
+                    constants: HashMap::new(),
+                },
+            );
             // Parameters must be visible while inferring the return type.
             self.symbols.enter_scope();
 
@@ -208,7 +219,7 @@ impl Analyzer {
             }
 
             for stmt in &f.body {
-                self.analyze_statement(stmt, f.is_async)?;
+                self.analyze_statement(stmt, f.is_async, &f.name)?;
             }
 
             self.symbols.exit_scope();
@@ -220,43 +231,66 @@ impl Analyzer {
         &mut self,
         stmt: &IRStatement,
         is_async: bool,
+        function_name: &str,
     ) -> Result<(), SemanticError> {
         match stmt {
-            IRStatement::Let { name, value } => {
+            IRStatement::Let { name, value, span } => {
                 let ty = self.analyze_expr(value, is_async)?;
+
                 self.symbols.define(
                     name,
                     Symbol::Var {
                         name: name.clone(),
-                        ty,
+                        ty: ty.clone(),
                     },
                 );
+
+                if let Some(function) = self.tooling.functions.get_mut(function_name) {
+                    function.variables.insert(
+                        name.clone(),
+                        ToolingSymbol {
+                            ty,
+                            span: span.clone(),
+                        },
+                    );
+                }
             }
-            IRStatement::Const { name, value } => {
+            IRStatement::Const { name, value, span } => {
                 let ty = self.analyze_expr(value, is_async)?;
+
                 self.symbols.define(
                     name,
                     Symbol::Const {
                         name: name.clone(),
-                        ty,
+                        ty: ty.clone(),
                     },
                 );
+
+                if let Some(function) = self.tooling.functions.get_mut(function_name) {
+                    function.constants.insert(
+                        name.clone(),
+                        ToolingSymbol {
+                            ty,
+                            span: span.clone(),
+                        },
+                    );
+                }
             }
             IRStatement::Return(expr) => {
                 self.analyze_expr(expr, is_async)?;
             }
             IRStatement::Loop(body) => {
                 for s in body {
-                    self.analyze_statement(s, is_async)?;
+                    self.analyze_statement(s, is_async, function_name)?;
                 }
             }
             IRStatement::If(if_node) => {
                 self.analyze_expr(&if_node.condition, is_async)?;
                 for s in &if_node.then_branch {
-                    self.analyze_statement(s, is_async)?;
+                    self.analyze_statement(s, is_async, function_name)?;
                 }
                 for s in &if_node.else_branch {
-                    self.analyze_statement(s, is_async)?;
+                    self.analyze_statement(s, is_async, function_name)?;
                 }
             }
             IRStatement::Match(m) => {
@@ -265,27 +299,27 @@ impl Analyzer {
 
                 for arm in &m.arms {
                     for statement in &arm.body {
-                        self.analyze_statement(statement, is_async)?;
+                        self.analyze_statement(statement, is_async, function_name)?;
                     }
                 }
 
                 if let Some(otherwise) = &m.otherwise {
                     for statement in otherwise {
-                        self.analyze_statement(statement, is_async)?;
+                        self.analyze_statement(statement, is_async, function_name)?;
                     }
                 }
             }
             IRStatement::Try(t) => {
                 for s in &t.try_body {
-                    self.analyze_statement(s, is_async)?;
+                    self.analyze_statement(s, is_async, function_name)?;
                 }
 
                 for s in &t.catch_body {
-                    self.analyze_statement(s, is_async)?;
+                    self.analyze_statement(s, is_async, function_name)?;
                 }
 
                 for s in &t.finally_body {
-                    self.analyze_statement(s, is_async)?;
+                    self.analyze_statement(s, is_async, function_name)?;
                 }
             }
             IRStatement::Move(move_node) => {

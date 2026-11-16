@@ -1,5 +1,7 @@
 use crate::diagnostics::parser::parse_with_diagnostics;
+use crate::diagnostics::validation::build_ir;
 use crate::frontend::lexer::token_kind::{TOKEN_SPEC, TokenKind};
+use crate::orchestrator::tooling_analysis_from_ir;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HoverInfo {
@@ -10,7 +12,35 @@ pub struct HoverInfo {
 pub fn hover_at(source: &str, line: u32, column: u32) -> Option<HoverInfo> {
     let word = word_at_position(source, line, column)?;
 
-    if let Ok((_, _, functions, _)) = parse_with_diagnostics(source) {
+    if let Ok((module, ast_types, functions, _)) = parse_with_diagnostics(source) {
+        let ir_root = build_ir(&module, &ast_types, &functions);
+
+        let tooling = tooling_analysis_from_ir(&ir_root).ok();
+
+        if let Some(tooling) = &tooling {
+            for function in tooling.functions.values() {
+                let inside_function = line >= function.span.line && line <= function.span.end_line;
+
+                if !inside_function {
+                    continue;
+                }
+
+                if let Some(variable) = function.variables.get(&word) {
+                    return Some(HoverInfo {
+                        label: word.to_string(),
+                        detail: format!("NXD variable\n\n{}: {}", word, variable.ty,),
+                    });
+                }
+
+                if let Some(constant) = function.constants.get(&word) {
+                    return Some(HoverInfo {
+                        label: word.to_string(),
+                        detail: format!("NXD constant\n\n{}: {}", word, constant.ty,),
+                    });
+                }
+            }
+        }
+
         for function in &functions {
             if function.name == word {
                 let params = function

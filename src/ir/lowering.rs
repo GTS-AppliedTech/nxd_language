@@ -150,11 +150,23 @@ pub fn lower_statement(ast: &AstStatement) -> IRStatement {
         AstStatement::Let(stmt) => IRStatement::Let {
             name: stmt.name.clone(),
             value: lower_expr(&stmt.value),
+            span: SourceSpan {
+                line: stmt.line,
+                column: stmt.column,
+                end_line: stmt.line,
+                end_column: stmt.column + 1,
+            },
         },
 
         AstStatement::Const(stmt) => IRStatement::Const {
             name: stmt.name.clone(),
             value: lower_expr(&stmt.value),
+            span: SourceSpan {
+                line: stmt.line,
+                column: stmt.column,
+                end_line: stmt.line,
+                end_column: stmt.column + 1,
+            },
         },
 
         AstStatement::Return(stmt) => IRStatement::Return(lower_expr(&stmt.value)),

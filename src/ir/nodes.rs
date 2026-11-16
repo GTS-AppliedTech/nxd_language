@@ -140,8 +140,16 @@ pub struct IRParam {
 
 #[derive(Clone, Debug, Serialize)]
 pub enum IRStatement {
-    Let { name: String, value: IRExpr },
-    Const { name: String, value: IRExpr },
+    Let {
+        name: String,
+        value: IRExpr,
+        span: SourceSpan,
+    },
+    Const {
+        name: String,
+        value: IRExpr,
+        span: SourceSpan,
+    },
     Return(IRExpr),
     Loop(Vec<IRStatement>),
     If(IRIf),
