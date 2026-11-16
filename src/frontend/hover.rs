@@ -1,3 +1,4 @@
+use crate::diagnostics::parser::parse_with_diagnostics;
 use crate::frontend::lexer::token_kind::{TOKEN_SPEC, TokenKind};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -9,6 +10,44 @@ pub struct HoverInfo {
 pub fn hover_at(source: &str, line: u32, column: u32) -> Option<HoverInfo> {
     let word = word_at_position(source, line, column)?;
 
+    if let Ok((_, _, functions, _)) = parse_with_diagnostics(source) {
+        for function in &functions {
+            if function.name == word {
+                let params = function
+                    .params
+                    .iter()
+                    .map(|param| format!("{}: {}", param.name, param.ty))
+                    .collect::<Vec<_>>()
+                    .join(", ");
+
+                let return_type = function.return_type.as_deref().unwrap_or("none");
+
+                let kind = if function.is_async {
+                    "NXD async function"
+                } else {
+                    "NXD function"
+                };
+
+                return Some(HoverInfo {
+                    label: function.name.clone(),
+                    detail: format!(
+                        "{}\n\n{}({}) -> {}",
+                        kind, function.name, params, return_type,
+                    ),
+                });
+            }
+
+            for param in &function.params {
+                if param.name == word {
+                    return Some(HoverInfo {
+                        label: param.name.clone(),
+                        detail: format!("NXD parameter\n\n{}: {}", param.name, param.ty,),
+                    });
+                }
+            }
+        }
+    }
+
     if word == "PRINTLN" {
         return Some(HoverInfo {
             label: "PRINTLN".to_string(),
@@ -16,7 +55,36 @@ pub fn hover_at(source: &str, line: u32, column: u32) -> Option<HoverInfo> {
         });
     }
 
+    match word.as_str() {
+        "true" | "false" => {
+            return Some(HoverInfo {
+                label: word.to_string(),
+                detail: "NXD boolean literal".to_string(),
+            });
+        }
+
+        "none" => {
+            return Some(HoverInfo {
+                label: word.to_string(),
+                detail: "NXD none literal".to_string(),
+            });
+        }
+
+        _ => {}
+    }
+
     for rule in TOKEN_SPEC {
+        if rule.kind != TokenKind::LowType {
+            continue;
+        }
+
+        if rule.pattern.split('|').any(|candidate| candidate == word) {
+            return Some(HoverInfo {
+                label: word.to_string(),
+                detail: "NXD primitive type".to_string(),
+            });
+        }
+
         if !matches!(rule.kind, TokenKind::Keyword | TokenKind::Op) {
             continue;
         }
