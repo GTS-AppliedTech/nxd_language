@@ -9,7 +9,61 @@ pub struct HoverInfo {
     pub detail: String,
 }
 
+fn number_at_position(source: &str, line: u32, column: u32) -> Option<String> {
+    let source_line = source.lines().nth(line.saturating_sub(1) as usize)?;
+
+    let characters: Vec<char> = source_line.chars().collect();
+
+    if characters.is_empty() {
+        return None;
+    }
+
+    let mut cursor = column.saturating_sub(1) as usize;
+
+    if cursor >= characters.len() {
+        cursor = characters.len().saturating_sub(1);
+    }
+
+    if !characters[cursor].is_ascii_digit() && characters[cursor] != '.' {
+        return None;
+    }
+
+    let mut start = cursor;
+
+    while start > 0 && (characters[start - 1].is_ascii_digit() || characters[start - 1] == '.') {
+        start -= 1;
+    }
+
+    let mut end = cursor + 1;
+
+    while end < characters.len() && (characters[end].is_ascii_digit() || characters[end] == '.') {
+        end += 1;
+    }
+
+    let number: String = characters[start..end].iter().collect();
+
+    if number.parse::<i64>().is_ok() || number.parse::<f64>().is_ok() {
+        Some(number)
+    } else {
+        None
+    }
+}
+
 pub fn hover_at(source: &str, line: u32, column: u32) -> Option<HoverInfo> {
+    if let Some(number) = number_at_position(source, line, column) {
+        if number.contains('.') {
+            return Some(HoverInfo {
+                label: number,
+                detail: "NXD floating-point literal\n\ntype: float".to_string(),
+            });
+        }
+
+        return Some(HoverInfo {
+            label: number,
+            detail: "NXD integer literal\n\ntype: int".to_string(),
+        });
+    }
+
     let word = word_at_position(source, line, column)?;
 
     if word.parse::<i64>().is_ok() {
