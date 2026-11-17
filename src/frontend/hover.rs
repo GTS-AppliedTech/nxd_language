@@ -92,7 +92,21 @@ pub fn hover_at(source: &str, line: u32, column: u32) -> Option<HoverInfo> {
                 if !inside_function {
                     continue;
                 }
-
+                for member in &function.members {
+                    if member.member.eq_ignore_ascii_case(&word)
+                        && line == member.span.line
+                        && column >= member.span.column
+                        && column <= member.span.end_column
+                    {
+                        return Some(HoverInfo {
+                            label: member.member.clone(),
+                            detail: format!(
+                                "NXD field\n\n{}.{}: {}",
+                                member.object_type, member.member, member.ty,
+                            ),
+                        });
+                    }
+                }
                 if let Some(variable) = function.variables.get(&word) {
                     return Some(HoverInfo {
                         label: word.to_string(),

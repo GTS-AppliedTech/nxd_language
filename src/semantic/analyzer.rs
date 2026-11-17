@@ -167,6 +167,7 @@ impl Analyzer {
                     span: f.span.clone(),
                     variables: HashMap::new(),
                     constants: HashMap::new(),
+                    members: Vec::new(),
                 },
             );
             // Parameters must be visible while inferring the return type.
