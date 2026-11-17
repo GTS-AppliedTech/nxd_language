@@ -12,6 +12,20 @@ pub struct HoverInfo {
 pub fn hover_at(source: &str, line: u32, column: u32) -> Option<HoverInfo> {
     let word = word_at_position(source, line, column)?;
 
+    if word.parse::<i64>().is_ok() {
+        return Some(HoverInfo {
+            label: word.to_string(),
+            detail: "NXD integer literal\n\ntype: int".to_string(),
+        });
+    }
+
+    if word.parse::<f64>().is_ok() {
+        return Some(HoverInfo {
+            label: word.to_string(),
+            detail: "NXD floating-point literal\n\ntype: float".to_string(),
+        });
+    }
+
     if let Ok((module, ast_types, functions, _)) = parse_with_diagnostics(source) {
         let ir_root = build_ir(&module, &ast_types, &functions);
 
