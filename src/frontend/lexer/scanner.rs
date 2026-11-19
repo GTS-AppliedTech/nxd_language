@@ -116,14 +116,20 @@ pub fn lex(src: &str) -> Result<Vec<Token>, LexerError> {
 
     while position < src.len() {
         let remaining_source = &src[position..];
-        let mut matched_rule = None;
+        let mut matched_rule: Option<(TokenKind, &str)> = None;
 
         for (kind, regex) in &rules {
             if let Some(regex_match) = regex.find(remaining_source) {
                 let value = regex_match.as_str();
 
-                matched_rule = Some((*kind, value));
-                break;
+                let should_replace = matched_rule
+                    .as_ref()
+                    .map(|(_, current_value)| value.len() > current_value.len())
+                    .unwrap_or(true);
+
+                if should_replace {
+                    matched_rule = Some((*kind, value));
+                }
             }
         }
 
