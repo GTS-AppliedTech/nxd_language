@@ -47,7 +47,26 @@ fn member_target_at_position(source: &str, line: u32, column: u32) -> Option<Str
 pub fn member_completion_words(source: &str, line: u32, column: u32) -> Option<Vec<String>> {
     let target = member_target_at_position(source, line, column)?;
 
-    let (module, ast_types, functions, _) = parse_with_diagnostics(source).ok()?;
+    let mut completion_source = source.to_string();
+
+    let source_line = source.lines().nth(line.saturating_sub(1) as usize)?;
+
+    let cursor = column.saturating_sub(1) as usize;
+
+    let byte_offset: usize = source
+        .lines()
+        .take(line.saturating_sub(1) as usize)
+        .map(|line| line.len() + 1)
+        .sum::<usize>()
+        + source_line
+            .chars()
+            .take(cursor)
+            .map(char::len_utf8)
+            .sum::<usize>();
+
+    completion_source.insert_str(byte_offset, "__NXD_COMPLETION__");
+
+    let (module, ast_types, functions, _) = parse_with_diagnostics(&completion_source).ok()?;
 
     let ir_root = build_ir(&module, &ast_types, &functions);
 
