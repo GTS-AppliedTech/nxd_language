@@ -179,6 +179,53 @@ pub fn object_initializer_completion_words(
     Some(remaining)
 }
 
+pub fn scope_completion_words(source: &str, line: u32, column: u32) -> Option<Vec<String>> {
+    let (module, ast_types, functions, _) = parse_with_diagnostics(source).ok()?;
+
+    let ir_root = build_ir(&module, &ast_types, &functions);
+
+    let tooling = tooling_analysis_from_ir(&ir_root).ok()?;
+
+    let (function_name, function_tooling) = tooling
+        .functions
+        .iter()
+        .find(|(_, function)| line >= function.span.line && line <= function.span.end_line)?;
+
+    let mut words = Vec::new();
+
+    if let Some(function) = functions
+        .iter()
+        .find(|function| function.name == *function_name)
+    {
+        words.extend(function.params.iter().map(|param| param.name.clone()));
+    }
+
+    words.extend(
+        function_tooling
+            .variables
+            .iter()
+            .filter(|(_, symbol)| {
+                symbol.span.line < line || (symbol.span.line == line && symbol.span.column < column)
+            })
+            .map(|(name, _)| name.clone()),
+    );
+
+    words.extend(
+        function_tooling
+            .constants
+            .iter()
+            .filter(|(_, symbol)| {
+                symbol.span.line < line || (symbol.span.line == line && symbol.span.column < column)
+            })
+            .map(|(name, _)| name.clone()),
+    );
+
+    words.sort();
+    words.dedup();
+
+    Some(words)
+}
+
 pub fn member_completion_words(source: &str, line: u32, column: u32) -> Option<Vec<String>> {
     let target = member_target_at_position(source, line, column)?;
 
