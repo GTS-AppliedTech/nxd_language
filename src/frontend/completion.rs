@@ -64,7 +64,11 @@ pub fn member_completion_words(source: &str, line: u32, column: u32) -> Option<V
             .map(char::len_utf8)
             .sum::<usize>();
 
-    completion_source.insert_str(byte_offset, "__NXD_COMPLETION__");
+    if byte_offset == 0 || completion_source.as_bytes()[byte_offset - 1] != b'.' {
+        return None;
+    }
+
+    completion_source.remove(byte_offset - 1);
 
     let (module, ast_types, functions, _) = parse_with_diagnostics(&completion_source).ok()?;
 
@@ -73,6 +77,17 @@ pub fn member_completion_words(source: &str, line: u32, column: u32) -> Option<V
     let tooling = tooling_analysis_from_ir(&ir_root).ok()?;
 
     for function in tooling.functions.values() {
+        println!(
+            "function span: {}:{} -> {}:{}",
+            function.span.line,
+            function.span.column,
+            function.span.end_line,
+            function.span.end_column,
+        );
+
+        println!("variables: {:?}", function.variables);
+
+        println!("types: {:?}", tooling.types);
         let inside_function = line >= function.span.line && line <= function.span.end_line;
 
         if !inside_function {
@@ -94,4 +109,48 @@ pub fn member_completion_words(source: &str, line: u32, column: u32) -> Option<V
     }
 
     None
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn completes_struct_members() {
+        let source = r#"
+MODULE TEST
+
+TYPE PERSON STRUCT:
+    NAME: string
+    AGE: int
+
+FUNC MAIN():
+    LET P SET PERSON {
+        NAME: "Gabriel",
+        AGE: 42
+    }
+
+    P.
+"#;
+
+        let line = source.lines().position(|line| line.trim() == "P.").unwrap() as u32 + 1;
+
+        let column = source
+            .lines()
+            .nth((line - 1) as usize)
+            .unwrap()
+            .chars()
+            .count() as u32
+            + 1;
+
+        println!("position: {line}:{column}");
+
+        let target = member_target_at_position(source, line, column);
+
+        println!("target: {target:?}");
+
+        let words = member_completion_words(source, line, column);
+
+        assert_eq!(words, Some(vec!["AGE".to_string(), "NAME".to_string(),]));
+    }
 }
