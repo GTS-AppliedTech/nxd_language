@@ -1,5 +1,6 @@
 use crate::diagnostics::parser::parse_with_diagnostics;
 use crate::diagnostics::validation::build_ir;
+use crate::frontend::ast::nodes::{AstExpr, AstNode, AstStatement};
 use crate::frontend::lexer::token_kind::{TOKEN_SPEC, TokenKind};
 use crate::orchestrator::tooling_analysis_from_ir;
 
@@ -42,6 +43,108 @@ fn member_target_at_position(source: &str, line: u32, column: u32) -> Option<Str
     } else {
         Some(target)
     }
+}
+
+fn object_initializer_type_at_position(source: &str, line: u32, column: u32) -> Option<String> {
+    let cursor_offset: usize = source
+        .lines()
+        .take(line.saturating_sub(1) as usize)
+        .map(|line| line.len() + 1)
+        .sum::<usize>()
+        + source
+            .lines()
+            .nth(line.saturating_sub(1) as usize)?
+            .chars()
+            .take(column.saturating_sub(1) as usize)
+            .map(char::len_utf8)
+            .sum::<usize>();
+
+    let before_cursor = &source[..cursor_offset];
+
+    let open_brace = before_cursor.rfind('{')?;
+
+    let prefix = before_cursor[..open_brace].trim_end();
+
+    let type_name = prefix
+        .chars()
+        .rev()
+        .take_while(|character| character.is_ascii_alphanumeric() || *character == '_')
+        .collect::<String>()
+        .chars()
+        .rev()
+        .collect::<String>();
+
+    if type_name.is_empty() {
+        None
+    } else {
+        Some(type_name)
+    }
+}
+
+fn object_initializer_fields(
+    functions: &[crate::frontend::ast::nodes::AstFunction],
+    type_name: &str,
+) -> Option<Vec<String>> {
+    for function in functions {
+        for statement in &function.body {
+            let value = match statement {
+                AstStatement::Let(stmt) => &stmt.value,
+                AstStatement::Const(stmt) => &stmt.value,
+                _ => continue,
+            };
+
+            let AstExpr::ObjectInit(init) = value else {
+                continue;
+            };
+
+            if init.type_name != type_name {
+                continue;
+            }
+
+            let mut fields: Vec<String> = init.fields.keys().cloned().collect();
+
+            fields.sort();
+
+            return Some(fields);
+        }
+    }
+
+    None
+}
+
+pub fn object_initializer_completion_words(
+    source: &str,
+    line: u32,
+    column: u32,
+) -> Option<Vec<String>> {
+    let type_name = object_initializer_type_at_position(source, line, column)?;
+
+    let (_, ast_types, functions, _) = parse_with_diagnostics(source).ok()?;
+
+    let present_fields = object_initializer_fields(&functions, &type_name)?;
+
+    let struct_decl = ast_types.iter().find_map(|node| {
+        let AstNode::Struct(struct_decl) = node else {
+            return None;
+        };
+
+        if struct_decl.name == type_name {
+            Some(struct_decl)
+        } else {
+            None
+        }
+    })?;
+
+    let mut remaining: Vec<String> = struct_decl
+        .fields
+        .iter()
+        .map(|field| field.name.clone())
+        .filter(|field| !present_fields.contains(field))
+        .collect();
+
+    remaining.sort();
+
+    Some(remaining)
 }
 
 pub fn member_completion_words(source: &str, line: u32, column: u32) -> Option<Vec<String>> {
@@ -139,5 +242,63 @@ FUNC MAIN():
         let words = member_completion_words(source, line, column);
 
         assert_eq!(words, Some(vec!["AGE".to_string(), "NAME".to_string(),]));
+    }
+
+    #[test]
+    fn detects_object_initializer_type() {
+        let source = r#"
+    MODULE TEST
+
+    TYPE PERSON STRUCT:
+        NAME: string
+        AGE: int
+
+    FUNC MAIN():
+        LET P SET PERSON {
+            NAME: "gabriel",
+
+        }
+    "#;
+
+        let line = source
+            .lines()
+            .position(|line| line.contains("NAME: \"gabriel\""))
+            .unwrap() as u32
+            + 2;
+
+        let column = 1;
+
+        let type_name = object_initializer_type_at_position(source, line, column);
+
+        assert_eq!(type_name, Some("PERSON".to_string()));
+    }
+
+    #[test]
+    fn completes_remaining_object_initializer_fields() {
+        let source = r#"
+    MODULE TEST
+
+    TYPE PERSON STRUCT:
+        NAME: string
+        AGE: int
+
+    FUNC MAIN():
+        LET P SET PERSON {
+            NAME: "gabriel",
+
+        }
+    "#;
+
+        let line = source
+            .lines()
+            .position(|line| line.contains("NAME: \"gabriel\""))
+            .unwrap() as u32
+            + 2;
+
+        let column = 1;
+
+        let words = object_initializer_completion_words(source, line, column);
+
+        assert_eq!(words, Some(vec!["AGE".to_string()]));
     }
 }
