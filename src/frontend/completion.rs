@@ -77,17 +77,6 @@ pub fn member_completion_words(source: &str, line: u32, column: u32) -> Option<V
     let tooling = tooling_analysis_from_ir(&ir_root).ok()?;
 
     for function in tooling.functions.values() {
-        println!(
-            "function span: {}:{} -> {}:{}",
-            function.span.line,
-            function.span.column,
-            function.span.end_line,
-            function.span.end_column,
-        );
-
-        println!("variables: {:?}", function.variables);
-
-        println!("types: {:?}", tooling.types);
         let inside_function = line >= function.span.line && line <= function.span.end_line;
 
         if !inside_function {
@@ -143,11 +132,9 @@ FUNC MAIN():
             .count() as u32
             + 1;
 
-        println!("position: {line}:{column}");
-
         let target = member_target_at_position(source, line, column);
 
-        println!("target: {target:?}");
+        assert_eq!(target, Some("P".to_string()));
 
         let words = member_completion_words(source, line, column);
 
