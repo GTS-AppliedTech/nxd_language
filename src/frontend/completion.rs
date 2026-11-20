@@ -4,16 +4,38 @@ use crate::frontend::ast::nodes::{AstExpr, AstNode, AstStatement};
 use crate::frontend::lexer::token_kind::{TOKEN_SPEC, TokenKind};
 use crate::orchestrator::tooling_analysis_from_ir;
 
-pub fn completion_words() -> Vec<String> {
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum LanguageCompletionKind {
+    Keyword,
+    Operator,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct LanguageCompletion {
+    pub name: String,
+    pub kind: LanguageCompletionKind,
+}
+
+pub fn completion_words() -> Vec<LanguageCompletion> {
     let mut words = Vec::new();
 
     for rule in TOKEN_SPEC {
-        if matches!(rule.kind, TokenKind::Keyword | TokenKind::Op) {
-            words.extend(rule.pattern.split('|').map(str::to_string));
-        }
+        let kind = match rule.kind {
+            TokenKind::Keyword => LanguageCompletionKind::Keyword,
+            TokenKind::Op => LanguageCompletionKind::Operator,
+            _ => continue,
+        };
+
+        words.extend(rule.pattern.split('|').map(|name| LanguageCompletion {
+            name: name.to_string(),
+            kind: kind.clone(),
+        }));
     }
 
-    words.push("PRINTLN".to_string());
+    words.push(LanguageCompletion {
+        name: "PRINTLN".to_string(),
+        kind: LanguageCompletionKind::Keyword,
+    });
 
     words
 }
