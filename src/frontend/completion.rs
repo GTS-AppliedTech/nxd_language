@@ -577,6 +577,10 @@ fn scope_symbol_type(source: &str, line: u32, column: u32, name: &str) -> Option
         .map(|item| item.ty)
 }
 
+pub fn completion_type_compatible(expected: &str, candidate: &str) -> bool {
+    expected == candidate || (expected == "float" && candidate == "int")
+}
+
 pub fn expected_binary_type_at_position(source: &str, line: u32, column: u32) -> Option<String> {
     let (left, _) = binary_left_target_at_position(source, line, column)?;
 
