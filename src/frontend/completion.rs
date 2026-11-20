@@ -536,3 +536,44 @@ FUNC MAIN():
         assert_eq!(words, Some(vec!["AGE".to_string()]));
     }
 }
+
+fn binary_left_target_at_position(
+    source: &str,
+    line: u32,
+    column: u32,
+) -> Option<(String, String)> {
+    let source_line = source.lines().nth(line.saturating_sub(1) as usize)?;
+
+    let cursor = column.saturating_sub(1) as usize;
+
+    let prefix: String = source_line.chars().take(cursor).collect();
+
+    let mut parts = prefix.split_whitespace().rev();
+
+    let operator = parts.next()?.to_string();
+
+    if !matches!(operator.as_str(), "ADD" | "SUB" | "MUL" | "DIV" | "MOD") {
+        return None;
+    }
+
+    let left = parts.next()?.to_string();
+
+    if left.is_empty() {
+        return None;
+    }
+
+    Some((left, operator))
+}
+
+fn scope_symbol_type(source: &str, line: u32, column: u32, name: &str) -> Option<String> {
+    scope_completion_words(source, line, column)?
+        .into_iter()
+        .find(|item| item.name == name)
+        .map(|item| item.ty)
+}
+
+pub fn expected_binary_type_at_position(source: &str, line: u32, column: u32) -> Option<String> {
+    let (left, _) = binary_left_target_at_position(source, line, column)?;
+
+    scope_symbol_type(source, line, column, &left)
+}
