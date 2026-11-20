@@ -578,7 +578,8 @@ fn scope_symbol_type(source: &str, line: u32, column: u32, name: &str) -> Option
 }
 
 pub fn completion_type_compatible(expected: &str, candidate: &str) -> bool {
-    expected == candidate || (expected == "float" && candidate == "int")
+    expected == candidate
+        || (matches!(expected, "int" | "float") && matches!(candidate, "int" | "float"))
 }
 
 pub fn expected_binary_type_at_position(source: &str, line: u32, column: u32) -> Option<String> {
