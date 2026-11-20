@@ -209,7 +209,9 @@ pub fn scope_completion_words(source: &str, line: u32, column: u32) -> Option<Ve
     if partial_identifier_length > 0 {
         let partial_identifier_start = cursor_byte_offset.checked_sub(partial_identifier_length)?;
 
-        completion_source.replace_range(partial_identifier_start..cursor_byte_offset, "");
+        completion_source.replace_range(partial_identifier_start..cursor_byte_offset, "0");
+    } else {
+        completion_source.insert_str(cursor_byte_offset, "0");
     }
 
     let (module, ast_types, functions, _) = parse_with_diagnostics(&completion_source).ok()?;
