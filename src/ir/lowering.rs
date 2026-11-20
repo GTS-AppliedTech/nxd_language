@@ -114,7 +114,7 @@ pub fn lower_trait(ast: &AstTrait) -> IRTrait {
                     .iter()
                     .map(|param| IRParam {
                         name: param.name.clone(),
-                        ty: "any".to_string(),
+                        ty: param.ty.clone(),
                     })
                     .collect(),
 
@@ -134,7 +134,7 @@ pub fn lower_function(ast: &AstFunction) -> IRFunction {
             .iter()
             .map(|param| IRParam {
                 name: param.name.clone(),
-                ty: "any".to_string(),
+                ty: param.ty.clone(),
             })
             .collect(),
 
