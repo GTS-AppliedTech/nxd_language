@@ -180,7 +180,39 @@ pub fn object_initializer_completion_words(
 }
 
 pub fn scope_completion_words(source: &str, line: u32, column: u32) -> Option<Vec<String>> {
-    let (module, ast_types, functions, _) = parse_with_diagnostics(source).ok()?;
+    let source_line = source.lines().nth(line.saturating_sub(1) as usize)?;
+
+    let cursor = column.saturating_sub(1) as usize;
+
+    let cursor_byte_offset: usize = source
+        .lines()
+        .take(line.saturating_sub(1) as usize)
+        .map(|line| line.len() + 1)
+        .sum::<usize>()
+        + source_line
+            .chars()
+            .take(cursor)
+            .map(char::len_utf8)
+            .sum::<usize>();
+
+    let mut completion_source = source.to_string();
+
+    let line_prefix: String = source_line.chars().take(cursor).collect();
+
+    let partial_identifier_length = line_prefix
+        .chars()
+        .rev()
+        .take_while(|character| character.is_ascii_alphanumeric() || *character == '_')
+        .map(char::len_utf8)
+        .sum::<usize>();
+
+    if partial_identifier_length > 0 {
+        let partial_identifier_start = cursor_byte_offset.checked_sub(partial_identifier_length)?;
+
+        completion_source.replace_range(partial_identifier_start..cursor_byte_offset, "");
+    }
+
+    let (module, ast_types, functions, _) = parse_with_diagnostics(&completion_source).ok()?;
 
     let ir_root = build_ir(&module, &ast_types, &functions);
 
