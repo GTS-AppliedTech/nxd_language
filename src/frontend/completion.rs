@@ -179,7 +179,25 @@ pub fn object_initializer_completion_words(
     Some(remaining)
 }
 
-pub fn scope_completion_words(source: &str, line: u32, column: u32) -> Option<Vec<String>> {
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum ScopeCompletionKind {
+    Parameter,
+    Variable,
+    Constant,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ScopeCompletion {
+    pub name: String,
+    pub ty: String,
+    pub kind: ScopeCompletionKind,
+}
+
+pub fn scope_completion_words(
+    source: &str,
+    line: u32,
+    column: u32,
+) -> Option<Vec<ScopeCompletion>> {
     let source_line = source.lines().nth(line.saturating_sub(1) as usize)?;
 
     let cursor = column.saturating_sub(1) as usize;
@@ -231,7 +249,11 @@ pub fn scope_completion_words(source: &str, line: u32, column: u32) -> Option<Ve
         .iter()
         .find(|function| function.name == *function_name)
     {
-        words.extend(function.params.iter().map(|param| param.name.clone()));
+        words.extend(function.params.iter().map(|param| ScopeCompletion {
+            name: param.name.clone(),
+            ty: param.ty.clone(),
+            kind: ScopeCompletionKind::Parameter,
+        }));
     }
 
     words.extend(
@@ -241,7 +263,11 @@ pub fn scope_completion_words(source: &str, line: u32, column: u32) -> Option<Ve
             .filter(|(_, symbol)| {
                 symbol.span.line < line || (symbol.span.line == line && symbol.span.column < column)
             })
-            .map(|(name, _)| name.clone()),
+            .map(|(name, symbol)| ScopeCompletion {
+                name: name.clone(),
+                ty: symbol.ty.clone(),
+                kind: ScopeCompletionKind::Variable,
+            }),
     );
 
     words.extend(
@@ -251,12 +277,16 @@ pub fn scope_completion_words(source: &str, line: u32, column: u32) -> Option<Ve
             .filter(|(_, symbol)| {
                 symbol.span.line < line || (symbol.span.line == line && symbol.span.column < column)
             })
-            .map(|(name, _)| name.clone()),
+            .map(|(name, symbol)| ScopeCompletion {
+                name: name.clone(),
+                ty: symbol.ty.clone(),
+                kind: ScopeCompletionKind::Constant,
+            }),
     );
 
-    words.sort();
-    words.dedup();
+    words.sort_by(|left, right| left.name.cmp(&right.name));
 
+    words.dedup_by(|left, right| left.name == right.name);
     Some(words)
 }
 
