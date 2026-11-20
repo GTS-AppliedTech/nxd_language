@@ -165,6 +165,9 @@ impl Analyzer {
                 f.name.clone(),
                 FunctionToolingInfo {
                     span: f.span.clone(),
+                    params: f.params.iter().map(|p| p.ty.clone()).collect(),
+                    return_type: String::new(),
+                    is_async: f.is_async,
                     variables: HashMap::new(),
                     constants: HashMap::new(),
                     members: Vec::new(),
@@ -187,6 +190,14 @@ impl Analyzer {
                 Some(return_type) => return_type.clone(),
                 None => self.infer_function_return_type(f)?,
             };
+
+            if let Some(function_tooling) = self.tooling.functions.get_mut(&f.name) {
+                function_tooling.return_type = if f.is_async {
+                    task_type(&resolved_return_type)
+                } else {
+                    resolved_return_type.clone()
+                };
+            }
 
             self.symbols.exit_scope();
 

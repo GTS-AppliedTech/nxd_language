@@ -19,11 +19,13 @@ pub struct ToolingMember {
 #[derive(Clone, Debug)]
 pub struct FunctionToolingInfo {
     pub span: SourceSpan,
+    pub params: Vec<String>,
+    pub return_type: String,
+    pub is_async: bool,
     pub variables: HashMap<String, ToolingSymbol>,
     pub constants: HashMap<String, ToolingSymbol>,
     pub members: Vec<ToolingMember>,
 }
-
 #[derive(Clone, Debug, Default)]
 pub struct ToolingAnalysis {
     pub functions: HashMap<String, FunctionToolingInfo>,

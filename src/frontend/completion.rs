@@ -5,6 +5,75 @@ use crate::frontend::lexer::token_kind::{TOKEN_SPEC, TokenKind};
 use crate::orchestrator::tooling_analysis_from_ir;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
+pub struct FunctionCompletion {
+    pub name: String,
+    pub params: Vec<String>,
+    pub return_type: String,
+    pub is_async: bool,
+}
+
+pub fn function_completion_words(
+    source: &str,
+    line: u32,
+    column: u32,
+) -> Option<Vec<FunctionCompletion>> {
+    let source_line = source.lines().nth(line.saturating_sub(1) as usize)?;
+
+    let cursor = column.saturating_sub(1) as usize;
+
+    let cursor_byte_offset: usize = source
+        .lines()
+        .take(line.saturating_sub(1) as usize)
+        .map(|line| line.len() + 1)
+        .sum::<usize>()
+        + source_line
+            .chars()
+            .take(cursor)
+            .map(char::len_utf8)
+            .sum::<usize>();
+
+    let mut completion_source = source.to_string();
+
+    let line_prefix: String = source_line.chars().take(cursor).collect();
+
+    let partial_identifier_length = line_prefix
+        .chars()
+        .rev()
+        .take_while(|character| character.is_ascii_alphanumeric() || *character == '_')
+        .map(char::len_utf8)
+        .sum::<usize>();
+
+    if partial_identifier_length > 0 {
+        let partial_identifier_start = cursor_byte_offset.checked_sub(partial_identifier_length)?;
+
+        completion_source.replace_range(partial_identifier_start..cursor_byte_offset, "0");
+    } else {
+        completion_source.insert_str(cursor_byte_offset, "0");
+    }
+
+    let (module, ast_types, functions, _) = parse_with_diagnostics(&completion_source).ok()?;
+
+    let ir_root = build_ir(&module, &ast_types, &functions);
+
+    let tooling = tooling_analysis_from_ir(&ir_root).ok()?;
+
+    let mut completions: Vec<FunctionCompletion> = tooling
+        .functions
+        .iter()
+        .map(|(name, function)| FunctionCompletion {
+            name: name.clone(),
+            params: function.params.clone(),
+            return_type: function.return_type.clone(),
+            is_async: function.is_async,
+        })
+        .collect();
+
+    completions.sort_by(|left, right| left.name.cmp(&right.name));
+
+    Some(completions)
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum LanguageCompletionKind {
     Keyword,
     Operator,
