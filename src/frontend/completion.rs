@@ -315,12 +315,17 @@ pub fn scope_completion_words(
         .map(char::len_utf8)
         .sum::<usize>();
 
+    let binary_placeholder =
+        binary_left_target_at_position(source, line, column).map(|(left, _)| left);
+
+    let placeholder = binary_placeholder.as_deref().unwrap_or("0");
+
     if partial_identifier_length > 0 {
         let partial_identifier_start = cursor_byte_offset.checked_sub(partial_identifier_length)?;
 
-        completion_source.replace_range(partial_identifier_start..cursor_byte_offset, "0");
+        completion_source.replace_range(partial_identifier_start..cursor_byte_offset, placeholder);
     } else {
-        completion_source.insert_str(cursor_byte_offset, "0");
+        completion_source.insert_str(cursor_byte_offset, placeholder);
     }
 
     let (module, ast_types, functions, _) = parse_with_diagnostics(&completion_source).ok()?;
@@ -548,19 +553,19 @@ fn binary_left_target_at_position(
 
     let prefix: String = source_line.chars().take(cursor).collect();
 
-    let mut parts = prefix.split_whitespace().rev();
+    let parts: Vec<&str> = prefix.split_whitespace().collect();
 
-    let operator = parts.next()?.to_string();
+    let operator_index = parts
+        .iter()
+        .rposition(|part| matches!(*part, "ADD" | "SUB" | "MUL" | "DIV" | "MOD"))?;
 
-    if !matches!(operator.as_str(), "ADD" | "SUB" | "MUL" | "DIV" | "MOD") {
+    if operator_index == 0 {
         return None;
     }
 
-    let left = parts.next()?.to_string();
+    let left = parts.get(operator_index - 1)?.to_string();
 
-    if left.is_empty() {
-        return None;
-    }
+    let operator = parts.get(operator_index)?.to_string();
 
     Some((left, operator))
 }
